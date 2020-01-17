@@ -5,24 +5,37 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <ImageView fitHeight="365.0" fitWidth="600.0" layoutX="-8.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
-      <MenuBar prefHeight="27.0" prefWidth="600.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="Fichier">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+	prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="controller.FileDisplayController">
+	<children>
+		<VBox maxHeight="1.7976931348623157E308"
+			maxWidth="1.7976931348623157E308">
+			<children>
+				<MenuBar fx:id="menuBar" prefHeight="27.0" prefWidth="600.0">
+					<menus>
+						<Menu mnemonicParsing="false" text="Fichier">
+							<items>
+								<MenuItem mnemonicParsing="false"
+									onAction="#ouvrirFichierHandler" text="Ouvrir un autre fichier" />
+								<MenuItem mnemonicParsing="false"
+									onAction="#fermerFichierHandler" text="Fermer le fichier" />
+							</items>
+						</Menu>
+						<Menu mnemonicParsing="false" text="Help">
+							<items>
+								<MenuItem mnemonicParsing="false" text="About" />
+							</items>
+						</Menu>
+					</menus>
+				</MenuBar>
+				<ImageView fitHeight="373.0" fitWidth="600.0"
+					pickOnBounds="true" preserveRatio="true" />
+			</children>
+		</VBox>
+	</children>
 </AnchorPane>
