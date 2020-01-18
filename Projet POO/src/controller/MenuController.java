@@ -1,15 +1,11 @@
 package controller;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import main.TrucsUtiles;
 
 /**
@@ -21,12 +17,6 @@ import main.TrucsUtiles;
 
 public class MenuController implements Initializable {
 
-	// Le fichier sera stocké ici
-	private static File LeCsv = null;
-
-	// L'objet d'explorateur de fichiers créé
-	private static FileChooser fileChooser = new FileChooser();
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// Pas grand chose à faire ici pour le moment
@@ -37,9 +27,9 @@ public class MenuController implements Initializable {
 	 * stocké dans l'objet File leCsv
 	 */
 	@FXML
-	public void importerCsvHandler(ActionEvent e) {
+	public void importerCsvHandler(ActionEvent event) {
 		// On charge le fichier csv et passe à la fenetre suivante ( affichage du
 		// fichier )
-		TrucsUtiles.setCsv(e, "/fxml/FileDisplay.fxml", this);
+		TrucsUtiles.setCsv(event, "/fxml/FileDisplay.fxml", this);
 	}
 }
