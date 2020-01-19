@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Cette classe représente un objet espece. Les differents attributs sont les caractéristiques
@@ -14,8 +15,8 @@ public class Espece {
 	 * Crée un objet espece avec les différentes valeurs spécifiées
 	 * 
 	 */
-	public Espece(int id, String nom, String embranchement, String classe, String ordre,
-			String famille, String genre, String description, String groupeTrophique,
+	public Espece(int id, String nom, String genre, String famille, String ordre,
+			String classe, String embranchement, String description, String groupeTrophique,
 			String groupeEcologique, String categorieImportance,String cheminImage,ArrayList<String> synonymes) {
 		this.id = id;
 		this.cheminImage = cheminImage;
@@ -31,7 +32,30 @@ public class Espece {
 		this.groupeEcologique = groupeEcologique;
 		this.categorieImportance = categorieImportance;
 	}
-	
+
+	@Override
+	public boolean equals(Object obj) {
+		/*
+		 * Fonction qui vérifie si obj est égal (du point de vue attribut ) à l'objet actuel.
+		 * Auto-générée
+		 */
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Espece)) {
+			return false;
+		}
+		Espece other = (Espece) obj;
+		return Objects.equals(categorieImportance, other.categorieImportance)
+				&& Objects.equals(cheminImage, other.cheminImage) && Objects.equals(classe, other.classe)
+				&& Objects.equals(description, other.description) && Objects.equals(embranchement, other.embranchement)
+				&& Objects.equals(famille, other.famille) && Objects.equals(genre, other.genre)
+				&& Objects.equals(groupeEcologique, other.groupeEcologique)
+				&& Objects.equals(groupeTrophique, other.groupeTrophique) && id == other.id
+				&& Objects.equals(nom, other.nom) && Objects.equals(ordre, other.ordre)
+				&& Objects.equals(synonymes, other.synonymes);
+	}
+
 	protected int id;
 	protected String cheminImage;
 	protected String nom;

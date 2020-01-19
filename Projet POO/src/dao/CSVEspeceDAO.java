@@ -30,8 +30,8 @@ public class CSVEspeceDAO implements EspeceDAO {
 	/**
 	 * Constructeur de FichierCSV 
 	 * 
-	 * <br> Les lignes du fichier csv doivent respecter la forme suivante : nom,embranchement,classe,
-	 * ordre,famille,genre,description,groupe trophique,groupe ecologique,categorie importance,
+	 * <br> Les lignes du fichier csv doivent respecter la forme suivante :  nom,genre,famille,ordre,classe,embranchement,
+	 * description,groupe trophique,groupe ecologique,categorie importance,
 	 * chemin vers l'image[, synonyme 1, synonyme 2, ...].<br> Tous les champs sont obligatoires sauf 
 	 * les synonymes.
 	 * @param fichier C'est le fichier qu'on veut lire
@@ -50,8 +50,8 @@ public class CSVEspeceDAO implements EspeceDAO {
 				// On ne considère pas les ligne vides (pas d'erreurs)
 				if ( (!ligne.equals("")) && elements.length < nombreElementsFixe) {
 					throw new FormeIncorrecteException("Erreur à la ligne "+i+" : Il n'y a que"
-							+ " "+elements.length+" élements !\n Il faut au moins "+nombreElementsFixe+
-							" élements.");
+							+ " "+elements.length+" élements !\nIl faut au moins "+nombreElementsFixe+
+							" élements.",i);
 				}
 				contenuFichier.add(ligne);
 				i++;
@@ -61,6 +61,7 @@ public class CSVEspeceDAO implements EspeceDAO {
 	
     /**
      * Renvoie un objet Espece qui correspond à la ligne en question
+     * Tous les caractères sont transformés en minuscule sauf l'url
      * 
      * @param ligne La chaine de caractere à convertir
      * @param id l'identifiant de l'objet Espece à creer
@@ -68,6 +69,9 @@ public class CSVEspeceDAO implements EspeceDAO {
      */
 	public Espece convertir(String ligne, int id) {
 		String[] elements = ligne.split(",");
+		// On met tout en minuscule sauf l'url qui est le 11eme element
+		for (int i = 0; i< elements.length; i++)
+			elements[i] = i == 10 ? elements[i] : elements[i].toLowerCase();
 		ArrayList<String> synonymes = new ArrayList<String>();
 		if (elements.length > nombreElementsFixe) {
 			for (int i = nombreElementsFixe; i < elements.length; i++)
@@ -80,6 +84,7 @@ public class CSVEspeceDAO implements EspeceDAO {
 	
 	/**
 	 * Renvoie une chaine de caractere qui correspond à l'espece
+	 * Tous les caractères sont transformés en minuscule sauf l'url
 	 * 
 	 * @param espece l'objet Espece à convertir
 	 * @return la chaine de caractere correspondante
@@ -89,10 +94,10 @@ public class CSVEspeceDAO implements EspeceDAO {
 		ArrayList<String> liste = espece.getSynonymes();
 		for (int i = 0; i < liste.size(); i++)
 			synonymes += (i == 0 ? "" : "," ) + liste.get(i);
-		return espece.getNom()+","+espece.getEmbranchement()+","+espece.getClasse()+","+
-	espece.getOrdre()+","+espece.getFamille()+","+espece.getGenre()+","+espece.getDescription()+","+
-	espece.getGroupeTrophique()+","+espece.getGroupeEcologique()+","+espece.getCategorieImportance()+
-	","+espece.getCheminImage()+","+synonymes;
+		return (espece.getNom()+","+espece.getGenre()+","+espece.getFamille()+","+
+		espece.getOrdre()+","+espece.getClasse()+","+espece.getEmbranchement()+","+
+		espece.getDescription()+","+espece.getGroupeTrophique()+","+espece.getGroupeEcologique()+","+
+		espece.getCategorieImportance()+",").toLowerCase()+espece.getCheminImage()+","+synonymes.toLowerCase();
 
 	}
 

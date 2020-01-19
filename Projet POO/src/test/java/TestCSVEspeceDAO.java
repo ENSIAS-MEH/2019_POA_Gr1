@@ -2,20 +2,23 @@ package test.java;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import dao.CSVEspeceDAO;
+import dao.Espece;
+import dao.FormeIncorrecteException;
 
 
 public class TestCSVEspeceDAO {
 	// Classe qui sert à tester les différentes méthodes de la classe CSVEspeceDAO
-
 
 	@Test
 	public void lectureImage() {
@@ -85,11 +88,66 @@ public class TestCSVEspeceDAO {
 		// Par exemple la connexion se coupe brusquement ...
 		// Le retour est 5 mais on ne le teste pas ici ...	
 	}
+
 	
-	@Ignore
 	@Test
-	public void modificationsFichier() {
-		// Le but du test est de vérifier les actions de lectures et écritures de l'objet
+	public void constructeurCSVEspeceDAO() {
+
+		// Le but du test est de vérifier le constructeur de CSVEspeceDAO ainsi que la 
+		// conversion des objets (texte - objet Java)
+		CSVEspeceDAO lecteurCSV = null;
+		
+		// On teste notre constructeur
+		
+		File fichier = new File("src/test/resources/test1.csv"); // Fichier malformé à la 2eme ligne
+		
+		try {
+			lecteurCSV = new CSVEspeceDAO(fichier);
+			fail("Fichier malformé !");
+		} catch (IOException e) {
+			fail("Fichier existant !");
+		} catch (FormeIncorrecteException e) {
+			assertEquals(2,e.getLigne()); // On vérifie la ligne de l'erreur
+		}
+
+		fichier = new File("src/test/resources/tes.csv"); // Fichier inexistant
+
+		try {
+			lecteurCSV = new CSVEspeceDAO(fichier);
+			fail("Fichier inexistant !");
+		} catch (IOException e) {
+			
+		} catch (FormeIncorrecteException e) {
+			fail("Fichier inexistant !");
+		}
+		
+		fichier = new File("src/test/resources/test2.csv"); // Fichier bien formé
+
+		try {
+			lecteurCSV = new CSVEspeceDAO(fichier);
+		} catch (IOException e) {
+			fail("Fichier correct !");
+		} catch (FormeIncorrecteException e) {
+			fail("Fichier correct !");
+		}
+
+		// On teste les methodes convertir
+		String ligneHusky = "husky sibérien,canis,canidae,carnivora,mammalia,chordata,"
+				+ "il est traditionnellement élevé comme chien d'attelage,carnivore,"
+				+ "espece sensible,4,https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg,"
+				+ "chien des glaces,husky sibérien";
+		
+		int id = 1;
+		ArrayList<String> synonymes = new ArrayList<String>();
+		synonymes.add("chien des glaces");synonymes.add("husky sibérien");
+		
+		Espece husky = new Espece(id,"husky sibérien","canis","canidae","carnivora","mammalia",
+				"chordata","il est traditionnellement élevé comme chien d'attelage","carnivore",
+				"espece sensible","4","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg",
+				synonymes);
+		
+		assertEquals(ligneHusky,lecteurCSV.convertir(husky));
+		assertEquals(husky,lecteurCSV.convertir(ligneHusky,id));
 	}
 
 }
