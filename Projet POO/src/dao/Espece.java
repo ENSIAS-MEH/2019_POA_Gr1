@@ -10,7 +10,6 @@ import java.util.Objects;
  */
 public class Espece {
 
-	
 	/**
 	 * Crée un objet espece avec les différentes valeurs spécifiées
 	 * 
@@ -111,5 +110,89 @@ public class Espece {
 	public void setId(int id) {
 		this.id = id;
 		
+	}
+
+	/**
+	 * @param cheminImage the cheminImage to set
+	 */
+	public void setCheminImage(String cheminImage) {
+		this.cheminImage = cheminImage;
+	}
+
+	/**
+	 * @param nom the nom to set
+	 */
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	/**
+	 * @param embranchement the embranchement to set
+	 */
+	public void setEmbranchement(String embranchement) {
+		this.embranchement = embranchement;
+	}
+
+	/**
+	 * @param classe the classe to set
+	 */
+	public void setClasse(String classe) {
+		this.classe = classe;
+	}
+
+	/**
+	 * @param famille the famille to set
+	 */
+	public void setFamille(String famille) {
+		this.famille = famille;
+	}
+
+	/**
+	 * @param ordre the ordre to set
+	 */
+	public void setOrdre(String ordre) {
+		this.ordre = ordre;
+	}
+
+	/**
+	 * @param genre the genre to set
+	 */
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+
+	/**
+	 * @param synonymes the synonymes to set
+	 */
+	public void setSynonymes(ArrayList<String> synonymes) {
+		this.synonymes = synonymes;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
+	 * @param groupeTrophique the groupeTrophique to set
+	 */
+	public void setGroupeTrophique(String groupeTrophique) {
+		this.groupeTrophique = groupeTrophique;
+	}
+
+	/**
+	 * @param groupeEcologique the groupeEcologique to set
+	 */
+	public void setGroupeEcologique(String groupeEcologique) {
+		this.groupeEcologique = groupeEcologique;
+	}
+
+	/**
+	 * @param categorieImportance the categorieImportance to set
+	 */
+	public void setCategorieImportance(String categorieImportance) {
+		this.categorieImportance = categorieImportance;
 	}
 }

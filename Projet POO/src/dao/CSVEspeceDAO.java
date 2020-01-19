@@ -1,15 +1,19 @@
 package dao;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
@@ -24,7 +28,7 @@ import java.util.ArrayList;
 public class CSVEspeceDAO implements EspeceDAO {
 	protected File fichier; // Le fichier qu'on lit
 	protected ArrayList<String> contenuFichier = new ArrayList<String>(); 
-	protected int nouvelleLigne; // Cet entier correspond à la dernière ligne qui a été lue
+	protected int nouvelleLigne; // Cet entier correspond à la dernière ligne qui a été lue + 1 
 	protected final int nombreElementsFixe = 11; // C'est le nombre minimum d'élements d'une ligne
 	
 	/**
@@ -41,22 +45,24 @@ public class CSVEspeceDAO implements EspeceDAO {
 	public CSVEspeceDAO(File fichier) throws IOException, FormeIncorrecteException{
 		this.fichier = fichier;
 		String ligne;
-		int i = 1; // On initialise un compteur pour savoir à quelle ligne s'est produite une erreur
-		try(FileReader fr = new FileReader(fichier);
-				BufferedReader br = new BufferedReader(fr)){
+		int i = 0; // On initialise un compteur pour savoir à quelle ligne s'est produite une erreur
+		try(FileInputStream fis = new FileInputStream(fichier);
+				InputStreamReader isr = new InputStreamReader(fis,"utf-8");
+				BufferedReader br = new BufferedReader(isr)){
 			while( (ligne = br.readLine()) != null) {
 				// On vérifie d'abord qu'il y a assez d'élements
 				String[] elements = ligne.split(",");
 				// On ne considère pas les ligne vides (pas d'erreurs)
 				if ( (!ligne.equals("")) && elements.length < nombreElementsFixe) {
-					throw new FormeIncorrecteException("Erreur à la ligne "+i+" : Il n'y a que"
+					throw new FormeIncorrecteException("Erreur à la ligne "+(1+1)+" : Il n'y a que"
 							+ " "+elements.length+" élements !\nIl faut au moins "+nombreElementsFixe+
-							" élements.",i);
+							" élements.",(i+1));
 				}
 				contenuFichier.add(ligne);
 				i++;
 			}
 		}
+		nouvelleLigne = i;
 	}
 	
     /**
@@ -72,6 +78,7 @@ public class CSVEspeceDAO implements EspeceDAO {
 		// On met tout en minuscule sauf l'url qui est le 11eme element
 		for (int i = 0; i< elements.length; i++)
 			elements[i] = i == 10 ? elements[i] : elements[i].toLowerCase();
+		
 		ArrayList<String> synonymes = new ArrayList<String>();
 		if (elements.length > nombreElementsFixe) {
 			for (int i = nombreElementsFixe; i < elements.length; i++)
@@ -101,15 +108,25 @@ public class CSVEspeceDAO implements EspeceDAO {
 
 	}
 
+	/**
+	 * @return the contenuFichier
+	 */
+	public ArrayList<String> getContenuFichier() {
+		return contenuFichier;
+	}
+
 	public void mettreAJour(Espece espece) {
 		int id = espece.getId();
 		contenuFichier.set(id, convertir(espece));
 	}
 
-	public void ajouter(Espece espece) {
-		espece.setId(nouvelleLigne);
+	public int ajouter(Espece espece) {
+		int id = nouvelleLigne;
+		espece.setId(id);
 		nouvelleLigne++;
 		contenuFichier.add(convertir(espece));
+		// On renvoie l'identifiant de l'espece
+		return id;
 	}
 
 	public void supprimer(int id) {
@@ -117,9 +134,11 @@ public class CSVEspeceDAO implements EspeceDAO {
 	}
 
 	public void enregistrerModifications() {
-		try(FileWriter fw = new FileWriter(fichier)){
+		try(FileOutputStream fos = new FileOutputStream(fichier);
+				OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+				BufferedWriter bw = new BufferedWriter(osw)){
 			for (String ligne: contenuFichier)
-				fw.write(ligne+"\n");
+				bw.write(ligne+"\n");
 		} catch (IOException e) {
 		}
 	}
