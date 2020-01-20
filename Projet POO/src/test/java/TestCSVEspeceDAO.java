@@ -2,20 +2,55 @@ package test.java;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 
 import dao.CSVEspeceDAO;
+import dao.Espece;
+import dao.FormeIncorrecteException;
 
 
 public class TestCSVEspeceDAO {
 	// Classe qui sert à tester les différentes méthodes de la classe CSVEspeceDAO
+	private static Espece husky; // L'espece qui va servir de test
+	private static int id = 0; // L'id de l'espece
 
+
+	@Before
+	public void initialisation() {
+		ArrayList<String> synonymes = new ArrayList<String>();
+		synonymes.add("chien des glaces");synonymes.add("husky sibérien");
+		// On crée l'objet
+		husky = new Espece(id,"husky de sybérie","canis","canidae","carnivora","mammalia",
+				"chordata","il est traditionnellement élevé comme chien d'attelage","carnivore",
+				"espece sensible","4","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg",
+				synonymes);	
+
+		// On prépare un fichier csv
+		File fichier = new File("src/test/resources/test interface EspeceDAO.csv");
+		try (FileOutputStream fos = new FileOutputStream(fichier);
+				OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+				BufferedWriter bw = new BufferedWriter(osw)) {
+			bw.write("husky de sybérie,canis,canidae,carnivora,mammalia,chordata,il est traditionnellement élevé comme chien d'attelage,carnivore,espece sensible,4,https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg,chien des glaces,husky sibérien\n" + 
+					"ligne test,1,1,1,1,1,1,1,1,1,1,syno 1, syno 2");
+			bw.flush();
+		} catch (IOException e) {}
+
+	}
 
 	@Test
 	public void lectureImage() {
@@ -34,6 +69,16 @@ public class TestCSVEspeceDAO {
 		} catch (IOException e) {
 			// On ne fait rien (le fichier n'existe pas)
 		}
+
+		// On crée un sous dossier vide qui servira plus tard
+		try {
+			Files.createDirectories(Paths.get(dossierSortie+"/essai/"));
+			Files.deleteIfExists(Paths.get(dossierSortie+"/essai/testLecture.png"));
+		} catch (IOException e) {
+			// On ne fait rien (le dossier est déjà vide)
+		}
+
+
 		// On devrait avoir 0 (télechargement reussi depuis internet)
 		assertEquals(0,CSVEspeceDAO.copierImage(chemin, dossierSortie));
 
@@ -70,26 +115,123 @@ public class TestCSVEspeceDAO {
 		assertEquals(6,CSVEspeceDAO.copierImage(chemin, dossierSortie));
 
 		// 8eme cas : le chemin correspond à une image présente sur le disque
-		chemin = "src/test/resources/a.png";
-		dossierSortie = "src/test/resources/essai/";
-		// On crée un sous dossier vide pour copie l'image
-		try {
-			Files.createDirectories(Paths.get(dossierSortie));
-			Files.deleteIfExists(Paths.get(dossierSortie+"a.png"));
-		} catch (IOException e) {
-			// On ne fait rien (le dossier est déjà vide)
-		}
-		assertEquals(0,CSVEspeceDAO.copierImage(chemin, dossierSortie));
+		chemin = "src/test/resources/testLecture.png";
+
+		assertEquals(0,CSVEspeceDAO.copierImage(chemin, dossierSortie+"/essai/"));
 
 		// 9eme cas : autres erreurs
 		// Par exemple la connexion se coupe brusquement ...
 		// Le retour est 5 mais on ne le teste pas ici ...	
 	}
-	
-	@Ignore
+
+
 	@Test
-	public void modificationsFichier() {
-		// Le but du test est de vérifier les actions de lectures et écritures de l'objet
+	public void constructeurCSVEspeceDAO() {
+
+		// Le but du test est de vérifier le constructeur de CSVEspeceDAO ainsi que la 
+		// conversion des objets (texte - objet Java)
+		CSVEspeceDAO lecteurCSV = null;
+
+		// On teste notre constructeur
+
+		File fichier = new File("src/test/resources/test mal forme.csv"); // Fichier malformé à la 2eme ligne
+
+		try {
+			lecteurCSV = new CSVEspeceDAO(fichier);
+			fail("Fichier malformé !");
+		} catch (IOException e) {
+			fail("Fichier existant !");
+		} catch (FormeIncorrecteException e) {
+			assertEquals(2,e.getLigne()); // On vérifie la ligne de l'erreur
+		}
+
+		fichier = new File("src/test/resources/inexistant.csv"); // Fichier inexistant
+
+		try {
+			lecteurCSV = new CSVEspeceDAO(fichier);
+			fail("Fichier inexistant !");
+		} catch (IOException e) {
+
+		} catch (FormeIncorrecteException e) {
+			fail("Fichier inexistant !");
+		}
+
+		fichier = new File("src/test/resources/test bien forme.csv"); // Fichier bien formé
+
+		try {
+			lecteurCSV = new CSVEspeceDAO(fichier);
+		} catch (IOException e) {
+			fail("Fichier correct !");
+		} catch (FormeIncorrecteException e) {
+			fail("Fichier correct !");
+		}
+
+		// On teste les methodes convertir
+		String ligneHusky = "husky de sybérie,canis,canidae,carnivora,mammalia,chordata,"
+				+ "il est traditionnellement élevé comme chien d'attelage,carnivore,"
+				+ "espece sensible,4,https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg,"
+				+ "chien des glaces,husky sibérien";
+
+		assertEquals(ligneHusky,lecteurCSV.convertir(husky));
+		assertEquals(husky,lecteurCSV.convertir(ligneHusky,id));
+	}
+
+	@Test
+	public void testInterfaceEspeceDAO() {
+		// Cette fonction sert à tester les différentes méthodes de l'interface EspeceDAO
+
+
+		File fichier = new File("src/test/resources/test interface EspeceDAO.csv");
+		// Ce fichier contient 2 especes : en 1er le husky et en 2eme une espece quelconque
+		CSVEspeceDAO especeDAO = null;
+		try {
+			especeDAO = new CSVEspeceDAO(fichier);
+		} catch (IOException | FormeIncorrecteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
+
+		// Test lecture
+		Espece huskyLu = especeDAO.recuperer(id);
+		assertEquals(husky,huskyLu);
+
+		// Test modification
+		huskyLu.setDescription("modification de la description");
+		husky.setDescription("modification de la description");
+		especeDAO.mettreAJour(huskyLu);
+		assertEquals(husky,especeDAO.recuperer(id));
+
+		// Test ajout
+		Espece lambda = new Espece(999,"a","b","c","d","e","f","g","h","i","j","k",
+				new ArrayList<String>());
+		// L'identifiant de lambda va être modifié lors de l'ajout dans le fichier
+		int idLambda = especeDAO.ajouter(lambda); 
+		lambda.setId(idLambda);
+		assertEquals(lambda,especeDAO.recuperer(idLambda));
+
+		// Test filtrage : A FAIRE
+
+		// Test enregistrement
+		especeDAO.enregistrerModifications();
+		// On va lire le fichier pour voir si la ligne qu'on a ajouté est là
+		List<String> contenuFichierReel = null;
+		try {
+			contenuFichierReel = Files.readAllLines(Path.of("src/test/resources/test interface EspeceDAO.csv"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			fail("Erreur !");
+		}
+		// On vérifie le nombre de ligne
+		assertEquals(especeDAO.getContenuFichier().size(),contenuFichierReel.size());
+
+		// On vérifie la ligne ajoutée
+		String ligne = contenuFichierReel.get(idLambda);
+		assertEquals(lambda,especeDAO.convertir(ligne,idLambda));
+		
+		// Test suppression
+		
+		especeDAO.supprimer(idLambda);
+		assertEquals("",especeDAO.getContenuFichier().get(idLambda));
 	}
 
 }

@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Cette classe représente un objet espece. Les differents attributs sont les caractéristiques
@@ -9,13 +10,12 @@ import java.util.ArrayList;
  */
 public class Espece {
 
-	
 	/**
 	 * Crée un objet espece avec les différentes valeurs spécifiées
 	 * 
 	 */
-	public Espece(int id, String nom, String embranchement, String classe, String ordre,
-			String famille, String genre, String description, String groupeTrophique,
+	public Espece(int id, String nom, String genre, String famille, String ordre,
+			String classe, String embranchement, String description, String groupeTrophique,
 			String groupeEcologique, String categorieImportance,String cheminImage,ArrayList<String> synonymes) {
 		this.id = id;
 		this.cheminImage = cheminImage;
@@ -31,7 +31,30 @@ public class Espece {
 		this.groupeEcologique = groupeEcologique;
 		this.categorieImportance = categorieImportance;
 	}
-	
+
+	@Override
+	public boolean equals(Object obj) {
+		/*
+		 * Fonction qui vérifie si obj est égal (du point de vue attribut ) à l'objet actuel.
+		 * Auto-générée
+		 */
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Espece)) {
+			return false;
+		}
+		Espece other = (Espece) obj;
+		return Objects.equals(categorieImportance, other.categorieImportance)
+				&& Objects.equals(cheminImage, other.cheminImage) && Objects.equals(classe, other.classe)
+				&& Objects.equals(description, other.description) && Objects.equals(embranchement, other.embranchement)
+				&& Objects.equals(famille, other.famille) && Objects.equals(genre, other.genre)
+				&& Objects.equals(groupeEcologique, other.groupeEcologique)
+				&& Objects.equals(groupeTrophique, other.groupeTrophique) && id == other.id
+				&& Objects.equals(nom, other.nom) && Objects.equals(ordre, other.ordre)
+				&& Objects.equals(synonymes, other.synonymes);
+	}
+
 	protected int id;
 	protected String cheminImage;
 	protected String nom;
@@ -87,5 +110,89 @@ public class Espece {
 	public void setId(int id) {
 		this.id = id;
 		
+	}
+
+	/**
+	 * @param cheminImage the cheminImage to set
+	 */
+	public void setCheminImage(String cheminImage) {
+		this.cheminImage = cheminImage;
+	}
+
+	/**
+	 * @param nom the nom to set
+	 */
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	/**
+	 * @param embranchement the embranchement to set
+	 */
+	public void setEmbranchement(String embranchement) {
+		this.embranchement = embranchement;
+	}
+
+	/**
+	 * @param classe the classe to set
+	 */
+	public void setClasse(String classe) {
+		this.classe = classe;
+	}
+
+	/**
+	 * @param famille the famille to set
+	 */
+	public void setFamille(String famille) {
+		this.famille = famille;
+	}
+
+	/**
+	 * @param ordre the ordre to set
+	 */
+	public void setOrdre(String ordre) {
+		this.ordre = ordre;
+	}
+
+	/**
+	 * @param genre the genre to set
+	 */
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+
+	/**
+	 * @param synonymes the synonymes to set
+	 */
+	public void setSynonymes(ArrayList<String> synonymes) {
+		this.synonymes = synonymes;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
+	 * @param groupeTrophique the groupeTrophique to set
+	 */
+	public void setGroupeTrophique(String groupeTrophique) {
+		this.groupeTrophique = groupeTrophique;
+	}
+
+	/**
+	 * @param groupeEcologique the groupeEcologique to set
+	 */
+	public void setGroupeEcologique(String groupeEcologique) {
+		this.groupeEcologique = groupeEcologique;
+	}
+
+	/**
+	 * @param categorieImportance the categorieImportance to set
+	 */
+	public void setCategorieImportance(String categorieImportance) {
+		this.categorieImportance = categorieImportance;
 	}
 }

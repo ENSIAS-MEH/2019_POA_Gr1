@@ -1,6 +1,5 @@
 package dao;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public interface EspeceDAO {
@@ -30,12 +29,13 @@ public interface EspeceDAO {
 	 * 
 	 * @param espece L'espece qu'on veut ajouter à la base de données
 	 */
-	public void ajouter(Espece espece);
+	public int ajouter(Espece espece);
 	
 	/**
 	 * Fonction qui supprime une espece de la base de données
 	 * 
 	 * @param id L'identifiant de l'espece qu'on veut supprimer
+	 * @return Un entier qui correspond à l'identifiant de l'espece dans la base de données
 	 */
 	public void supprimer(int id);
 	
@@ -53,6 +53,5 @@ public interface EspeceDAO {
 	void enregistrerModifications();
 	
 	public static void main(String[] args) {
-		File f = new File("");
 	}
 }
