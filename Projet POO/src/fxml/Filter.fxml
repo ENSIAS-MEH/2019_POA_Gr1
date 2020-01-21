@@ -26,7 +26,7 @@
 						<Label prefHeight="25.0" prefWidth="147.0" text="Vous rechercher dans :" />
 						<HBox prefHeight="44.0" prefWidth="485.0" spacing="15.0">
 							<children>
-								<RadioButton fx:id="noms" mnemonicParsing="false" prefHeight="43.0" prefWidth="121.0" text="Noms/Synonymes" wrapText="true">
+								<RadioButton fx:id="noms" mnemonicParsing="false" prefHeight="43.0" prefWidth="121.0" selected="true" text="Noms/Synonymes" wrapText="true">
 									<toggleGroup>
 										<ToggleGroup fx:id="FIltresRadioGroup" />
 									</toggleGroup>
@@ -47,6 +47,7 @@
 								<RadioButton fx:id="descriptions" mnemonicParsing="false" prefHeight="43.0" prefWidth="121.0" text="Descriptions" toggleGroup="$FIltresRadioGroup" wrapText="true" />
 								<RadioButton fx:id="ordres" mnemonicParsing="false" prefHeight="43.0" prefWidth="105.0" text="Ordres" toggleGroup="$FIltresRadioGroup" />
 								<RadioButton fx:id="embranchements" mnemonicParsing="false" prefHeight="43.0" prefWidth="147.0" text="Embranchements" toggleGroup="$FIltresRadioGroup" />
+                        <RadioButton fx:id="tous" mnemonicParsing="false" prefHeight="43.0" prefWidth="147.0" text="Tous les champs" toggleGroup="$FIltresRadioGroup" />
 							</children>
 							<opaqueInsets>
 								<Insets />
