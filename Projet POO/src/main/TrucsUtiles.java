@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import dao.CSVConnectionFactory;
 import dao.CSVEspeceDAO;
+import dao.ConnectionFactory;
 import dao.Espece;
+import dao.EspeceDAO;
 import dao.FormeIncorrecteException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +21,7 @@ import javafx.stage.Stage;
 /**
  * Cette classe regroupe un ensemble de méthodes qu'on utilisera dans différents
  * coins de l'application
+ * 
  * @author Amine
  *
  */
@@ -26,7 +30,7 @@ public class TrucsUtiles {
 
 	// Le fichier csv importé sera stocké ici
 	private static File LeCsv = null;
-	
+
 	// Et les especes seront stockées ici
 	private static ArrayList<Espece> listEspeces = null;
 
@@ -35,22 +39,25 @@ public class TrucsUtiles {
 
 	/**
 	 * Méthode pour le fichier fichier
-	 * @return
+	 * 
+	 * @returnx
 	 */
 	public static File getCsv() {
 		return LeCsv;
 	}
-	
+
 	/**
 	 * Méthode pour récuperer la liste des espèces
+	 * 
 	 * @return
 	 */
-	public static ArrayList<Espece> getListEspeces(){
+	public static ArrayList<Espece> getListEspeces() {
 		return listEspeces;
 	}
 
 	/**
 	 * Méthode pour mettre le fichier en null
+	 * 
 	 * @return
 	 */
 	public static boolean setCsvNull() {
@@ -61,6 +68,7 @@ public class TrucsUtiles {
 	/**
 	 * Méthode pour ouvrir l'explorateur et choisir un fichier csv Puis charger une
 	 * nouvelle scene
+	 * 
 	 * @param source
 	 * @param fxmlPath
 	 * @param context
@@ -75,22 +83,18 @@ public class TrucsUtiles {
 
 //		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Fichier .csv", "*.csv"));
 		LeCsv = fileChooser.showOpenDialog(getStage(source));
-		
+
 		// Vérification si le csv est bel et bien selectionné
 		if (!(LeCsv == null)) {
 
-			// TODO Ce qu'on devrait faire avec ce fichier, comment le gérer et comment l'afficher
-			
-			try {
-				listEspeces = (new CSVEspeceDAO(LeCsv)).recupererToutes();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (FormeIncorrecteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+			// TODO Ce qu'on devrait faire avec ce fichier, comment le gérer et comment
+			// l'afficher
+
+			// Récuperation des espèces
+			ConnectionFactory cf = CSVConnectionFactory.getInstance(LeCsv);
+			EspeceDAO especeDAO = cf.getEspeceDAO();
+			listEspeces = especeDAO.recupererToutes();
+
 			// Passage à la fenetre suivante
 			changeStage(source, fxmlPath, context);
 			return true;
@@ -100,6 +104,7 @@ public class TrucsUtiles {
 
 	/**
 	 * Méthode pour le changement de fenetres
+	 * 
 	 * @param source
 	 * @param fxmlPath
 	 * @param context
@@ -120,10 +125,10 @@ public class TrucsUtiles {
 		} else
 			return false;
 	}
-	
-	
+
 	/**
 	 * Méthode pour récuperer le stage courant
+	 * 
 	 * @param source
 	 * @return
 	 */
@@ -138,5 +143,13 @@ public class TrucsUtiles {
 			currentWindow = (Stage) ((MenuBar) source).getScene().getWindow();
 		}
 		return currentWindow;
+	}
+	
+	public static String[] getGroupesTrophiques() {
+		return groupesTrophiques;
+	}
+	
+	public static String[] getGroupesEcologiques() {
+		return groupesEcologiques;
 	}
 }

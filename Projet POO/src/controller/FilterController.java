@@ -15,6 +15,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import main.TrucsUtiles;
 
 /**
  * Cette classe est le controlleur de la fenetre de recherche/filtrage,
@@ -31,13 +32,14 @@ public class FilterController implements Initializable {
 	private TextField searchTextField;
 
 	@FXML
-	private RadioButton noms, familles, classes, genres, descriptions, ordres, embranchements;
-	
-	@FXML
-	private ChoiceBox<String> groupeTrophiqueChoiceBox,groupeEcologiqueChoiceBox;
+	private RadioButton noms, familles, classes, genres, descriptions, ordres, embranchements, tous;
 
-	// On regroupe les boutons dans un tableau afin de determiner lequel est selectionné
-	private RadioButton[] buttonsList = { noms, familles, classes, genres, descriptions, ordres, embranchements };
+	@FXML
+	private ChoiceBox<String> groupeTrophiqueChoiceBox, groupeEcologiqueChoiceBox;
+
+	// On regroupe les boutons dans un tableau afin de determiner lequel est
+	// selectionné
+	private RadioButton[] buttonsList = { noms, familles, classes, genres, descriptions, ordres, embranchements, tous };
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -51,17 +53,19 @@ public class FilterController implements Initializable {
 		descriptions.setId("descriptions");
 		ordres.setId("ordres");
 		embranchements.setId("embranchements");
-		
+		tous.setId("tous");
+		;
+
 		groupeTrophiqueChoiceBox.setId("groupeTrophiqueChoiceBox");
 		groupeEcologiqueChoiceBox.setId("groupeEcologiqueChoiceBox");
-		
 
 		initializeGroupesTrophiques_Ecologiques();
 
 	}
-	
+
 	/**
 	 * Méthode qui se déclenche pour effectuer la recherche
+	 * 
 	 * @param event
 	 */
 	@FXML
@@ -71,7 +75,7 @@ public class FilterController implements Initializable {
 
 		// On récupère le RadioButton choisis ( catégorie dans laquelle chercher )
 		String boutonChoisis = fetchClickedRadioButton().getText();
-		
+
 		// On récupère les groupes ecologiques et trophiques choisis
 		String groupeEcologiqueChoisi = groupeEcologiqueChoiceBox.getValue().toString();
 		String groupeTrophiquesChoisi = groupeTrophiqueChoiceBox.getValue().toString();
@@ -83,7 +87,9 @@ public class FilterController implements Initializable {
 
 	/**
 	 * Méthode pour récuperer le nom du champs choisis
-	 * @return Elle renvoie le nom du champs dans lequel on souhaite effectuer la recherche sous forme de string
+	 * 
+	 * @return Elle renvoie le nom du champs dans lequel on souhaite effectuer la
+	 *         recherche sous forme de string
 	 */
 	private RadioButton fetchClickedRadioButton() {
 		RadioButton resultButton = null;
@@ -94,42 +100,32 @@ public class FilterController implements Initializable {
 	}
 
 	/**
-	 * Méthode pour initialiser les groupes trophiques et écologiques
+	 * Méthode pour initialiser les groupes trophiques et écologiques d'après les tableaux des groupes
+	 * fournits dans la classe Espece
 	 */
 	private void initializeGroupesTrophiques_Ecologiques() {
 
-		ArrayList<String> groupesEcologiquesArray = new ArrayList<String>() {{
-			add("Tous");
-			add("Espèces sensibles");
-			add("Espèces indifférentes");
-			add("Espèces tolérantes");
-			add("Espèces opportunistes de deuxième ordre");
-			add("Espèces opportunistes de premier ordre");			
-		}};
+		ArrayList<String> groupesEcologiquesArray = new ArrayList<String>();
 		
+		for(String s : TrucsUtiles.getGroupesEcologiques())
+			groupesEcologiquesArray.add(s);
+
 		ObservableList<String> groupesEcologiquesList = FXCollections.observableArrayList(groupesEcologiquesArray);
-		
+
 		groupeEcologiqueChoiceBox.setItems(groupesEcologiquesList);
-		
+
 		groupeEcologiqueChoiceBox.getSelectionModel().selectFirst();
+
+		ArrayList<String> groupesTrophiquesArray = new ArrayList<String>();
 		
-		ArrayList<String> groupesTrophiquesArray = new ArrayList<String>() {{
-			add("Tous");
-			add("Carnivores");
-			add("Nécrophages");
-			add("Herbivores");
-			add("Détritivores");
-			add("Suspensivores");			
-			add("Déposivores");			
-			add("Déposivores non sélectifs");			
-			add("Microbrouteurs");			
-		}};
-		
+		for(String s : TrucsUtiles.getGroupesTrophiques())
+			groupesTrophiquesArray.add(s);
+
 		ObservableList<String> groupesTrophiquesList = FXCollections.observableArrayList(groupesTrophiquesArray);
-		
+
 		groupeTrophiqueChoiceBox.setItems(groupesTrophiquesList);
-	
+
 		groupeTrophiqueChoiceBox.getSelectionModel().selectFirst();
 
-	}	
+	}
 }
