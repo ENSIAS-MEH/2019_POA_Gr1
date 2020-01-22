@@ -37,19 +37,13 @@ public class CSVConnectionFactory implements ConnectionFactory {
 		return instance;
 	}
 	
-	
-	/**
-	 * Retourne un objet EspeceDAO
-	 * @return Un objet EspeceDAO
-	 */
 	public EspeceDAO getEspeceDAO() {
 		try {
 			return new CSVEspeceDAO(fichier);
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (FormeIncorrecteException e) {
-			e.printStackTrace();
 		}
+		
 		return null;
 	}
 

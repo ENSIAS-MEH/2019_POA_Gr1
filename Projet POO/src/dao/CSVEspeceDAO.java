@@ -35,6 +35,8 @@ public class CSVEspeceDAO implements EspeceDAO {
 	// L'ordre des champs qui servira pour le filtrage 
 	protected ArrayList<String> ordreChamp = new ArrayList<String>(Arrays.asList("nom","genre","famille",
 			"ordre","classe","embranchement","description","gTro","gEco")); 
+	protected ArrayList<String> listeErreurs = new ArrayList<String>(); // Une liste contenant les erreurs
+	// lors de la lecture du fichier csv
 	
 
 	/**
@@ -50,28 +52,40 @@ public class CSVEspeceDAO implements EspeceDAO {
 	 * @param fichier C'est le fichier qu'on veut lire
 	 * @throws IOException              Si le fichier n'est pas trouvé
 	 * @throws FormeIncorrecteException Si les lignes du fichier ne respectent pas
-	 *                                  la forme correcte
+	 * la forme correcte
 	 */
-	public CSVEspeceDAO(File fichier) throws IOException, FormeIncorrecteException {
+	public CSVEspeceDAO(File fichier) throws IOException {
 		this.fichier = fichier;
-		String ligne;
+		String ligne; 
 		int i = 0; // On initialise un compteur pour savoir à quelle ligne s'est produite une
 					// erreur
 		try (FileInputStream fis = new FileInputStream(fichier);
 				InputStreamReader isr = new InputStreamReader(fis, "utf-8");
 				BufferedReader br = new BufferedReader(isr)) {
 			while ((ligne = br.readLine()) != null) {
+				// On ne considère pas les ligne vides ni les lignes déjà erronées 
+				if (!ligne.equals("") && !ligne.startsWith("???")) {
+					contenuFichier.add(ligne);
+					i++;
+					continue;
+				}
+				
 				// On vérifie d'abord qu'il y a assez d'élements
 				String[] elements = ligne.split(",");
-				// On ne considère pas les ligne vides (pas d'erreurs)
-				if ((!ligne.equals("")) && elements.length < nombreElementsFixe) {
-					throw new FormeIncorrecteException("Erreur à la ligne " + (1 + 1) + " : Il n'y a que" + " "
-							+ elements.length + " élements !\nIl faut au moins " + nombreElementsFixe + " élements.",
-							(i + 1));
+				
+				if (elements.length < nombreElementsFixe) {
+					listeErreurs.add("Erreur à la ligne " + (1+1) + " : Il n'y a que" + " "
+							+ elements.length + " élements !\nIl faut au moins " + nombreElementsFixe + " élements.");
+					ligne = "???" + ligne; // On ajoute ??? pour signaler que la ligne est incorrecte
 				}
-				else if (ligne.startsWith("???")){
-					throw new FormeIncorrecteException("Erreur à la ligne " + (i+1) + " : la ligne ne peut "
-							+ " pas commencer par ???",i+1);
+				else {
+					// On vérifie que les groupes ecologique et trophique sont bons
+					// Normalement ils sont à la position 7 et 8
+					String erreur = Espece.estCorrectTrophique(elements[7]) + 
+							Espece.estCorrectEcologique(elements[8]);
+					if (!erreur.isEmpty())
+						listeErreurs.add("Erreur à la ligne " + (1+1) + " : "+ erreur);
+					ligne = "???" + ligne; // On ajoute ??? pour signaler que la ligne est incorrecte
 				}
 				contenuFichier.add(ligne);
 				i++;
@@ -100,8 +114,12 @@ public class CSVEspeceDAO implements EspeceDAO {
 				synonymes.add(elements[i]);
 		}
 		// Il faudra définir le chemin de l'image sur le disque
-		return new Espece(id, elements[0], elements[1], elements[2], elements[3], elements[4], elements[5], elements[6],
-				elements[7], elements[8], elements[9],"",elements[10], synonymes);
+		try {
+			return new Espece(id, elements[0], elements[1], elements[2], elements[3], elements[4], elements[5], elements[6],
+					elements[7], elements[8], elements[9],"",elements[10], synonymes);
+		} catch (ChampIncorrectException e) {
+			return null;
+		}
 
 	}
 
@@ -130,6 +148,15 @@ public class CSVEspeceDAO implements EspeceDAO {
 	 */
 	public ArrayList<String> getContenuFichier() {
 		return contenuFichier;
+	}
+
+	/**
+	 * @return the listeErreurs
+	 */
+	public ArrayList<String> recupererErreurs() {
+		ArrayList<String> copie = new ArrayList<String>(listeErreurs);
+		listeErreurs.clear(); // On vide la liste des erreurs
+		return copie;
 	}
 
 	public void mettreAJour(Espece espece) {

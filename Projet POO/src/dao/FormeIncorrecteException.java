@@ -1,5 +1,10 @@
 package dao;
 
+/**
+ * Classe qui représente une exception levée lorsque qu'un fichier csv n'a pas la forme requise
+ *
+ *
+ */
 public class FormeIncorrecteException extends Exception {
 
 	private static final long serialVersionUID = 1L;
