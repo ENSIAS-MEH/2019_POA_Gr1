@@ -23,9 +23,10 @@ public class Espece {
 	 */
 	public Espece(int id, String nom, String genre, String famille, String ordre,
 			String classe, String embranchement, String description, String groupeTrophique,
-			String groupeEcologique, String categorieImportance,String cheminImage,ArrayList<String> synonymes) {
+			String groupeEcologique, String categorieImportance,String cheminImageDisque,String cheminImageOriginale,ArrayList<String> synonymes) {
 		this.id = id;
-		this.cheminImage = cheminImage;
+		this.cheminImageDisque = cheminImageDisque;
+		this.cheminImageOriginale = cheminImageOriginale;
 		this.nom = nom;
 		this.embranchement = embranchement;
 		this.classe = classe;
@@ -45,6 +46,7 @@ public class Espece {
 		 * Fonction qui vérifie si obj est égal (du point de vue attribut ) à l'objet actuel.
 		 * Auto-générée
 		 */
+
 		if (this == obj) {
 			return true;
 		}
@@ -53,17 +55,19 @@ public class Espece {
 		}
 		Espece other = (Espece) obj;
 		return Objects.equals(categorieImportance, other.categorieImportance)
-				&& Objects.equals(cheminImage, other.cheminImage) && Objects.equals(classe, other.classe)
-				&& Objects.equals(description, other.description) && Objects.equals(embranchement, other.embranchement)
-				&& Objects.equals(famille, other.famille) && Objects.equals(genre, other.genre)
-				&& Objects.equals(groupeEcologique, other.groupeEcologique)
+				&& Objects.equals(cheminImageDisque, other.cheminImageDisque)
+				&& Objects.equals(cheminImageOriginale, other.cheminImageOriginale)
+				&& Objects.equals(classe, other.classe) && Objects.equals(description, other.description)
+				&& Objects.equals(embranchement, other.embranchement) && Objects.equals(famille, other.famille)
+				&& Objects.equals(genre, other.genre) && Objects.equals(groupeEcologique, other.groupeEcologique)
 				&& Objects.equals(groupeTrophique, other.groupeTrophique) && id == other.id
 				&& Objects.equals(nom, other.nom) && Objects.equals(ordre, other.ordre)
 				&& Objects.equals(synonymes, other.synonymes);
 	}
 
 	protected int id;
-	protected String cheminImage;
+	protected String cheminImageDisque;
+	protected String cheminImageOriginale;
 	protected String nom;
 	protected String embranchement;
 	protected String classe;
@@ -78,9 +82,7 @@ public class Espece {
 	public int getId() {
 		return id;
 	}
-	public String getCheminImage() {
-		return cheminImage;
-	}
+
 	public String getNom() {
 		return nom;
 	}
@@ -117,13 +119,6 @@ public class Espece {
 	public void setId(int id) {
 		this.id = id;
 		
-	}
-
-	/**
-	 * @param cheminImage the cheminImage to set
-	 */
-	public void setCheminImage(String cheminImage) {
-		this.cheminImage = cheminImage;
 	}
 
 	/**
@@ -201,5 +196,33 @@ public class Espece {
 	 */
 	public void setCategorieImportance(String categorieImportance) {
 		this.categorieImportance = categorieImportance;
+	}
+
+	/**
+	 * @return the cheminImageDisque
+	 */
+	public String getCheminImageDisque() {
+		return cheminImageDisque;
+	}
+
+	/**
+	 * @param cheminImageDisque the cheminImageDisque to set
+	 */
+	public void setCheminImageDisque(String cheminImageDisque) {
+		this.cheminImageDisque = cheminImageDisque;
+	}
+
+	/**
+	 * @return the cheminImageOriginale
+	 */
+	public String getCheminImageOriginale() {
+		return cheminImageOriginale;
+	}
+
+	/**
+	 * @param cheminImageOriginale the cheminImageOriginale to set
+	 */
+	public void setCheminImageOriginale(String cheminImageOriginale) {
+		this.cheminImageOriginale = cheminImageOriginale;
 	}
 }

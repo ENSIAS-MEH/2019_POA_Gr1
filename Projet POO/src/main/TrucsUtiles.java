@@ -40,7 +40,11 @@ public class TrucsUtiles {
 	/**
 	 * Méthode pour le fichier fichier
 	 * 
+<<<<<<< HEAD
 	 * @returnx
+=======
+	 * @return
+>>>>>>> refs/remotes/origin/master
 	 */
 	public static File getCsv() {
 		return LeCsv;
@@ -89,7 +93,11 @@ public class TrucsUtiles {
 
 			// TODO Ce qu'on devrait faire avec ce fichier, comment le gérer et comment
 			// l'afficher
+<<<<<<< HEAD
 
+=======
+			
+>>>>>>> refs/remotes/origin/master
 			// Récuperation des espèces
 			ConnectionFactory cf = CSVConnectionFactory.getInstance(LeCsv);
 			EspeceDAO especeDAO = cf.getEspeceDAO();

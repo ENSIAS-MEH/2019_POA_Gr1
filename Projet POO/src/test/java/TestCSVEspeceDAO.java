@@ -37,7 +37,7 @@ public class TestCSVEspeceDAO {
 		// On crée l'objet
 		husky = new Espece(id,"husky de sybérie","canis","canidae","carnivora","mammalia",
 				"chordata","il est traditionnellement élevé comme chien d'attelage","carnivore",
-				"espece sensible","4","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg",
+				"espece sensible","4","","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg",
 				synonymes);	
 
 		// On prépare un fichier csv
@@ -202,14 +202,15 @@ public class TestCSVEspeceDAO {
 		assertEquals(husky,especeDAO.recuperer(id));
 
 		// Test ajout
-		Espece lambda = new Espece(999,"a","b","c","d","e","f","g","h","i","j","k",
+		Espece lambda = new Espece(999,"a","b","c","d","e","f","g","h","i","j","","k",
 				new ArrayList<String>());
 		// L'identifiant de lambda va être modifié lors de l'ajout dans le fichier
 		int idLambda = especeDAO.ajouter(lambda); 
 		lambda.setId(idLambda);
 		assertEquals(lambda,especeDAO.recuperer(idLambda));
 
-		// Test filtrage : A FAIRE
+		// Test filtrage
+		// A FAIRE
 
 		// Test enregistrement
 		especeDAO.enregistrerModifications();
