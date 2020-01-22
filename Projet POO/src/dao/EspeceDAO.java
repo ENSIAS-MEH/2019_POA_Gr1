@@ -18,11 +18,19 @@ public interface EspeceDAO {
 	public ArrayList<Espece> recupererToutes();
 	
 	/**
-	 * Fonction qui renvoie toutes les especes vérifiant les critères précisés
-	 * ----
+	 * Fonction qui renvoie toutes les especes vérifiant les critères précisés. <br>
+	 * 
+	 * Le champSaisi doit être dans la liste suivante : 
+	 * [noms, familles, classes, genres, descriptions, ordres, embranchements,tous] <br>
+	 * gEcoSaisi et gTroSaisi représentent les groupes ecologiques et trophiques choisis
+	 * 
+	 * @param saisie Le mot ou expression recherchée
+	 * @param champSaisi La zone où on cherche l'expression
+	 * @param gEcoSaisi Le groupe ecologiaue choisi
+	 * @param gTroSaisi Le groupe trophique choisi
 	 * @return Une liste contenant toutes les especes vérifiant les critères précisés
 	 */
-	public ArrayList<Espece> filtrer();
+	public ArrayList<Espece> filtrer(String saisie, String champSaisi, String gEcoSaisi, String gTroSaisi);
 	
 	/**
 	 * Fonction qui ajoute une espece à la base de données

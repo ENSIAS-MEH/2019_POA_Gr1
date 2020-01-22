@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * 
@@ -31,6 +32,10 @@ public class CSVEspeceDAO implements EspeceDAO {
 	protected ArrayList<String> contenuFichier = new ArrayList<String>();
 	protected int nouvelleLigne; // Cet entier correspond à la dernière ligne qui a été lue + 1
 	protected final int nombreElementsFixe = 11; // C'est le nombre minimum d'élements d'une ligne
+	// L'ordre des champs qui servira pour le filtrage 
+	protected ArrayList<String> ordreChamp = new ArrayList<String>(Arrays.asList("nom","genre","famille",
+			"ordre","classe","embranchement","description","gTro","gEco")); 
+	
 
 	/**
 	 * Constructeur de FichierCSV
@@ -64,6 +69,10 @@ public class CSVEspeceDAO implements EspeceDAO {
 							+ elements.length + " élements !\nIl faut au moins " + nombreElementsFixe + " élements.",
 							(i + 1));
 				}
+				else if (ligne.startsWith("???")){
+					throw new FormeIncorrecteException("Erreur à la ligne " + (i+1) + " : la ligne ne peut "
+							+ " pas commencer par ???",i+1);
+				}
 				contenuFichier.add(ligne);
 				i++;
 			}
@@ -72,7 +81,7 @@ public class CSVEspeceDAO implements EspeceDAO {
 	}
 
 	/**
-	 * Renvoie un objet Espece qui correspond à la ligne en question Tous les
+	 * Renvoie un objet Espece qui correspond à la ligne en question <br> Tous les
 	 * caractères sont transformés en minuscule sauf l'url
 	 * 
 	 * @param ligne La chaine de caractere à convertir
@@ -90,8 +99,9 @@ public class CSVEspeceDAO implements EspeceDAO {
 			for (int i = nombreElementsFixe; i < elements.length; i++)
 				synonymes.add(elements[i]);
 		}
+		// Il faudra définir le chemin de l'image sur le disque
 		return new Espece(id, elements[0], elements[1], elements[2], elements[3], elements[4], elements[5], elements[6],
-				elements[7], elements[8], elements[9], elements[10], synonymes);
+				elements[7], elements[8], elements[9],"",elements[10], synonymes);
 
 	}
 
@@ -110,7 +120,7 @@ public class CSVEspeceDAO implements EspeceDAO {
 		return (espece.getNom() + "," + espece.getGenre() + "," + espece.getFamille() + "," + espece.getOrdre() + ","
 				+ espece.getClasse() + "," + espece.getEmbranchement() + "," + espece.getDescription() + ","
 				+ espece.getGroupeTrophique() + "," + espece.getGroupeEcologique() + ","
-				+ espece.getCategorieImportance() + ",").toLowerCase() + espece.getCheminImage() + ","
+				+ espece.getCategorieImportance() + ",").toLowerCase() + espece.getCheminImageOriginale() + ","
 				+ synonymes.toLowerCase();
 
 	}
@@ -242,8 +252,59 @@ public class CSVEspeceDAO implements EspeceDAO {
 		return liste;
 	}
 
-	public ArrayList<Espece> filtrer() {
-		// A DETERMINER
-		return null;
+	@Override
+	public ArrayList<Espece> filtrer(String saisie, String champSaisi, String gEcoSaisi, String gTroSaisi) {
+		// Fonction de filtrage
+		
+		// On initialise des booleens qui nous permettront de chercher dans tous les champs
+		boolean tousEco = gEcoSaisi.equals("tous"), tousTro = gTroSaisi.equals("tous");
+		
+		// On determine la position des champs
+		// Cette position est la position du champ dans une ligne de fichier csv
+		int positionEco = ordreChamp.indexOf("gEco"), positionTro = ordreChamp.indexOf("gTro");
+		
+		if (champSaisi.equals("synonyme"))
+			// On le change en nom
+			champSaisi = "nom";
+		
+		// On commence le filtrage
+		ArrayList<Espece> resultat = new ArrayList<Espece>();
+		for (int i = 0; i < contenuFichier.size(); i++) {
+			boolean ok = false;
+			String ligne = contenuFichier.get(i);
+			if (ligne.equals("") || ligne.startsWith("???"))
+				continue; // On ne traite pas ces lignes
+			
+			String[] elements = ligne.split(",");
+			// On va ajouter les synonymes dans le champ nom s'il y en a
+			// càd tout ce qui se trouve après le dernier champ
+			if (elements.length > nombreElementsFixe){
+				for (int j = nombreElementsFixe; j < elements.length; j++)
+					elements[ordreChamp.indexOf("nom")] += ","+elements[j];	
+			}
+
+			// On filtre d'abord les groupes (ecologique et trophique)
+			if ((elements[positionEco].contains(gEcoSaisi) || tousEco) &&
+				(elements[positionTro].contains(gTroSaisi) || tousTro)) {
+				if (champSaisi.equals("tous")) {
+					// On cherche dans tous les champs
+					for (int j = 0; j <= 6; j++) {
+						if (elements[j].contains(saisie)) {
+							ok = true;
+							break;
+						}
+					}
+				}
+				else {
+					if (elements[ordreChamp.indexOf(champSaisi)].contains(saisie))
+						ok = true;
+				}
+			}	
+			if (ok)
+				resultat.add(convertir(ligne,i));
+		}
+		return resultat;
+		
 	}
+
 }
