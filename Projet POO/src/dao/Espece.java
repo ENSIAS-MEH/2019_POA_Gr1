@@ -64,7 +64,7 @@ public class Espece {
 		this.groupeEcologique = groupeEcologique;
 		this.categorieImportance = categorieImportance;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		/*

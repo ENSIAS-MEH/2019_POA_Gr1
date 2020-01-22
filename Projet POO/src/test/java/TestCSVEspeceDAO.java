@@ -2,6 +2,7 @@ package test.java;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.BufferedWriter;
@@ -22,7 +23,6 @@ import org.junit.Test;
 import dao.CSVEspeceDAO;
 import dao.ChampIncorrectException;
 import dao.Espece;
-import dao.FormeIncorrecteException;
 
 
 public class TestCSVEspeceDAO {
@@ -145,6 +145,7 @@ public class TestCSVEspeceDAO {
 
 		try {
 			lecteurCSV = new CSVEspeceDAO(fichier);
+			assertEquals(1,lecteurCSV.recupererErreurs().size());
 		} catch (IOException e) {
 		
 		}
@@ -154,16 +155,24 @@ public class TestCSVEspeceDAO {
 		try {
 			lecteurCSV = new CSVEspeceDAO(fichier);
 			fail("Fichier inexistant !");
-		} catch (IOException e) {
+		} catch (IOException e) { }
 
-		}
-
-		fichier = new File("src/test/resources/test bien forme.csv"); // Fichier bien formé
+		fichier = new File("src/test/resources/test bien forme valeur mauvaise.csv");
 
 		try {
 			lecteurCSV = new CSVEspeceDAO(fichier);
+			assertEquals(1,lecteurCSV.recupererErreurs().size());
 		} catch (IOException e) {
-			fail("Fichier correct !");
+			fail("Fichier present !");
+		}
+		
+		fichier = new File("src/test/resources/test bien forme bonne valeur.csv");
+
+		try {
+			lecteurCSV = new CSVEspeceDAO(fichier);
+			assertTrue(lecteurCSV.recupererErreurs().isEmpty());
+		} catch (IOException e) {
+			fail("Fichier present !");
 		}
 
 		// On teste les methodes convertir
@@ -182,7 +191,6 @@ public class TestCSVEspeceDAO {
 		try {
 			especeDAO = new CSVEspeceDAO(fichier);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} 
 
@@ -202,17 +210,26 @@ public class TestCSVEspeceDAO {
 			lambda = new Espece(999,"a","b","c","d","e","f","g","carnivore","sensible","j","","k",
 					new ArrayList<String>());
 		} catch (ChampIncorrectException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		// L'identifiant de lambda va être modifié lors de l'ajout dans le fichier
-		int idLambda = especeDAO.ajouter(lambda); 
-		lambda.setId(idLambda);
+		int idLambda = especeDAO.ajouter(lambda);
+		assertEquals(lambda.getId(),idLambda); 
 		assertEquals(lambda,especeDAO.recuperer(idLambda));
 
 		// Test filtrage
-		// A FAIRE
-
+		ArrayList<Espece> resultat;
+		
+		resultat = especeDAO.filtrer("champ introuvable", "tous", "tous", "tous");
+		assertTrue(resultat.isEmpty());
+		
+		resultat = especeDAO.filtrer("husky", "embranchement", "tous", "tous");
+		assertTrue(resultat.isEmpty());
+		
+		resultat = especeDAO.filtrer("husky", "nom", "tous", "tous");
+		assertEquals(1,resultat.size());
+		assertEquals(husky,resultat.get(0));
+		
 		// Test enregistrement
 		especeDAO.enregistrerModifications();
 		// On va lire le fichier pour voir si la ligne qu'on a ajouté est là

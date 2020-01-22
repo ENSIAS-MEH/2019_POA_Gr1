@@ -51,8 +51,7 @@ public class CSVEspeceDAO implements EspeceDAO {
 	 * 
 	 * @param fichier C'est le fichier qu'on veut lire
 	 * @throws IOException              Si le fichier n'est pas trouvé
-	 * @throws FormeIncorrecteException Si les lignes du fichier ne respectent pas
-	 * la forme correcte
+	 * 
 	 */
 	public CSVEspeceDAO(File fichier) throws IOException {
 		this.fichier = fichier;
@@ -64,12 +63,11 @@ public class CSVEspeceDAO implements EspeceDAO {
 				BufferedReader br = new BufferedReader(isr)) {
 			while ((ligne = br.readLine()) != null) {
 				// On ne considère pas les ligne vides ni les lignes déjà erronées 
-				if (!ligne.equals("") && !ligne.startsWith("???")) {
+				if (ligne.equals("") || ligne.startsWith("???")) {
 					contenuFichier.add(ligne);
 					i++;
 					continue;
 				}
-				
 				// On vérifie d'abord qu'il y a assez d'élements
 				String[] elements = ligne.split(",");
 				
@@ -83,9 +81,10 @@ public class CSVEspeceDAO implements EspeceDAO {
 					// Normalement ils sont à la position 7 et 8
 					String erreur = Espece.estCorrectTrophique(elements[7]) + 
 							Espece.estCorrectEcologique(elements[8]);
-					if (!erreur.isEmpty())
+					if (!erreur.isEmpty()) {
 						listeErreurs.add("Erreur à la ligne " + (1+1) + " : "+ erreur);
-					ligne = "???" + ligne; // On ajoute ??? pour signaler que la ligne est incorrecte
+						ligne = "???" + ligne; // On ajoute ??? pour signaler que la ligne est incorrecte
+					}
 				}
 				contenuFichier.add(ligne);
 				i++;
