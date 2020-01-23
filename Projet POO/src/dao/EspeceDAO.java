@@ -34,8 +34,9 @@ public interface EspeceDAO {
 	
 	/**
 	 * Fonction qui ajoute une espece à la base de données
-	 * 
+	 * Cette fonction modifie l'identifiant de l'objet espece passé en parametre
 	 * @param espece L'espece qu'on veut ajouter à la base de données
+	 * @return Un entier qui correspond à l'identifiant de l'espece dans la base de données
 	 */
 	public int ajouter(Espece espece);
 	
@@ -43,7 +44,6 @@ public interface EspeceDAO {
 	 * Fonction qui supprime une espece de la base de données
 	 * 
 	 * @param id L'identifiant de l'espece qu'on veut supprimer
-	 * @return Un entier qui correspond à l'identifiant de l'espece dans la base de données
 	 */
 	public void supprimer(int id);
 	
