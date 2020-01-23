@@ -37,8 +37,20 @@ public class CSVEspeceDAO implements EspeceDAO {
 			"ordre","classe","embranchement","description","gTro","gEco")); 
 	protected ArrayList<String> listeErreurs = new ArrayList<String>(); // Une liste contenant les erreurs
 	// lors de la lecture du fichier csv
+	protected String dossierImages; // Le dossier où les images sont télechargées
 	
-
+	/**
+	 * Constructeur par defaut de FichierCSV. Les images seront enregistrées dans le dossier images à la
+	 * racine. Ce constructeur fait appel au constructeur {@link CSVEspeceDAO#CSVEspeceDAO(File, String)} 
+	 * avec pour chaine de caractere "images"
+	 * @param fichier Le fichier csv
+	 * @throws IOException Si le fichier est introuvable
+	 * @see CSVEspeceDAO#CSVEspeceDAO(File, String) 
+	 */
+	public CSVEspeceDAO(File fichier) throws IOException {
+		this(fichier,"images/");
+	}
+	
 	/**
 	 * Constructeur de FichierCSV
 	 * 
@@ -50,14 +62,19 @@ public class CSVEspeceDAO implements EspeceDAO {
 	 * Tous les champs sont obligatoires sauf les synonymes.
 	 * 
 	 * @param fichier C'est le fichier qu'on veut lire
+	 * @param dossierImages C'est le dossier où seront stockées les images
 	 * @throws IOException              Si le fichier n'est pas trouvé
 	 * 
 	 */
-	public CSVEspeceDAO(File fichier) throws IOException {
+	public CSVEspeceDAO(File fichier, String dossierImages) throws IOException {
 		this.fichier = fichier;
-		String ligne; 
+		this.dossierImages = dossierImages;
+		// On cree le dossier de sortie (Au meme niveau que le jar ou le projet)
+		File dossierSortie = new File(dossierImages);
+		dossierSortie.mkdir();
 		int i = 0; // On initialise un compteur pour savoir à quelle ligne s'est produite une
 					// erreur
+		String ligne; 
 		try (FileInputStream fis = new FileInputStream(fichier);
 				InputStreamReader isr = new InputStreamReader(fis, "utf-8");
 				BufferedReader br = new BufferedReader(isr)) {
@@ -86,6 +103,22 @@ public class CSVEspeceDAO implements EspeceDAO {
 						ligne = "???" + ligne; // On ajoute ??? pour signaler que la ligne est incorrecte
 					}
 				}
+				// Si la ligne est bonne on tente de telecharger l'image
+				if (!ligne.startsWith("???")) {
+					int erreur = CSVEspeceDAO.copierImage(elements[10], dossierImages);
+					if (erreur > 0) {
+						// Il y a un probleme ...
+						ligne = "???" + ligne; // On ajoute ??? pour signaler que la ligne est incorrecte
+						// On signale seulement 2 cas : probleme de connexion et les autres
+						if (erreur == 2)
+							listeErreurs.add("Erreur à la ligne " + (1+1) + " : impossible de se connecter "
+									+ "pour recuperer l'image. Veuillez vérifier votre connexion et "
+									+ "la disponibilité du site web.");
+						else
+							listeErreurs.add("Erreur à la ligne " + (1+1) + " : Impossible de recuperer "
+									+ "l'image. Veuillez vérifier l'addresse.");
+					}
+				}
 				contenuFichier.add(ligne);
 				i++;
 			}
@@ -112,10 +145,10 @@ public class CSVEspeceDAO implements EspeceDAO {
 			for (int i = nombreElementsFixe; i < elements.length; i++)
 				synonymes.add(elements[i]);
 		}
-		// Il faudra définir le chemin de l'image sur le disque
+		String cheminImageDisque = dossierImages + elements[10].substring(elements[10].lastIndexOf("/")+1);
 		try {
 			return new Espece(id, elements[0], elements[1], elements[2], elements[3], elements[4], elements[5], elements[6],
-					elements[7], elements[8], elements[9],"",elements[10], synonymes);
+					elements[7], elements[8], elements[9],cheminImageDisque,elements[10], synonymes);
 		} catch (ChampIncorrectException e) {
 			return null;
 		}
@@ -190,7 +223,8 @@ public class CSVEspeceDAO implements EspeceDAO {
 	 * Télécharge l'image qui correspond à la chaine entree et la place dans le
 	 * dossier sortie sous le nom spécifié
 	 * 
-	 * @param entree Le chemin de l'image à telecharger
+	 * @param entree Le chemin de l'image à telecharger <br>
+	 * S'il s'agit d'une image sur internet, elle doit commencer par le protocole (http, ftp, etc)
 	 * @param sortie Le dossier ou il faut placer l'image
 	 * @param nom    Le nom de l'image dans le dossier de sortie
 	 * @return Un code d'opération qui détermine si la fonction a reussi à
@@ -204,9 +238,7 @@ public class CSVEspeceDAO implements EspeceDAO {
 	 *         la forme ne correspond pas <br>
 	 *         4 si l'hôte est injoignable (par exemple il n'y a pas de connexion
 	 *         internet) <br>
-	 *         6 si l'hôte est injoignable (par exemple il n'y a pas de connexion
-	 *         internet) <br>
-	 *         7 si le chemin correspond à une image sur le disque dur qui n'existe
+	 *         6 si le chemin correspond à une image sur le disque dur qui n'existe
 	 *         pas <br>
 	 *         5 pour les autres erreurs
 	 * 
@@ -296,7 +328,6 @@ public class CSVEspeceDAO implements EspeceDAO {
 		// On commence le filtrage
 		ArrayList<Espece> resultat = new ArrayList<Espece>();
 		for (int i = 0; i < contenuFichier.size(); i++) {
-			boolean ok = false;
 			String ligne = contenuFichier.get(i);
 			if (ligne.equals("") || ligne.startsWith("???"))
 				continue; // On ne traite pas ces lignes
@@ -316,21 +347,15 @@ public class CSVEspeceDAO implements EspeceDAO {
 					// On cherche dans tous les champs
 					for (int j = 0; j <= 6; j++) {
 						if (elements[j].contains(saisie)) {
-							ok = true;
+							resultat.add(convertir(ligne,i));
 							break;
 						}
 					}
 				}
-				else {
-					if (elements[ordreChamp.indexOf(champSaisi)].contains(saisie))
-						ok = true;
-				}
-			}	
-			if (ok)
-				resultat.add(convertir(ligne,i));
+				else if (elements[ordreChamp.indexOf(champSaisi)].contains(saisie))
+					resultat.add(convertir(ligne,i));
+			}		
 		}
 		return resultat;
-		
 	}
-
 }

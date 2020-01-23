@@ -33,6 +33,7 @@ public class TestCSVEspeceDAO {
 	private static Espece husky; // L'espece qui va servir de test
 	private static String ligneHusky;
 	private static int id = 0; // L'id de l'espece
+	private static String dossierImages = "src/test/resources/images/";
 
 
 	@Before
@@ -43,7 +44,7 @@ public class TestCSVEspeceDAO {
 		try {
 			husky = new Espece(id,"husky de sybérie","canis","canidae","carnivora","mammalia",
 					"chordata","il est traditionnellement élevé comme chien d'attelage","carnivore",
-					"sensible","4","","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg",
+					"sensible","4",dossierImages+"250px-Siberian-husky-1291343_1920.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg",
 					synonymes);
 		} catch (ChampIncorrectException e1) {
 			e1.printStackTrace();
@@ -56,7 +57,7 @@ public class TestCSVEspeceDAO {
 				OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
 				BufferedWriter bw = new BufferedWriter(osw)) {
 			bw.write(ligneHusky+"\n" + 
-					"ligne test,1,1,1,1,1,1,carnivore,sensible,1,1,syno 1, syno 2");
+					"ligne test,1,1,1,1,1,1,carnivore,sensible,1,https://cdn.pixabay.com/photo/2019/12/23/08/15/alaska-4714097__340.jpg,syno 1, syno 2");
 			bw.flush();
 		} catch (IOException e) {}
 
@@ -147,7 +148,7 @@ public class TestCSVEspeceDAO {
 		File fichier = new File("src/test/resources/test mal forme.csv"); // Fichier malformé à la 2eme ligne
 
 		try {
-			lecteurCSV = new CSVEspeceDAO(fichier);
+			lecteurCSV = new CSVEspeceDAO(fichier,dossierImages);
 			assertEquals(1,lecteurCSV.recupererErreurs().size());
 		} catch (IOException e) {
 		
@@ -156,14 +157,14 @@ public class TestCSVEspeceDAO {
 		fichier = new File("src/test/resources/inexistant.csv"); // Fichier inexistant
 
 		try {
-			lecteurCSV = new CSVEspeceDAO(fichier);
+			lecteurCSV = new CSVEspeceDAO(fichier,dossierImages);
 			fail("Fichier inexistant !");
 		} catch (IOException e) { }
 
 		fichier = new File("src/test/resources/test bien forme valeur mauvaise.csv");
 
 		try {
-			lecteurCSV = new CSVEspeceDAO(fichier);
+			lecteurCSV = new CSVEspeceDAO(fichier,dossierImages);
 			assertEquals(1,lecteurCSV.recupererErreurs().size());
 		} catch (IOException e) {
 			fail("Fichier present !");
@@ -172,7 +173,7 @@ public class TestCSVEspeceDAO {
 		fichier = new File("src/test/resources/test bien forme bonne valeur.csv");
 
 		try {
-			lecteurCSV = new CSVEspeceDAO(fichier);
+			lecteurCSV = new CSVEspeceDAO(fichier,dossierImages);
 			assertTrue(lecteurCSV.recupererErreurs().isEmpty());
 		} catch (IOException e) {
 			fail("Fichier present !");
@@ -192,7 +193,7 @@ public class TestCSVEspeceDAO {
 		// Ce fichier contient 2 especes : en 1er le husky et en 2eme une espece quelconque
 		CSVEspeceDAO especeDAO = null;
 		try {
-			especeDAO = new CSVEspeceDAO(fichier);
+			especeDAO = new CSVEspeceDAO(fichier,dossierImages);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		} 
@@ -210,13 +211,14 @@ public class TestCSVEspeceDAO {
 		// Test ajout
 		Espece lambda = null;
 		try {
-			lambda = new Espece(999,"a","b","c","d","e","f","g","carnivore","sensible","j","","k",
+			lambda = new Espece(999,"a","b","c","d","e","f","g","carnivore","sensible","j",dossierImages+"k","k",
 					new ArrayList<String>());
 		} catch (ChampIncorrectException e) {
 			e.printStackTrace();
 		}
 		// L'identifiant de lambda va être modifié lors de l'ajout dans le fichier
-		int idLambda = especeDAO.ajouter(lambda);
+		especeDAO.ajouter(lambda);
+		int idLambda = lambda.getId();
 		assertEquals(lambda.getId(),idLambda); 
 		assertEquals(lambda,especeDAO.recuperer(idLambda));
 
