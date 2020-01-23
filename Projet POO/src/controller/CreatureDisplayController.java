@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import dao.Espece;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -24,7 +25,10 @@ public class CreatureDisplayController implements Initializable {
 	private static Espece especeSelectionnée;
 
 	// Les éléments à afficher sur cette espèce
+	@FXML
 	ImageView photo;
+	
+	@FXML
 	Label nom_de_lespece, description_de_lespece, groupe_trophique_de_lespece, groupe_ecologique_de_lespece,
 			categorie_dimportance_de_lespece;
 
@@ -39,15 +43,6 @@ public class CreatureDisplayController implements Initializable {
 	 */
 
 	private void initializeInformations() {
-		// On initialise les composants de cette fenetre pour qu'on puisse les modifier
-		// suivant l'espèce selectionnée
-		photo.setId("photo");
-		nom_de_lespece.setId("nom_de_lespece");
-		description_de_lespece.setId("description_de_lespece");
-		groupe_trophique_de_lespece.setId("groupe_trophique_de_lespece");
-		groupe_ecologique_de_lespece.setId("groupe_ecologique_de_lespece");
-		categorie_dimportance_de_lespece.setId("categorie_dimportance_de_lespece");
-
 		// TODO récupération de l'image
 
 		photo.setImage(new Image((new File(especeSelectionnée.getCheminImageDisque())).toURI().toString())); // C'est pas le

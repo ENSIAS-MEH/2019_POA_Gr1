@@ -3,27 +3,20 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-	prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="controller.FileDisplayController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FileDisplayController">
 	<children>
-		<VBox maxHeight="1.7976931348623157E308"
-			maxWidth="1.7976931348623157E308">
+		<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
 			<children>
 				<MenuBar fx:id="menuBar" prefHeight="27.0" prefWidth="600.0">
 					<menus>
 						<Menu mnemonicParsing="false" text="Fichier">
 							<items>
-								<MenuItem mnemonicParsing="false"
-									onAction="#ouvrirFichierHandler" text="Ouvrir un autre fichier" />
-								<MenuItem mnemonicParsing="false"
-									onAction="#fermerFichierHandler" text="Fermer le fichier" />
+								<MenuItem mnemonicParsing="false" onAction="#ouvrirFichierHandler" text="Ouvrir un autre fichier" />
+								<MenuItem mnemonicParsing="false" onAction="#fermerFichierHandler" text="Fermer le fichier" />
 							</items>
 						</Menu>
 						<Menu mnemonicParsing="false" text="Help">
@@ -33,8 +26,11 @@
 						</Menu>
 					</menus>
 				</MenuBar>
-				<ImageView fitHeight="373.0" fitWidth="600.0"
-					pickOnBounds="true" preserveRatio="true" />
+            <ScrollPane prefHeight="372.0" prefWidth="600.0">
+               <content>
+                  <VBox fx:id="vbox" prefHeight="550.0" prefWidth="583.0" />
+               </content>
+            </ScrollPane>
 			</children>
 		</VBox>
 	</children>

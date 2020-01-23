@@ -1,8 +1,5 @@
 package main;
 
-import dao.CSVConnectionFactory;
-import dao.ConnectionFactory;
-import dao.EspeceDAO;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,9 +12,7 @@ import javafx.stage.Stage;
  */
 
 public class Main extends Application{
-	
-	public static EspeceDAO especeDAO;
-	
+		
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/fxml/Menu.fxml"));

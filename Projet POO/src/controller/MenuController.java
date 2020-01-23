@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.TrucsUtiles;
@@ -32,13 +33,20 @@ public class MenuController implements Initializable {
 	@FXML
 	public void importerCsvHandler(ActionEvent event) {
 		try {
-			Stage popUp = new Stage();
-			popUp.setScene(new Scene(FXMLLoader.load(event.getClass().getResource("/fxml/ErrorsPopUp"))));
-			popUp.show();
-
 			// On charge le fichier csv et passe à la fenetre suivante ( affichage du
 			// fichier )
 			TrucsUtiles.setCsv(event, "/fxml/FileDisplay.fxml", this);
+			
+			/*
+			 * On affiche un pop qui indique que le fichier a bien été récupéré Et affiche
+			 * les erreurs dans ce fichier s'il y'en a
+			 */
+			Stage popUp = new Stage();
+			popUp.setTitle("Succès");
+			Parent popUpRoot = FXMLLoader.load(getClass().getResource("/fxml/ErrorsPopUp.fxml"));
+			Scene scene = new Scene(popUpRoot);
+			popUp.setScene(scene);
+			popUp.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

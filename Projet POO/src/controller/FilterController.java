@@ -41,22 +41,14 @@ public class FilterController implements Initializable {
 	// On regroupe les boutons dans un tableau afin de determiner lequel est
 	// selectionné
 	private RadioButton[] buttonsList = { noms, familles, classes, genres, descriptions, ordres, embranchements, tous };
+	
+	static ArrayList<Espece> resultRecherche;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-		searchTextField.setId("searchTextField");
-
-		noms.setId("noms");
-		familles.setId("familles");
-		classes.setId("classes");
-		genres.setId("genres");
-		descriptions.setId("descriptions");
-		ordres.setId("ordres");
-		embranchements.setId("embranchements");
-		tous.setId("tous");
-		;
-
+		
+		resultRecherche=null;
+		
 		groupeTrophiqueChoiceBox.setId("groupeTrophiqueChoiceBox");
 		groupeEcologiqueChoiceBox.setId("groupeEcologiqueChoiceBox");
 
@@ -81,12 +73,11 @@ public class FilterController implements Initializable {
 		String groupeEcologiqueChoisi = groupeEcologiqueChoiceBox.getValue().toString();
 		String groupeTrophiqueChoisi = groupeTrophiqueChoiceBox.getValue().toString();
 
-		ArrayList<Espece> resultRecherche = (TrucsUtiles.getDAO()).filtrer(saisie, boutonChoisis,
+		resultRecherche = (TrucsUtiles.getDAO()).filtrer(saisie, boutonChoisis,
 				groupeEcologiqueChoisi, groupeTrophiqueChoisi);
 
 		// TODO passer à la fenetre d'affichage avec un nouveau fichier csv qui
 		// correspond au resultat du filtrage ?
-		
 		
 	}
 

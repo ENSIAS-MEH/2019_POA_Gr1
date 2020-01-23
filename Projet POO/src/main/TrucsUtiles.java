@@ -5,11 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import dao.CSVConnectionFactory;
-import dao.CSVEspeceDAO;
 import dao.ConnectionFactory;
 import dao.Espece;
 import dao.EspeceDAO;
-import dao.FormeIncorrecteException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -30,7 +28,7 @@ public class TrucsUtiles {
 
 	// Le fichier csv importé sera stocké ici
 	private static File LeCsv = null;
-	
+
 	// On stocke le DAO ici
 	private static EspeceDAO especeDAO;
 
@@ -41,13 +39,8 @@ public class TrucsUtiles {
 	private static FileChooser fileChooser = new FileChooser();
 
 	/**
-	 * Méthode pour le fichier fichier
-	 * 
-<<<<<<< HEAD
-	 * @returnx
-=======
+	 * Méthode pour récuperer l'objet fichier csv
 	 * @return
->>>>>>> refs/remotes/origin/master
 	 */
 	public static File getCsv() {
 		return LeCsv;
@@ -76,8 +69,8 @@ public class TrucsUtiles {
 	 * Méthode pour ouvrir l'explorateur et choisir un fichier csv Puis charger une
 	 * nouvelle scene
 	 * 
-	 * @param source
-	 * @param fxmlPath
+	 * @param source   Le déclencheur du changement de fichier csv
+	 * @param fxmlPath Le path de la fenêtre de redirection
 	 * @param context
 	 * @return
 	 */
@@ -88,7 +81,7 @@ public class TrucsUtiles {
 		// TODO retirer le commentaire en dessous pour appliquer le filtre sur
 		// l'explorateur de fichiers
 
-//		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Fichier .csv", "*.csv"));
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Fichier .csv", "*.csv"));
 		LeCsv = fileChooser.showOpenDialog(getStage(source));
 
 		// Vérification si le csv est bel et bien selectionné
@@ -101,14 +94,15 @@ public class TrucsUtiles {
 		} else
 			return false;
 	}
-	
+
 	/**
-	 * Méthode qui intervient pour lire les espèces dans le cas de selection d'un fichier .csv
+	 * Méthode qui intervient pour lire les espèces dans le cas de selection d'un
+	 * fichier .csv
 	 */
 	private static void connexionCSV() {
 		ConnectionFactory cf = CSVConnectionFactory.getInstance(LeCsv);
 		especeDAO = cf.getEspeceDAO();
-		listEspeces = especeDAO.recupererToutes();		
+		listEspeces = especeDAO.recupererToutes();
 	}
 
 	/**
@@ -137,7 +131,6 @@ public class TrucsUtiles {
 
 	/**
 	 * Méthode pour récuperer le stage courant
-	 * 
 	 * @param source
 	 * @return
 	 */
@@ -153,7 +146,7 @@ public class TrucsUtiles {
 		}
 		return currentWindow;
 	}
-	
+
 	/**
 	 * Getter pour le DAO
 	 * @return
