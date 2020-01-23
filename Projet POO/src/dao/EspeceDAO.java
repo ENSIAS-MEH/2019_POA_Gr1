@@ -53,12 +53,19 @@ public interface EspeceDAO {
 	 * remplacée)
 	 * @param espece La nouvelle espece qui doit remplacer l'ancienne
 	 */
-	void mettreAJour(Espece espece);
+	public void mettreAJour(Espece espece);
 	
 	/**
 	 * Fonction qui sauvegarde les eventuelles modifications faites sur la base de données
 	 */
-	void enregistrerModifications();
+	public void enregistrerModifications();
+	
+	/**
+	 * Fonction qui permet de recuperer des eventuelles erreurs en particulier après la création de l'objet
+	 * @return Une liste de chaine de caractère, chaque chaine représente une erreur
+	 */
+	public ArrayList<String> recupererErreurs();
+	
 	
 	public static void main(String[] args) {
 	}

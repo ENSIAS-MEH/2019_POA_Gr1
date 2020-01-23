@@ -112,7 +112,7 @@ public class FilterController implements Initializable {
 
 		ArrayList<String> groupesEcologiquesArray = new ArrayList<String>();
 
-		for (String s : Espece.groupesEcologiques)
+		for (String s : Espece.getListeGroupeEcologique())
 			groupesEcologiquesArray.add(s);
 
 		ObservableList<String> groupesEcologiquesList = FXCollections.observableArrayList(groupesEcologiquesArray);
@@ -123,7 +123,7 @@ public class FilterController implements Initializable {
 
 		ArrayList<String> groupesTrophiquesArray = new ArrayList<String>();
 
-		for (String s : Espece.groupesTrophiques)
+		for (String s : Espece.getListeGroupeTrophique())
 			groupesTrophiquesArray.add(s);
 
 		ObservableList<String> groupesTrophiquesList = FXCollections.observableArrayList(groupesTrophiquesArray);

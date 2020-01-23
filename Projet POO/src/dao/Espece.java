@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -10,20 +11,46 @@ import java.util.Objects;
  */
 public class Espece {
 	
-	// On stocke les groupes écologiques et trophiques dans des tableaux
-	public final static String[] groupesEcologiques = { "Tous", "Espèces sensibles", "Espèces indifférentes",
-			"Espèces tolérantes", "Espèces opportunistes de deuxième ordre", "Espèces opportunistes de premier ordre" };
+	protected int id;
+	protected String cheminImageDisque;
+	protected String cheminImageOriginale;
+	protected String nom;
+	protected String embranchement;
+	protected String classe;
+	protected String famille;
+	protected String ordre;
+	protected String genre;
+	protected ArrayList<String> synonymes = new ArrayList<String>();
+	protected String description;
+	protected String groupeTrophique;
+	protected String groupeEcologique;
+	protected String categorieImportance;
 	
-	public final static String[] groupesTrophiques = { "Tous", "Carnivores", "Nécrophages",
-			"Herbivores", "Détritivores", "Suspensivores","Déposivores","Déposivores non sélectifs","Microbrouteurs" };
+	protected static ArrayList<String> listeGroupeTrophique = new ArrayList<String>(Arrays.asList("carnivore","necrophage","herbivore","detritivore",
+			"suspensivore","deposivore selectif","deposivore non selectif","microbrouteur"));
+	protected static ArrayList<String> listeGroupeEcologique = new ArrayList<String>(Arrays.asList("sensible","indifferente","tolerante",
+			"opportuniste de 2e ordre","opportuniste de 1er ordre"));
+
+	
 
 	/**
-	 * Crée un objet espece avec les différentes valeurs spécifiées
+	 * Crée un objet espece avec les différentes valeurs spécifiées. <br>
+	 * Le groupe trophique doit être dans la liste : carnivore, nécrophage,
+	 * herbivore, détritivore, suspensivore, déposivore sélectif, déposivore non sélectif, microbrouteur <br>
+	 *  Le groupe ecologique doit être dans la liste : sensible, indifférente, tolérantes, 
+	 *  opportuniste de 2e ordre, opportuniste de 1er ordre 
+	 * @throws ChampIncorrectException Si l'un des champs a une valeur incorrecte
 	 * 
 	 */
 	public Espece(int id, String nom, String genre, String famille, String ordre,
 			String classe, String embranchement, String description, String groupeTrophique,
-			String groupeEcologique, String categorieImportance,String cheminImageDisque,String cheminImageOriginale,ArrayList<String> synonymes) {
+			String groupeEcologique, String categorieImportance,String cheminImageDisque,String cheminImageOriginale,ArrayList<String> synonymes) throws ChampIncorrectException {
+		String erreurEco = estCorrectTrophique(groupeTrophique),
+				erreurTro = estCorrectEcologique(groupeEcologique);
+		
+		if (!(erreurEco.isEmpty() && erreurTro.isEmpty()))
+			// L'un des groupes n'est pas correct, on lève une exception
+			throw new ChampIncorrectException(erreurEco+"\n"+erreurTro);
 		this.id = id;
 		this.cheminImageDisque = cheminImageDisque;
 		this.cheminImageOriginale = cheminImageOriginale;
@@ -39,7 +66,7 @@ public class Espece {
 		this.groupeEcologique = groupeEcologique;
 		this.categorieImportance = categorieImportance;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		/*
@@ -64,21 +91,22 @@ public class Espece {
 				&& Objects.equals(nom, other.nom) && Objects.equals(ordre, other.ordre)
 				&& Objects.equals(synonymes, other.synonymes);
 	}
-
-	protected int id;
-	protected String cheminImageDisque;
-	protected String cheminImageOriginale;
-	protected String nom;
-	protected String embranchement;
-	protected String classe;
-	protected String famille;
-	protected String ordre;
-	protected String genre;
-	protected ArrayList<String> synonymes = new ArrayList<String>();
-	protected String description;
-	protected String groupeTrophique;
-	protected String groupeEcologique;
-	protected String categorieImportance;
+	
+	public static String estCorrectTrophique(String gTro){
+		if (listeGroupeTrophique.contains(gTro))
+			return "";
+		return "Erreur : le groupe trophique doit être dans la liste : "
+		+ listeGroupeTrophique.toString();
+		
+	}
+	
+	public static String estCorrectEcologique(String gEco){
+		if (listeGroupeEcologique.contains(gEco))
+			return "";
+		return "Erreur : le groupe écologique doit être dans la liste : "
+		+ listeGroupeEcologique.toString();
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -115,6 +143,12 @@ public class Espece {
 	}
 	public String getCategorieImportance() {
 		return categorieImportance;
+	}
+	public static ArrayList<String> getListeGroupeTrophique(){
+		return listeGroupeTrophique;
+	}
+	public static ArrayList<String> getListeGroupeEcologique(){
+		return listeGroupeEcologique;
 	}
 	public void setId(int id) {
 		this.id = id;
@@ -224,5 +258,9 @@ public class Espece {
 	 */
 	public void setCheminImageOriginale(String cheminImageOriginale) {
 		this.cheminImageOriginale = cheminImageOriginale;
+	}
+	
+	public static void main(String[] args) {
+		
 	}
 }
