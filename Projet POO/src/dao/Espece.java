@@ -11,10 +11,10 @@ import java.util.Objects;
 public class Espece {
 	
 	// On stocke les groupes écologiques et trophiques dans des tableaux
-	final static String[] groupesEcologiques = { "Tous", "Espèces sensibles", "Espèces indifférentes",
+	public final static String[] groupesEcologiques = { "Tous", "Espèces sensibles", "Espèces indifférentes",
 			"Espèces tolérantes", "Espèces opportunistes de deuxième ordre", "Espèces opportunistes de premier ordre" };
 	
-	final static String[] groupesTrophiques = { "Tous", "Carnivores", "Nécrophages",
+	public final static String[] groupesTrophiques = { "Tous", "Carnivores", "Nécrophages",
 			"Herbivores", "Détritivores", "Suspensivores","Déposivores","Déposivores non sélectifs","Microbrouteurs" };
 
 	/**

@@ -15,6 +15,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import main.Main;
 import main.TrucsUtiles;
 
 /**
@@ -78,11 +79,15 @@ public class FilterController implements Initializable {
 
 		// On récupère les groupes ecologiques et trophiques choisis
 		String groupeEcologiqueChoisi = groupeEcologiqueChoiceBox.getValue().toString();
-		String groupeTrophiquesChoisi = groupeTrophiqueChoiceBox.getValue().toString();
+		String groupeTrophiqueChoisi = groupeTrophiqueChoiceBox.getValue().toString();
 
-		// TODO La méthode de filtrage
-		ArrayList<Espece> resultRecherche = CSVEspeceDAO.this.filtrer();
+		ArrayList<Espece> resultRecherche = (TrucsUtiles.getDAO()).filtrer(saisie, boutonChoisis,
+				groupeEcologiqueChoisi, groupeTrophiqueChoisi);
 
+		// TODO passer à la fenetre d'affichage avec un nouveau fichier csv qui
+		// correspond au resultat du filtrage ?
+		
+		
 	}
 
 	/**
@@ -100,14 +105,14 @@ public class FilterController implements Initializable {
 	}
 
 	/**
-	 * Méthode pour initialiser les groupes trophiques et écologiques d'après les tableaux des groupes
-	 * fournits dans la classe Espece
+	 * Méthode pour initialiser les groupes trophiques et écologiques d'après les
+	 * tableaux des groupes fournits dans la classe Espece
 	 */
 	private void initializeGroupesTrophiques_Ecologiques() {
 
 		ArrayList<String> groupesEcologiquesArray = new ArrayList<String>();
-		
-		for(String s : TrucsUtiles.getGroupesEcologiques())
+
+		for (String s : Espece.groupesEcologiques)
 			groupesEcologiquesArray.add(s);
 
 		ObservableList<String> groupesEcologiquesList = FXCollections.observableArrayList(groupesEcologiquesArray);
@@ -117,8 +122,8 @@ public class FilterController implements Initializable {
 		groupeEcologiqueChoiceBox.getSelectionModel().selectFirst();
 
 		ArrayList<String> groupesTrophiquesArray = new ArrayList<String>();
-		
-		for(String s : TrucsUtiles.getGroupesTrophiques())
+
+		for (String s : Espece.groupesTrophiques)
 			groupesTrophiquesArray.add(s);
 
 		ObservableList<String> groupesTrophiquesList = FXCollections.observableArrayList(groupesTrophiquesArray);

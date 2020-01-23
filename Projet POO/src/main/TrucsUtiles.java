@@ -30,6 +30,9 @@ public class TrucsUtiles {
 
 	// Le fichier csv importé sera stocké ici
 	private static File LeCsv = null;
+	
+	// On stocke le DAO ici
+	private static EspeceDAO especeDAO;
 
 	// Et les especes seront stockées ici
 	private static ArrayList<Espece> listEspeces = null;
@@ -90,24 +93,22 @@ public class TrucsUtiles {
 
 		// Vérification si le csv est bel et bien selectionné
 		if (!(LeCsv == null)) {
-
-			// TODO Ce qu'on devrait faire avec ce fichier, comment le gérer et comment
-			// l'afficher
-<<<<<<< HEAD
-
-=======
-			
->>>>>>> refs/remotes/origin/master
 			// Récuperation des espèces
-			ConnectionFactory cf = CSVConnectionFactory.getInstance(LeCsv);
-			EspeceDAO especeDAO = cf.getEspeceDAO();
-			listEspeces = especeDAO.recupererToutes();
-
-			// Passage à la fenetre suivante
+			connexionCSV();
+			// Passage à la fenetre d'affichage du fichier
 			changeStage(source, fxmlPath, context);
 			return true;
 		} else
 			return false;
+	}
+	
+	/**
+	 * Méthode qui intervient pour lire les espèces dans le cas de selection d'un fichier .csv
+	 */
+	private static void connexionCSV() {
+		ConnectionFactory cf = CSVConnectionFactory.getInstance(LeCsv);
+		especeDAO = cf.getEspeceDAO();
+		listEspeces = especeDAO.recupererToutes();		
 	}
 
 	/**
@@ -153,11 +154,11 @@ public class TrucsUtiles {
 		return currentWindow;
 	}
 	
-	public static String[] getGroupesTrophiques() {
-		return groupesTrophiques;
-	}
-	
-	public static String[] getGroupesEcologiques() {
-		return groupesEcologiques;
+	/**
+	 * Getter pour le DAO
+	 * @return
+	 */
+	public static EspeceDAO getDAO() {
+		return especeDAO;
 	}
 }

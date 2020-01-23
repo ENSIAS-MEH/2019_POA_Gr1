@@ -21,7 +21,7 @@ import javafx.scene.image.ImageView;
 public class CreatureDisplayController implements Initializable {
 	
 	// L'espèces selectionnée d'après la fenetre d'affichage ou la fenetre de filtrage
-	Espece especeSelectionnée;
+	private static Espece especeSelectionnée;
 
 	// Les éléments à afficher sur cette espèce
 	ImageView photo;
@@ -50,12 +50,16 @@ public class CreatureDisplayController implements Initializable {
 
 		// TODO récupération de l'image
 
-		photo.setImage(new Image((new File(especeSelectionnée.getCheminImage())).toURI().toString())); // C'est pas le
+		photo.setImage(new Image((new File(especeSelectionnée.getCheminImageDisque())).toURI().toString())); // C'est pas le
 																										// bon chemin ça
 		nom_de_lespece.setText(especeSelectionnée.getNom());
 		description_de_lespece.setText(especeSelectionnée.getDescription());
 		groupe_trophique_de_lespece.setText(especeSelectionnée.getGroupeTrophique());
 		groupe_ecologique_de_lespece.setText(especeSelectionnée.getGroupeEcologique());
 		categorie_dimportance_de_lespece.setText(especeSelectionnée.getCategorieImportance());
+	}
+	
+	public static void setEspece(Espece espece) {
+		especeSelectionnée=espece;
 	}
 }
