@@ -304,7 +304,7 @@ public class CSVEspeceDAO implements EspeceDAO {
 		ArrayList<Espece> liste = new ArrayList<Espece>();
 		for (int i = 0; i < contenuFichier.size(); i++) {
 			String ligne = contenuFichier.get(i);
-			if (!ligne.equals(""))
+			if (!ligne.equals("") && !ligne.startsWith("???"))
 				liste.add(convertir(ligne, i));
 		}
 		return liste;
