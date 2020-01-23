@@ -5,14 +5,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -233,13 +236,18 @@ public class TestCSVEspeceDAO {
 		// Test enregistrement
 		especeDAO.enregistrerModifications();
 		// On va lire le fichier pour voir si la ligne qu'on a ajouté est là
-		List<String> contenuFichierReel = null;
-		try {
-			contenuFichierReel = Files.readAllLines(Path.of("src/test/resources/test interface EspeceDAO.csv"));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-			fail("Erreur !");
-		}
+		List<String> contenuFichierReel = new ArrayList<String>();
+		String l;
+		try (FileInputStream fis = new FileInputStream(fichier);
+				InputStreamReader isr = new InputStreamReader(fis, "utf-8");
+				BufferedReader br = new BufferedReader(isr)) {
+			while ((l = br.readLine()) != null)
+					contenuFichierReel.add(l);
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("Fichier existant !");
+		} 
+		
 		// On vérifie le nombre de ligne
 		assertEquals(especeDAO.getContenuFichier().size(),contenuFichierReel.size());
 
