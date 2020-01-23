@@ -89,17 +89,17 @@ public class CSVEspeceDAO implements EspeceDAO {
 				String[] elements = ligne.split(",");
 				
 				if (elements.length < nombreElementsFixe) {
-					listeErreurs.add("Erreur à la ligne " + (1+1) + " : Il n'y a que" + " "
+					listeErreurs.add("Erreur à la ligne " + (i+1) + " : Il n'y a que" + " "
 							+ elements.length + " élements !\nIl faut au moins " + nombreElementsFixe + " élements.");
 					ligne = "???" + ligne; // On ajoute ??? pour signaler que la ligne est incorrecte
 				}
 				else {
 					// On vérifie que les groupes ecologique et trophique sont bons
 					// Normalement ils sont à la position 7 et 8
-					String erreur = Espece.estCorrectTrophique(elements[7]) + 
+					String erreur = Espece.estCorrectTrophique(elements[7]) + " ; " +
 							Espece.estCorrectEcologique(elements[8]);
-					if (!erreur.isEmpty()) {
-						listeErreurs.add("Erreur à la ligne " + (1+1) + " : "+ erreur);
+					if (!erreur.equals(" ; ")) {
+						listeErreurs.add("Erreur à la ligne " + (i+1) + " : "+ erreur);
 						ligne = "???" + ligne; // On ajoute ??? pour signaler que la ligne est incorrecte
 					}
 				}
@@ -111,11 +111,11 @@ public class CSVEspeceDAO implements EspeceDAO {
 						ligne = "???" + ligne; // On ajoute ??? pour signaler que la ligne est incorrecte
 						// On signale seulement 2 cas : probleme de connexion et les autres
 						if (erreur == 2)
-							listeErreurs.add("Erreur à la ligne " + (1+1) + " : impossible de se connecter "
+							listeErreurs.add("Erreur à la ligne " + (i+1) + " : impossible de se connecter "
 									+ "pour recuperer l'image. Veuillez vérifier votre connexion et "
 									+ "la disponibilité du site web.");
 						else
-							listeErreurs.add("Erreur à la ligne " + (1+1) + " : Impossible de recuperer "
+							listeErreurs.add("Erreur à la ligne " + (i+1) + " : Impossible de recuperer "
 									+ "l'image. Veuillez vérifier l'addresse.");
 					}
 				}

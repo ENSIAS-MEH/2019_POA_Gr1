@@ -50,7 +50,7 @@ public class Espece {
 		
 		if (!(erreurEco.isEmpty() && erreurTro.isEmpty()))
 			// L'un des groupes n'est pas correct, on lève une exception
-			throw new ChampIncorrectException(erreurEco+"\n"+erreurTro);
+			throw new ChampIncorrectException("Erreur : "+erreurEco+"\n"+erreurTro);
 		this.id = id;
 		this.cheminImageDisque = cheminImageDisque;
 		this.cheminImageOriginale = cheminImageOriginale;
@@ -95,7 +95,7 @@ public class Espece {
 	public static String estCorrectTrophique(String gTro){
 		if (listeGroupeTrophique.contains(gTro))
 			return "";
-		return "Erreur : le groupe trophique doit être dans la liste : "
+		return "Le groupe trophique doit être dans la liste : "
 		+ listeGroupeTrophique.toString();
 		
 	}
@@ -103,7 +103,7 @@ public class Espece {
 	public static String estCorrectEcologique(String gEco){
 		if (listeGroupeEcologique.contains(gEco))
 			return "";
-		return "Erreur : le groupe écologique doit être dans la liste : "
+		return "Le groupe écologique doit être dans la liste : "
 		+ listeGroupeEcologique.toString();
 	}
 	
