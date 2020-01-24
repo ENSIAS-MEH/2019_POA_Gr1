@@ -77,10 +77,6 @@ public class TrucsUtiles {
 	public static boolean setCsv(Object source, String fxmlPath, Object context) {
 
 		// On ajoute un filtre afin de ne prendre que les fichiers sous format .csv
-
-		// TODO retirer le commentaire en dessous pour appliquer le filtre sur
-		// l'explorateur de fichiers
-
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Fichier .csv", "*.csv"));
 		LeCsv = fileChooser.showOpenDialog(getStage(source));
 
@@ -90,6 +86,7 @@ public class TrucsUtiles {
 			connexionCSV();
 			// Passage à la fenetre d'affichage du fichier
 			changeStage(source, fxmlPath, context);
+			
 			return true;
 		} else
 			return false;

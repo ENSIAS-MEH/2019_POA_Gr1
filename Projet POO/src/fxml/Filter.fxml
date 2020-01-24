@@ -4,6 +4,9 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -13,13 +16,28 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FilterController">
 	<children>
-		<VBox layoutX="14.0" layoutY="31.0" prefHeight="335.0" prefWidth="559.0">
+      <MenuBar fx:id="menuBar" layoutY="1.0" prefHeight="27.0" prefWidth="600.0">
+         <menus>
+            <Menu mnemonicParsing="false" text="Fichier">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#ouvrirFichierHandler" text="Ouvrir un autre fichier" />
+                  <MenuItem mnemonicParsing="false" onAction="#fermerFichierHandler" text="Fermer le fichier" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#rechercherEspeceHandler" text="Rechercher des espèces" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+		<VBox layoutX="14.0" layoutY="44.0" prefHeight="335.0" prefWidth="559.0">
 			<children>
 				<VBox>
 					<children>
 						<HBox>
 							<children>
-								<Label prefHeight="40.0" prefWidth="147.0" text="Saisissez votre recherche :" />
+                  								<Label prefHeight="40.0" prefWidth="147.0" text="Saisissez votre recherche :" />
 								<TextField fx:id="searchTextField" prefHeight="40.0" prefWidth="364.0" />
 							</children>
 						</HBox>
@@ -73,5 +91,6 @@
 				<Button mnemonicParsing="false" onAction="#rechercherButtonHandler" prefHeight="60.0" prefWidth="206.0" text="Rechercher" />
 			</children>
 		</VBox>
+      <Button layoutX="381.0" layoutY="279.0" mnemonicParsing="false" onAction="#retourButtonHandler" prefHeight="60.0" prefWidth="206.0" text="Retour à l'affichage" />
 	</children>
 </AnchorPane>

@@ -1,21 +1,24 @@
 package controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import dao.CSVEspeceDAO;
 import dao.Espece;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import main.Main;
+import javafx.stage.Stage;
 import main.TrucsUtiles;
 
 /**
@@ -38,17 +41,20 @@ public class FilterController implements Initializable {
 	@FXML
 	private ChoiceBox<String> groupeTrophiqueChoiceBox, groupeEcologiqueChoiceBox;
 
+	@FXML
+	private MenuBar menuBar;
+
 	// On regroupe les boutons dans un tableau afin de determiner lequel est
 	// selectionné
 	private RadioButton[] buttonsList = { noms, familles, classes, genres, descriptions, ordres, embranchements, tous };
-	
+
 	static ArrayList<Espece> resultRecherche;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-		resultRecherche=null;
-		
+
+		resultRecherche = null;
+
 		groupeTrophiqueChoiceBox.setId("groupeTrophiqueChoiceBox");
 		groupeEcologiqueChoiceBox.setId("groupeEcologiqueChoiceBox");
 
@@ -73,12 +79,12 @@ public class FilterController implements Initializable {
 		String groupeEcologiqueChoisi = groupeEcologiqueChoiceBox.getValue().toString();
 		String groupeTrophiqueChoisi = groupeTrophiqueChoiceBox.getValue().toString();
 
-		resultRecherche = (TrucsUtiles.getDAO()).filtrer(saisie, boutonChoisis,
-				groupeEcologiqueChoisi, groupeTrophiqueChoisi);
+		resultRecherche = (TrucsUtiles.getDAO()).filtrer(saisie, boutonChoisis, groupeEcologiqueChoisi,
+				groupeTrophiqueChoisi);
 
 		// TODO passer à la fenetre d'affichage avec un nouveau fichier csv qui
 		// correspond au resultat du filtrage ?
-		
+
 	}
 
 	/**
@@ -100,28 +106,88 @@ public class FilterController implements Initializable {
 	 * tableaux des groupes fournits dans la classe Espece
 	 */
 	private void initializeGroupesTrophiques_Ecologiques() {
-
+		
+		// On initialise une liste des groupes écologiques
 		ArrayList<String> groupesEcologiquesArray = new ArrayList<String>();
-
+		
+		// qu'on remplit à partir de celle dans la classe Espece
 		for (String s : Espece.getListeGroupeEcologique())
 			groupesEcologiquesArray.add(s);
-
+		
+		// et on adapte cette liste au CheckBox
 		ObservableList<String> groupesEcologiquesList = FXCollections.observableArrayList(groupesEcologiquesArray);
-
 		groupeEcologiqueChoiceBox.setItems(groupesEcologiquesList);
-
 		groupeEcologiqueChoiceBox.getSelectionModel().selectFirst();
 
+		// Meme manip qu'en haut, pour les groupes trophiques
 		ArrayList<String> groupesTrophiquesArray = new ArrayList<String>();
 
 		for (String s : Espece.getListeGroupeTrophique())
 			groupesTrophiquesArray.add(s);
 
 		ObservableList<String> groupesTrophiquesList = FXCollections.observableArrayList(groupesTrophiquesArray);
-
 		groupeTrophiqueChoiceBox.setItems(groupesTrophiquesList);
-
 		groupeTrophiqueChoiceBox.getSelectionModel().selectFirst();
 
+	}
+
+	/**
+	 * Méthode pour l'option dans la barre de menu>Fichier>Ouvrir un fichier On
+	 * change le fichier csv, et on réaffiche
+	 * @param event
+	 */
+	@FXML
+	private void ouvrirFichierHandler(ActionEvent event) {
+		try {
+			/*
+			 * Possibilité de choisir de choisir un autre fichier, On refresh la scene
+			 * courante utilisant le même fichier fxml
+			 */
+			TrucsUtiles.setCsv(menuBar, "/fxml/FileDisplay.fxml", this);
+
+			/*
+			 * On affiche un pop qui indique que le fichier a bien été récupéré Et affiche
+			 * les erreurs dans ce fichier s'il y'en a
+			 */
+			Stage popUp = new Stage();
+			popUp.setTitle("Succès");
+			Parent popUpRoot = FXMLLoader.load(getClass().getResource("/fxml/ErrorsPopUp.fxml"));
+			Scene scene = new Scene(popUpRoot);
+			popUp.setScene(scene);
+			popUp.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Méthode pour l'option dans la barre de menu>Fichier>Fermer le fichier On
+	 * remet le fichier LeCsv en null On repasse à la premiere fenetre de
+	 * l'application
+	 * @param event
+	 */
+	@FXML
+	private void fermerFichierHandler(ActionEvent event) {
+		TrucsUtiles.setCsvNull();
+		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this);
+	}
+
+	/**
+	 * Méthode pour l'option dans la barre de menu>Help>Rechercher espèces On passe
+	 * à la fenetre de filtrage
+	 * @param event
+	 */
+	@FXML
+	private void rechercherEspeceHandler(ActionEvent event) {
+		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this);
+	}
+	
+	/**
+	 * Méthode pour revenir à l'affichage premier du fichier
+	 * @param event
+	 */ 
+	@FXML
+	private void retourButtonHandler(ActionEvent event) {
+		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this);
 	}
 }
