@@ -27,7 +27,6 @@ public class FileDisplayController extends Display implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
 		/*
 		 * On récupère les espèces depuis le csv
 		 */
@@ -49,12 +48,10 @@ public class FileDisplayController extends Display implements Initializable {
 			 * courante utilisant le même fichier fxml
 			 */
 			TrucsUtiles.setCsv(menuBar, "/fxml/FileDisplay.fxml", this);
-
 			/*
 			 * On affiche un pop qui indique que le fichier a bien été récupéré Et affiche
 			 * les erreurs dans ce fichier s'il y'en a
 			 */
-
 			Stage popUp = new Stage();
 			popUp.setTitle("Succès");
 			Parent popUpRoot = FXMLLoader.load(getClass().getResource("/fxml/ErrorsPopUp.fxml"));

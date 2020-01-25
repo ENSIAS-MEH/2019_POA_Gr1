@@ -30,7 +30,7 @@ public class TrucsUtiles {
 	private static File LeCsv = null;
 
 	// On stocke le DAO ici
-	private static EspeceDAO especeDAO;
+	private static EspeceDAO especeDAO = null;
 
 	// Et les especes seront stockées ici
 	private static ArrayList<Espece> listEspeces = null;
@@ -40,6 +40,7 @@ public class TrucsUtiles {
 
 	/**
 	 * Méthode pour récuperer l'objet fichier csv
+	 * 
 	 * @return
 	 */
 	public static File getCsv() {
@@ -78,15 +79,15 @@ public class TrucsUtiles {
 
 		// On ajoute un filtre afin de ne prendre que les fichiers sous format .csv
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Fichier .csv", "*.csv"));
-		LeCsv = fileChooser.showOpenDialog(getStage(source));
+		LeCsv = fileChooser.showOpenDialog(getStage(source)); // Update du File csv
 
 		// Vérification si le csv est bel et bien selectionné
 		if (!(LeCsv == null)) {
 			// Récuperation des espèces
-			connexionCSV();
+			connexionCSV(LeCsv); // Update du DAO et de la liste des espèces
 			// Passage à la fenetre d'affichage du fichier
 			changeStage(source, fxmlPath, context);
-			
+
 			return true;
 		} else
 			return false;
@@ -96,10 +97,12 @@ public class TrucsUtiles {
 	 * Méthode qui intervient pour lire les espèces dans le cas de selection d'un
 	 * fichier .csv
 	 */
-	private static void connexionCSV() {
-		ConnectionFactory cf = CSVConnectionFactory.getInstance(LeCsv);
+	private static void connexionCSV(File csv) {
+
+		ConnectionFactory cf = CSVConnectionFactory.getInstance(csv);
 		especeDAO = cf.getEspeceDAO();
 		listEspeces = especeDAO.recupererToutes();
+
 	}
 
 	/**
@@ -128,6 +131,7 @@ public class TrucsUtiles {
 
 	/**
 	 * Méthode pour récuperer le stage courant
+	 * 
 	 * @param source
 	 * @return
 	 */
@@ -146,6 +150,7 @@ public class TrucsUtiles {
 
 	/**
 	 * Getter pour le DAO
+	 * 
 	 * @return
 	 */
 	public static EspeceDAO getDAO() {

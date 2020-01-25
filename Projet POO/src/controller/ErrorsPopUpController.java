@@ -32,7 +32,7 @@ public class ErrorsPopUpController implements Initializable{
 	 */
 	private void recupererErreurs(ArrayList<String> tableauErreurs) {
 		for(String e : tableauErreurs)
-			textArea.setText(e+"\n");
+			textArea.setText(textArea.getText()+e+"\n");
 		return;
 	}
 }
