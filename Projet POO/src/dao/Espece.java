@@ -27,9 +27,9 @@ public class Espece {
 	protected String categorieImportance;
 	
 	protected static ArrayList<String> listeGroupeTrophique = new ArrayList<String>(Arrays.asList("carnivore","necrophage","herbivore","detritivore",
-			"suspensivore","deposivore selectif","deposivore non selectif","microbrouteur"));
+			"suspensivore","deposivore selectif","deposivore non selectif","microbrouteur","tous"));
 	protected static ArrayList<String> listeGroupeEcologique = new ArrayList<String>(Arrays.asList("sensible","indifferente","tolerante",
-			"opportuniste de 2e ordre","opportuniste de 1er ordre"));
+			"opportuniste de 2e ordre","opportuniste de 1er ordre","tous"));
 
 	
 

@@ -31,7 +31,7 @@ public class CSVConnectionFactory implements ConnectionFactory {
 	 * @return Un objet CSVConnectionFactory
 	 */
 	public static ConnectionFactory getInstance(File fichier) {
-		if (instance == null) {
+		if (instance == null || !fichier.equals(instance.getFile())) {
 			instance = new CSVConnectionFactory(fichier);
 		}
 		return instance;
