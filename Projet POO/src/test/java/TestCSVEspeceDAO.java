@@ -9,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -44,12 +43,12 @@ public class TestCSVEspeceDAO {
 		try {
 			husky = new Espece(id,"husky de sybérie","canis","canidae","carnivora","mammalia",
 					"chordata","il est traditionnellement élevé comme chien d'attelage","carnivore",
-					"sensible","4",dossierImages+"250px-Siberian-husky-1291343_1920.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg",
+					"sensible","4",10,dossierImages+"250px-Siberian-husky-1291343_1920.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg",
 					synonymes);
 		} catch (ChampIncorrectException e1) {
 			e1.printStackTrace();
 		}	
-		ligneHusky = "husky de sybérie,canis,canidae,carnivora,mammalia,chordata,il est traditionnellement élevé comme chien d'attelage,carnivore,sensible,4,https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg,chien des glaces,husky sibérien";
+		ligneHusky = "husky de sybérie,canis,canidae,carnivora,mammalia,chordata,il est traditionnellement élevé comme chien d'attelage,carnivore,sensible,4,10,https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg,chien des glaces,husky sibérien";
 
 		// On prépare un fichier csv
 		File fichier = new File("src/test/resources/test interface EspeceDAO.csv");
@@ -57,7 +56,7 @@ public class TestCSVEspeceDAO {
 				OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
 				BufferedWriter bw = new BufferedWriter(osw)) {
 			bw.write(ligneHusky+"\n" + 
-					"ligne test,1,1,1,1,1,1,carnivore,sensible,1,https://cdn.pixabay.com/photo/2019/12/23/08/15/alaska-4714097__340.jpg,syno 1, syno 2");
+					"ligne test,1,1,1,1,1,1,carnivore,sensible,1,10,https://cdn.pixabay.com/photo/2019/12/23/08/15/alaska-4714097__340.jpg,syno 1, syno 2");
 			bw.flush();
 		} catch (IOException e) {}
 
@@ -211,7 +210,7 @@ public class TestCSVEspeceDAO {
 		// Test ajout
 		Espece lambda = null;
 		try {
-			lambda = new Espece(999,"a","b","c","d","e","f","g","carnivore","sensible","j",dossierImages+"k","k",
+			lambda = new Espece(999,"a","b","c","d","e","f","g","carnivore","sensible","j",13,dossierImages+"k","k",
 					new ArrayList<String>());
 		} catch (ChampIncorrectException e) {
 			e.printStackTrace();

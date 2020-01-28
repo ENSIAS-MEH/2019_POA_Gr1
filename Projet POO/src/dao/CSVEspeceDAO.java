@@ -31,10 +31,9 @@ public class CSVEspeceDAO implements EspeceDAO {
 	protected File fichier; // Le fichier qu'on lit
 	protected ArrayList<String> contenuFichier = new ArrayList<String>();
 	protected int nouvelleLigne; // Cet entier correspond à la dernière ligne qui a été lue + 1
-	protected final int nombreElementsFixe = 11; // C'est le nombre minimum d'élements d'une ligne
-	// L'ordre des champs qui servira pour le filtrage 
+	protected final int nombreElementsFixe = 12; // C'est le nombre minimum d'élements d'une ligne
 	protected ArrayList<String> ordreChamp = new ArrayList<String>(Arrays.asList("nom","genre","famille",
-			"ordre","classe","embranchement","description","gTro","gEco")); 
+			"ordre","classe","embranchement","description","gTro","gEco","categorie d'importance")); // L'ordre des champs qui servira pour le filtrage 
 	protected ArrayList<String> listeErreurs = new ArrayList<String>(); // Une liste contenant les erreurs
 	// lors de la lecture du fichier csv
 	protected String dossierImages; // Le dossier où les images sont télechargées
@@ -57,13 +56,13 @@ public class CSVEspeceDAO implements EspeceDAO {
 	 * <br>
 	 * Les lignes du fichier csv doivent respecter la forme suivante :
 	 * nom,genre,famille,ordre,classe,embranchement, description,groupe
-	 * trophique,groupe ecologique,categorie importance, chemin vers l'image[,
+	 * trophique,groupe ecologique,categorie importance,zone,chemin vers l'image[,
 	 * synonyme 1, synonyme 2, ...].<br>
 	 * Tous les champs sont obligatoires sauf les synonymes.
 	 * 
 	 * @param fichier C'est le fichier qu'on veut lire
 	 * @param dossierImages C'est le dossier où seront stockées les images
-	 * @throws IOException              Si le fichier n'est pas trouvé
+	 * @throws IOException  Si le fichier n'est pas trouvé
 	 * 
 	 */
 	public CSVEspeceDAO(File fichier, String dossierImages) throws IOException {
@@ -102,10 +101,18 @@ public class CSVEspeceDAO implements EspeceDAO {
 						listeErreurs.add("Erreur à la ligne " + (i+1) + " : "+ erreur);
 						ligne = "???" + ligne; // On ajoute ??? pour signaler que la ligne est incorrecte
 					}
+					// On verifie que la zone est bien un entier
+					try {
+						Integer.parseInt(elements[10]);
+					} catch (NumberFormatException e) {
+						listeErreurs.add("Erreur à la ligne " + (i+1) + " : la valeur "+elements[10]
+								+ "est incorrecte : un entier est attendu");
+						ligne = "???" + ligne; // On ajoute ??? pour signaler que la ligne est incorrecte
+					}
 				}
 				// Si la ligne est bonne on tente de telecharger l'image
 				if (!ligne.startsWith("???")) {
-					int erreur = CSVEspeceDAO.copierImage(elements[10], dossierImages);
+					int erreur = CSVEspeceDAO.copierImage(elements[11], dossierImages);
 					if (erreur > 0) {
 						// Il y a un probleme ...
 						ligne = "???" + ligne; // On ajoute ??? pour signaler que la ligne est incorrecte
@@ -128,27 +135,40 @@ public class CSVEspeceDAO implements EspeceDAO {
 
 	/**
 	 * Renvoie un objet Espece qui correspond à la ligne en question <br> Tous les
-	 * caractères sont transformés en minuscule sauf l'url
+	 * caractères sont transformés en minuscule sauf l'url <br>
+	 * 
+	 * Note : le 11e element de la ligne doit être un entier et les 9e et 10e elements doivent être dans 
+	 * les listes des groupes trophique et ecologique : voir {@link dao.Espece#getListeGroupeEcologique()} et
+	 * {@link dao.Espece#getListeGroupeTrophique()}
 	 * 
 	 * @param ligne La chaine de caractere à convertir
 	 * @param id    l'identifiant de l'objet Espece à creer
-	 * @return l'objet Espece crée
+	 * @return l'objet Espece crée. En cas de probleme 
 	 */
 	public Espece convertir(String ligne, int id) {
 		String[] elements = ligne.split(",");
-		// On met tout en minuscule sauf l'url qui est le 11eme element
+		// On met tout en minuscule sauf l'url qui est le 12eme element
 		for (int i = 0; i < elements.length; i++)
-			elements[i] = i == 10 ? elements[i] : elements[i].toLowerCase();
+			elements[i] = i == 11 ? elements[i] : elements[i].toLowerCase();
 
 		ArrayList<String> synonymes = new ArrayList<String>();
 		if (elements.length > nombreElementsFixe) {
 			for (int i = nombreElementsFixe; i < elements.length; i++)
 				synonymes.add(elements[i]);
 		}
-		String cheminImageDisque = dossierImages + elements[10].substring(elements[10].lastIndexOf("/")+1);
+		// On determine le chemin normal de l'image sur le disque
+		String cheminImageDisque = dossierImages + elements[11].substring(elements[11].lastIndexOf("/")+1);
+		
+		// On convertir la zone en entier
+		int zone = 0;
+		try {
+			zone = Integer.parseInt(elements[10]);
+		} catch(NumberFormatException e) {
+			// On ne fait rien : zone prendra la valeur par defaut 0
+		}
 		try {
 			return new Espece(id, elements[0], elements[1], elements[2], elements[3], elements[4], elements[5], elements[6],
-					elements[7], elements[8], elements[9],cheminImageDisque,elements[10], synonymes);
+					elements[7], elements[8], elements[9],zone,cheminImageDisque,elements[11], synonymes);
 		} catch (ChampIncorrectException e) {
 			return null;
 		}
@@ -167,12 +187,11 @@ public class CSVEspeceDAO implements EspeceDAO {
 		ArrayList<String> liste = espece.getSynonymes();
 		for (int i = 0; i < liste.size(); i++)
 			synonymes += (i == 0 ? "" : ",") + liste.get(i);
-		return (espece.getNom() + "," + espece.getGenre() + "," + espece.getFamille() + "," + espece.getOrdre() + ","
-				+ espece.getClasse() + "," + espece.getEmbranchement() + "," + espece.getDescription() + ","
-				+ espece.getGroupeTrophique() + "," + espece.getGroupeEcologique() + ","
-				+ espece.getCategorieImportance() + ",").toLowerCase() + espece.getCheminImageOriginale() + ","
-				+ synonymes.toLowerCase();
-
+		return (espece.getNom() + "," + espece.getGenre() + "," + espece.getFamille() + "," + 
+			espece.getOrdre() + "," + espece.getClasse() + "," + espece.getEmbranchement() + "," +
+			espece.getDescription() + "," + espece.getGroupeTrophique() + "," + 
+			espece.getGroupeEcologique() + "," + espece.getCategorieImportance() + "," + espece.getZone() + 
+			",").toLowerCase() + espece.getCheminImageOriginale() + "," + synonymes.toLowerCase();
 	}
 
 	/**

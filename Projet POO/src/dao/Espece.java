@@ -25,6 +25,7 @@ public class Espece {
 	protected String groupeTrophique;
 	protected String groupeEcologique;
 	protected String categorieImportance;
+	protected int zone;
 	
 	protected static ArrayList<String> listeGroupeTrophique = new ArrayList<String>(Arrays.asList("carnivore","necrophage","herbivore","detritivore",
 			"suspensivore","deposivore selectif","deposivore non selectif","microbrouteur"));
@@ -44,7 +45,7 @@ public class Espece {
 	 */
 	public Espece(int id, String nom, String genre, String famille, String ordre,
 			String classe, String embranchement, String description, String groupeTrophique,
-			String groupeEcologique, String categorieImportance,String cheminImageDisque,String cheminImageOriginale,ArrayList<String> synonymes) throws ChampIncorrectException {
+			String groupeEcologique, String categorieImportance,int zone,String cheminImageDisque,String cheminImageOriginale,ArrayList<String> synonymes) throws ChampIncorrectException {
 		String erreurEco = estCorrectTrophique(groupeTrophique),
 				erreurTro = estCorrectEcologique(groupeEcologique);
 		
@@ -65,15 +66,17 @@ public class Espece {
 		this.groupeTrophique = groupeTrophique;
 		this.groupeEcologique = groupeEcologique;
 		this.categorieImportance = categorieImportance;
+		this.zone = zone;
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-		/*
-		 * Fonction qui vérifie si obj est égal (du point de vue attribut ) à l'objet actuel.
-		 * Auto-générée
-		 */
+	public int hashCode() {
+		return Objects.hash(categorieImportance, cheminImageDisque, cheminImageOriginale, classe, description,
+				embranchement, famille, genre, groupeEcologique, groupeTrophique, id, nom, ordre, synonymes, zone);
+	}
 
+	@Override
+	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -89,9 +92,16 @@ public class Espece {
 				&& Objects.equals(genre, other.genre) && Objects.equals(groupeEcologique, other.groupeEcologique)
 				&& Objects.equals(groupeTrophique, other.groupeTrophique) && id == other.id
 				&& Objects.equals(nom, other.nom) && Objects.equals(ordre, other.ordre)
-				&& Objects.equals(synonymes, other.synonymes);
+				&& Objects.equals(synonymes, other.synonymes) && zone == other.zone;
 	}
-	
+
+	/**
+	 * Verifie si la chaine de caractere est une valeur correcte pour le groupe trophique
+	 * 
+	 * @param gTro La chaine de caractere dont on veut verifier la validité
+	 * @return Une chaine de caractere qui est soit vide (pas d'erreurs) soit contenant le message d'erreur
+	 * (non vide)
+	 */
 	public static String estCorrectTrophique(String gTro){
 		if (listeGroupeTrophique.contains(gTro))
 			return "";
@@ -100,6 +110,13 @@ public class Espece {
 		
 	}
 	
+	/**
+	 * Verifie si la chaine de caractere est une valeur correcte pour le groupe ecologique
+	 * 
+	 * @param gTro La chaine de caractere dont on veut verifier la validité
+	 * @return Une chaine de caractere qui est soit vide (pas d'erreurs) soit contenant le message d'erreur
+	 * (non vide)
+	 */
 	public static String estCorrectEcologique(String gEco){
 		if (listeGroupeEcologique.contains(gEco))
 			return "";
@@ -144,15 +161,40 @@ public class Espece {
 	public String getCategorieImportance() {
 		return categorieImportance;
 	}
+	
+	/**
+	 * Renvoie la liste des groupes trophiques valides pour l'objet Espece
+	 * @return Une liste contenant les valeurs valides
+	 */
 	public static ArrayList<String> getListeGroupeTrophique(){
 		return listeGroupeTrophique;
 	}
+	
+	/**
+	 * Renvoie la liste des groupes ecologiques valides pour l'objet Espece
+	 * @return Une liste contenant les valeurs valides
+	 */
 	public static ArrayList<String> getListeGroupeEcologique(){
 		return listeGroupeEcologique;
 	}
+	public int getZone() {
+		return zone;
+	}
+	
+	/**
+	 * 
+	 * @param zone the zone to set
+	 */
+	public void setZone(int zone) {
+		this.zone = zone;
+	}
+	
+	/**
+	 * 
+	 * @param id the id to set
+	 */
 	public void setId(int id) {
 		this.id = id;
-		
 	}
 
 	/**
