@@ -313,17 +313,13 @@ public class CSVEspeceDAO implements EspeceDAO {
 	@Override
 	public ArrayList<Espece> filtrer(String saisie, String champSaisi, String gEcoSaisi, String gTroSaisi) {
 		// Fonction de filtrage
-		
+		champSaisi = champSaisi.toLowerCase();
 		// On initialise des booleens qui nous permettront de chercher dans tous les champs
 		boolean tousEco = gEcoSaisi.equals("tous"), tousTro = gTroSaisi.equals("tous");
 		
 		// On determine la position des champs
 		// Cette position est la position du champ dans une ligne de fichier csv
 		int positionEco = ordreChamp.indexOf("gEco"), positionTro = ordreChamp.indexOf("gTro");
-		
-		if (champSaisi.equals("synonyme"))
-			// On le change en nom
-			champSaisi = "nom";
 		
 		// On commence le filtrage
 		ArrayList<Espece> resultat = new ArrayList<Espece>();

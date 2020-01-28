@@ -44,14 +44,14 @@
 						<Label prefHeight="25.0" prefWidth="147.0" text="Vous rechercher dans :" />
 						<HBox prefHeight="44.0" prefWidth="485.0" spacing="15.0">
 							<children>
-								<RadioButton fx:id="noms" mnemonicParsing="false" prefHeight="43.0" prefWidth="121.0" selected="true" text="Noms/Synonymes" wrapText="true">
+								<RadioButton fx:id="noms" mnemonicParsing="false" prefHeight="43.0" prefWidth="121.0" selected="true" text="Nom" wrapText="true">
 									<toggleGroup>
 										<ToggleGroup fx:id="FIltresRadioGroup" />
 									</toggleGroup>
 								</RadioButton>
-								<RadioButton fx:id="familles" mnemonicParsing="false" prefHeight="43.0" prefWidth="105.0" text="Familles" toggleGroup="$FIltresRadioGroup" />
-								<RadioButton fx:id="classes" mnemonicParsing="false" prefHeight="43.0" prefWidth="105.0" text="Classes" toggleGroup="$FIltresRadioGroup" />
-								<RadioButton fx:id="genres" mnemonicParsing="false" prefHeight="43.0" prefWidth="105.0" text="Genres" toggleGroup="$FIltresRadioGroup" />
+								<RadioButton fx:id="familles" mnemonicParsing="false" prefHeight="43.0" prefWidth="105.0" text="Famille" toggleGroup="$FIltresRadioGroup" />
+								<RadioButton fx:id="classes" mnemonicParsing="false" prefHeight="43.0" prefWidth="105.0" text="Classe" toggleGroup="$FIltresRadioGroup" />
+								<RadioButton fx:id="genres" mnemonicParsing="false" prefHeight="43.0" prefWidth="105.0" text="Genre" toggleGroup="$FIltresRadioGroup" />
 							</children>
 							<opaqueInsets>
 								<Insets />
@@ -62,10 +62,10 @@
 						</HBox>
 						<HBox prefHeight="44.0" prefWidth="485.0" spacing="15.0">
 							<children>
-								<RadioButton fx:id="descriptions" mnemonicParsing="false" prefHeight="43.0" prefWidth="121.0" text="Descriptions" toggleGroup="$FIltresRadioGroup" wrapText="true" />
-								<RadioButton fx:id="ordres" mnemonicParsing="false" prefHeight="43.0" prefWidth="105.0" text="Ordres" toggleGroup="$FIltresRadioGroup" />
-								<RadioButton fx:id="embranchements" mnemonicParsing="false" prefHeight="43.0" prefWidth="147.0" text="Embranchements" toggleGroup="$FIltresRadioGroup" />
-                        <RadioButton fx:id="tous" mnemonicParsing="false" prefHeight="43.0" prefWidth="147.0" text="Tous les champs" toggleGroup="$FIltresRadioGroup" />
+								<RadioButton fx:id="descriptions" mnemonicParsing="false" prefHeight="43.0" prefWidth="121.0" text="Description" toggleGroup="$FIltresRadioGroup" wrapText="true" />
+								<RadioButton fx:id="ordres" mnemonicParsing="false" prefHeight="43.0" prefWidth="105.0" text="Ordre" toggleGroup="$FIltresRadioGroup" />
+								<RadioButton fx:id="embranchements" mnemonicParsing="false" prefHeight="43.0" prefWidth="147.0" text="Embranchement" toggleGroup="$FIltresRadioGroup" />
+                        <RadioButton fx:id="tous" mnemonicParsing="false" prefHeight="43.0" prefWidth="147.0" text="Tous" toggleGroup="$FIltresRadioGroup" />
 							</children>
 							<opaqueInsets>
 								<Insets />

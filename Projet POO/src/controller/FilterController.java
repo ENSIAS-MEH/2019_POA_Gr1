@@ -36,7 +36,7 @@ public class FilterController implements Initializable {
 	private TextField searchTextField;
 
 	@FXML
-	private RadioButton noms, familles, classes, genres, descriptions, ordres, embranchements, tous;
+	private RadioButton noms, familles, classes, genres, descriptions, ordres, embranchements,tous;
 
 	@FXML
 	private ChoiceBox<String> groupeTrophiqueChoiceBox, groupeEcologiqueChoiceBox;
@@ -46,7 +46,7 @@ public class FilterController implements Initializable {
 
 	// On regroupe les boutons dans un tableau afin de determiner lequel est
 	// selectionné
-	private RadioButton[] buttonsList = { noms, familles, classes, genres, descriptions, ordres, embranchements, tous };
+	private RadioButton[] buttonsList;
 
 	static ArrayList<Espece> resultRecherche;
 
@@ -54,6 +54,7 @@ public class FilterController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		resultRecherche = null;
+		buttonsList = new RadioButton[]{ noms, familles, classes, genres, descriptions, ordres, embranchements, tous };
 
 		groupeTrophiqueChoiceBox.setId("groupeTrophiqueChoiceBox");
 		groupeEcologiqueChoiceBox.setId("groupeEcologiqueChoiceBox");
@@ -82,8 +83,7 @@ public class FilterController implements Initializable {
 		resultRecherche = (TrucsUtiles.getDAO()).filtrer(saisie, boutonChoisis, groupeEcologiqueChoisi,
 				groupeTrophiqueChoisi);
 
-		// TODO passer à la fenetre d'affichage avec un nouveau fichier csv qui
-		// correspond au resultat du filtrage ?
+		TrucsUtiles.changeStage(event,"/fxml/ResultDisplay.fxml",this);
 
 	}
 
@@ -113,6 +113,7 @@ public class FilterController implements Initializable {
 		// qu'on remplit à partir de celle dans la classe Espece
 		for (String s : Espece.getListeGroupeEcologique())
 			groupesEcologiquesArray.add(s);
+		groupesEcologiquesArray.add("tous"); // On ajoute le tous
 		
 		// et on adapte cette liste au CheckBox
 		ObservableList<String> groupesEcologiquesList = FXCollections.observableArrayList(groupesEcologiquesArray);
@@ -124,6 +125,7 @@ public class FilterController implements Initializable {
 
 		for (String s : Espece.getListeGroupeTrophique())
 			groupesTrophiquesArray.add(s);
+		groupesTrophiquesArray.add("tous");
 
 		ObservableList<String> groupesTrophiquesList = FXCollections.observableArrayList(groupesTrophiquesArray);
 		groupeTrophiqueChoiceBox.setItems(groupesTrophiquesList);
