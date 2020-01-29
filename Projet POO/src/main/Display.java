@@ -30,12 +30,12 @@ public abstract class Display {
 	 * @param especes
 	 * @param vbox
 	 */
-	public void recupererResultat(ArrayList<Espece> especes, VBox vbox) {
-		vbox.getChildren().clear();
-		for (Espece espece : especes) {
-			vbox.getChildren().add(especeRow(espece));
-		}
-	}
+//	public void recupererResultat(ArrayList<Espece> especes, VBox vbox) {
+//		vbox.getChildren().clear();
+//		for (Espece espece : especes) {
+//			vbox.getChildren().add(especeRow(espece));
+//		}
+//	}
 
 	/**
 	 * Méthode pour generer un affichage horizontal pour une espece donnée Cet

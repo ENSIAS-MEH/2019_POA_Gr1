@@ -36,7 +36,7 @@ public class FilterController implements Initializable {
 	private TextField searchTextField;
 
 	@FXML
-	private RadioButton noms, familles, classes, genres, descriptions, ordres, embranchements,tous;
+	private RadioButton nom, famille, classe, genre, description, ordre, embranchement, categorie, tous;
 
 	@FXML
 	private ChoiceBox<String> groupeTrophiqueChoiceBox, groupeEcologiqueChoiceBox;
@@ -54,10 +54,8 @@ public class FilterController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		resultRecherche = null;
-		buttonsList = new RadioButton[]{ noms, familles, classes, genres, descriptions, ordres, embranchements, tous };
-
-		groupeTrophiqueChoiceBox.setId("groupeTrophiqueChoiceBox");
-		groupeEcologiqueChoiceBox.setId("groupeEcologiqueChoiceBox");
+		buttonsList = new RadioButton[] { nom, famille, classe, genre, description, ordre, embranchement, categorie,
+				tous };
 
 		initializeGroupesTrophiques_Ecologiques();
 
@@ -73,8 +71,8 @@ public class FilterController implements Initializable {
 		// On récupère ce qui est dans la zone de saisie
 		String saisie = searchTextField.getText();
 
-		// On récupère le RadioButton choisis ( catégorie dans laquelle chercher )
-		String boutonChoisis = fetchClickedRadioButton().getText();
+		// On récupère le RadioButton choisis ( champ dans laquel chercher )
+		String boutonChoisis = fetchClickedRadioButton().getId();
 
 		// On récupère les groupes ecologiques et trophiques choisis
 		String groupeEcologiqueChoisi = groupeEcologiqueChoiceBox.getValue().toString();
@@ -83,7 +81,7 @@ public class FilterController implements Initializable {
 		resultRecherche = (TrucsUtiles.getDAO()).filtrer(saisie, boutonChoisis, groupeEcologiqueChoisi,
 				groupeTrophiqueChoisi);
 
-		TrucsUtiles.changeStage(event,"/fxml/ResultDisplay.fxml",this);
+		TrucsUtiles.changeStage(event, "/fxml/ResultDisplay.fxml", this);
 
 	}
 
@@ -106,15 +104,15 @@ public class FilterController implements Initializable {
 	 * tableaux des groupes fournits dans la classe Espece
 	 */
 	private void initializeGroupesTrophiques_Ecologiques() {
-		
+
 		// On initialise une liste des groupes écologiques
 		ArrayList<String> groupesEcologiquesArray = new ArrayList<String>();
-		
+
 		// qu'on remplit à partir de celle dans la classe Espece
 		for (String s : Espece.getListeGroupeEcologique())
 			groupesEcologiquesArray.add(s);
 		groupesEcologiquesArray.add("tous"); // On ajoute le tous
-		
+
 		// et on adapte cette liste au CheckBox
 		ObservableList<String> groupesEcologiquesList = FXCollections.observableArrayList(groupesEcologiquesArray);
 		groupeEcologiqueChoiceBox.setItems(groupesEcologiquesList);
@@ -136,6 +134,7 @@ public class FilterController implements Initializable {
 	/**
 	 * Méthode pour l'option dans la barre de menu>Fichier>Ouvrir un fichier On
 	 * change le fichier csv, et on réaffiche
+	 * 
 	 * @param event
 	 */
 	@FXML
@@ -166,6 +165,7 @@ public class FilterController implements Initializable {
 	 * Méthode pour l'option dans la barre de menu>Fichier>Fermer le fichier On
 	 * remet le fichier LeCsv en null On repasse à la premiere fenetre de
 	 * l'application
+	 * 
 	 * @param event
 	 */
 	@FXML
@@ -177,17 +177,19 @@ public class FilterController implements Initializable {
 	/**
 	 * Méthode pour l'option dans la barre de menu>Help>Rechercher espèces On passe
 	 * à la fenetre de filtrage
+	 * 
 	 * @param event
 	 */
 	@FXML
 	private void rechercherEspeceHandler(ActionEvent event) {
 		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this);
 	}
-	
+
 	/**
 	 * Méthode pour revenir à l'affichage premier du fichier
+	 * 
 	 * @param event
-	 */ 
+	 */
 	@FXML
 	private void retourButtonHandler(ActionEvent event) {
 		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this);

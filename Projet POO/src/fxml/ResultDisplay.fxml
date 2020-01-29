@@ -7,31 +7,46 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ResultDisplayController">
-   <children>
-      <MenuBar fx:id="menuBar" layoutY="1.0" prefHeight="27.0" prefWidth="600.0">
-         <menus>
-            <Menu mnemonicParsing="false" text="Fichier">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#ouvrirFichierHandler" text="Ouvrir un autre fichier" />
-                  <MenuItem mnemonicParsing="false" onAction="#fermerFichierHandler" text="Fermer le fichier" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#rechercherEspeceHandler" text="Rechercher des espèces" />
-               </items>
-            </Menu>
-         </menus>
-      </MenuBar>
-      <Label layoutX="6.0" layoutY="33.0" prefHeight="51.0" prefWidth="274.0" text="Resultat de la recherche :" />
-      <ScrollPane layoutY="93.0" prefHeight="307.0" prefWidth="600.0">
-         <content>
-            <VBox fx:id="vbox" prefHeight="285.0" prefWidth="585.0" />
-         </content>
-      </ScrollPane>
-      <Button layoutX="380.0" layoutY="37.0" mnemonicParsing="false" onAction="#retourButtonHandler" prefHeight="44.0" prefWidth="206.0" text="Retour à l'affichage" />
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="613.0" prefWidth="826.0" styleClass="anchorpane" stylesheets="@../css/DisplayCSS.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ResultDisplayController">
+	<children>
+		<MenuBar fx:id="menuBar" layoutY="1.0" prefHeight="27.0" prefWidth="826.0">
+			<menus>
+				<Menu mnemonicParsing="false" text="Fichier">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#ouvrirFichierHandler" text="Ouvrir un autre fichier" />
+						<MenuItem mnemonicParsing="false" onAction="#fermerFichierHandler" text="Fermer le fichier" />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Help">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#rechercherEspeceHandler" text="Rechercher des espèces" />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+		<Label layoutX="71.0" layoutY="76.0" prefHeight="51.0" prefWidth="274.0" text="Resultat de la recherche :" />
+		<Button layoutX="606.0" layoutY="79.0" mnemonicParsing="false" onAction="#retourButtonHandler" prefHeight="44.0" prefWidth="206.0" text="Retour à l'affichage" />
+		<ScrollPane layoutY="504.0" opacity="0.59" prefHeight="109.0" prefWidth="826.0">
+			<content>
+				<HBox fx:id="hbox_3" alignment="CENTER" prefHeight="103.0" prefWidth="820.0" />
+			</content>
+		</ScrollPane>
+		<ScrollPane layoutY="395.0" opacity="0.59" prefHeight="109.0" prefWidth="826.0">
+			<content>
+				<HBox fx:id="hbox_2" alignment="CENTER" prefHeight="107.0" prefWidth="819.0" />
+			</content>
+		</ScrollPane>
+		<ScrollPane layoutY="280.0" opacity="0.59" prefHeight="115.0" prefWidth="826.0">
+			<content>
+				<HBox fx:id="hbox_1" alignment="CENTER" prefHeight="109.0" prefWidth="821.0" />
+			</content>
+		</ScrollPane>
+		<ScrollPane layoutY="165.0" opacity="0.59" prefHeight="115.0" prefWidth="826.0">
+			<content>
+				<HBox fx:id="hbox_0" alignment="CENTER" prefHeight="110.0" prefWidth="821.0" />
+			</content>
+		</ScrollPane>
+	</children>
 </AnchorPane>

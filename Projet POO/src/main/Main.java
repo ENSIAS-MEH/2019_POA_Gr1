@@ -19,6 +19,8 @@ public class Main extends Application{
 		Scene sc = new Scene(root);
 		primaryStage.setTitle("Le projet POO");
 		primaryStage.setScene(sc);
+		primaryStage.centerOnScreen();
+		primaryStage.setResizable(false);
 		primaryStage.show();
 	}
 	

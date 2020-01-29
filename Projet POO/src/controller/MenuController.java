@@ -33,10 +33,11 @@ public class MenuController implements Initializable {
 	@FXML
 	public void importerCsvHandler(ActionEvent event) {
 		try {
+			
 			// On charge le fichier csv et passe à la fenetre suivante ( affichage du
 			// fichier )
 			TrucsUtiles.setCsv(event, "/fxml/FileDisplay.fxml", this);
-			
+
 			/*
 			 * On affiche un pop qui indique que le fichier a bien été récupéré Et affiche
 			 * les erreurs dans ce fichier s'il y'en a
@@ -47,6 +48,7 @@ public class MenuController implements Initializable {
 			Scene scene = new Scene(popUpRoot);
 			popUp.setScene(scene);
 			popUp.show();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

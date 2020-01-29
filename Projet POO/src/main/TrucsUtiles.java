@@ -120,9 +120,12 @@ public class TrucsUtiles {
 		// Changement de la fenetre courante
 		if (!(currentWindow == null)) {
 			try {
-				currentWindow.setScene(new Scene(FXMLLoader.load(context.getClass().getResource(fxmlPath))));
+				// FIXME l'erreur dans le fxmlloader peut etre
+				Scene sc = new Scene(FXMLLoader.load(context.getClass().getResource(fxmlPath)));
+				currentWindow.setScene(sc);
 			} catch (IOException e1) {
 				e1.printStackTrace();
+				return false;
 			}
 			return true;
 		} else
