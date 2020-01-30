@@ -37,8 +37,10 @@ public interface EspeceDAO {
 	 * Cette fonction modifie l'identifiant de l'objet espece passé en parametre
 	 * @param espece L'espece qu'on veut ajouter à la base de données
 	 * @return Un entier qui correspond à l'identifiant de l'espece dans la base de données
+	 * @throws ChampIncorrectException Si l'espece n'a pas d'image sur le disque et qu'on arrive pas à la 
+	 * recuperer
 	 */
-	public int ajouter(Espece espece);
+	public int ajouter(Espece espece) throws ChampIncorrectException;
 	
 	/**
 	 * Fonction qui supprime une espece de la base de données

@@ -27,32 +27,49 @@ public class Espece {
 	protected String categorieImportance;
 	protected int zone;
 	
+	// Les variables statiques suivantes servent au controle des attributs de l'objet
+
 	protected static ArrayList<String> listeGroupeTrophique = new ArrayList<String>(Arrays.asList("carnivore","necrophage","herbivore","detritivore",
 			"suspensivore","deposivore selectif","deposivore non selectif","microbrouteur"));
 	protected static ArrayList<String> listeGroupeEcologique = new ArrayList<String>(Arrays.asList("sensible","indifferente","tolerante",
 			"opportuniste de 2e ordre","opportuniste de 1er ordre"));
+	protected static int minZone = 0, maxZone = 3;
 
 	
 
 	/**
 	 * Crée un objet espece avec les différentes valeurs spécifiées. <br>
-	 * Le groupe trophique doit être dans la liste : carnivore, nécrophage,
-	 * herbivore, détritivore, suspensivore, déposivore sélectif, déposivore non sélectif, microbrouteur <br>
-	 *  Le groupe ecologique doit être dans la liste : sensible, indifférente, tolérantes, 
-	 *  opportuniste de 2e ordre, opportuniste de 1er ordre 
+	 * Pour connaitre les valeurs correctes, voir {@link dao.Espece#getListeGroupeEcologique} 
+	 * pour le groupe ecologique, {@link dao.Espece#getListeGroupeTrophique} pour le groupe trophique et 
+	 * {@link dao.Espece#getIntervalleZone} pour la zone.
 	 * @throws ChampIncorrectException Si l'un des champs a une valeur incorrecte
 	 * 
 	 */
 	public Espece(int id, String nom, String genre, String famille, String ordre,
 			String classe, String embranchement, String description, String groupeTrophique,
-			String groupeEcologique, String categorieImportance,int zone,String cheminImageDisque,String cheminImageOriginale,ArrayList<String> synonymes) throws ChampIncorrectException {
-		String erreurEco = estCorrectTrophique(groupeTrophique),
-				erreurTro = estCorrectEcologique(groupeEcologique);
+			String groupeEcologique, String categorieImportance,String zone,String cheminImageDisque,
+			String cheminImageOriginale,ArrayList<String> synonymes) throws ChampIncorrectException {
+
+		// On vérifie que les groupes ecologique et trophique sont bons
+		String erreurGroupes = estCorrectTrophique(groupeTrophique) + " ; " + estCorrectEcologique(groupeEcologique);
+		if (!erreurGroupes.equals(" ; ")) 
+			throw new ChampIncorrectException(erreurGroupes);
 		
-		if (!(erreurEco.isEmpty() && erreurTro.isEmpty()))
-			// L'un des groupes n'est pas correct, on lève une exception
-			throw new ChampIncorrectException("Erreur : "+erreurEco+"\n"+erreurTro);
+		// On verifie que la zone est bien un entier
+		try {
+			this.zone = Integer.parseInt(zone);
+		} catch (NumberFormatException e) {
+			throw new ChampIncorrectException("La valeur << " + zone + " >> pour la zone est incorrecte "
+					+ ": un entier est attendu");
+		}
+		
+		// On verifie que l'intervalle est le bon
+		if (this.zone > maxZone || this.zone < minZone)
+			throw new ChampIncorrectException("L'entier " + zone + " pour la zone est incorrect : "
+					+ "il doit être entre "+minZone+" et "+maxZone);
+		
 		this.id = id;
+		// On garde le meme nom pour l'image
 		this.cheminImageDisque = cheminImageDisque;
 		this.cheminImageOriginale = cheminImageOriginale;
 		this.nom = nom;
@@ -66,7 +83,21 @@ public class Espece {
 		this.groupeTrophique = groupeTrophique;
 		this.groupeEcologique = groupeEcologique;
 		this.categorieImportance = categorieImportance;
-		this.zone = zone;
+	}
+	
+	/**
+	 * Crée un objet espece avec le champ cheminImageDisque vide.
+	 * 
+	 * @see dao.Espece#Espece(int, String, String, String, String, String, String, String, String, String, String, String, String, String, ArrayList)
+	 * 
+	 */
+	public Espece(int id, String nom, String genre, String famille, String ordre,
+			String classe, String embranchement, String description, String groupeTrophique,
+			String groupeEcologique, String categorieImportance,String zone,
+			String cheminImageOriginale,ArrayList<String> synonymes) throws ChampIncorrectException {
+		this(id, nom, genre, famille, ordre, classe, embranchement, description, groupeTrophique, 
+				groupeEcologique, categorieImportance, zone, "", cheminImageOriginale, synonymes);
+		
 	}
 	
 	@Override
@@ -94,6 +125,7 @@ public class Espece {
 				&& Objects.equals(nom, other.nom) && Objects.equals(ordre, other.ordre)
 				&& Objects.equals(synonymes, other.synonymes) && zone == other.zone;
 	}
+
 
 	/**
 	 * Verifie si la chaine de caractere est une valeur correcte pour le groupe trophique
@@ -177,6 +209,14 @@ public class Espece {
 	public static ArrayList<String> getListeGroupeEcologique(){
 		return listeGroupeEcologique;
 	}
+	/**
+	 * Renvoie les valeurs extremes (bornes incluses) que peut prendre l'attribut zone
+	 * @return un tableau de 2 entiers : le 1er est le minimum, le 2e est le maximum
+	 */
+	public static int[] getIntervalleZone() {
+		return new int[] {minZone,maxZone};
+	}
+	
 	public int getZone() {
 		return zone;
 	}
@@ -300,9 +340,5 @@ public class Espece {
 	 */
 	public void setCheminImageOriginale(String cheminImageOriginale) {
 		this.cheminImageOriginale = cheminImageOriginale;
-	}
-	
-	public static void main(String[] args) {
-		
 	}
 }

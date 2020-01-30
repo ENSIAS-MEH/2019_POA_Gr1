@@ -31,7 +31,6 @@ public class TestCSVEspeceDAO {
 	// Classe qui sert à tester les différentes méthodes de la classe CSVEspeceDAO
 	private static Espece husky; // L'espece qui va servir de test
 	private static String ligneHusky;
-	private static int id = 0; // L'id de l'espece
 	private static String dossierImages = "src/test/resources/images/";
 
 
@@ -41,14 +40,15 @@ public class TestCSVEspeceDAO {
 		synonymes.add("chien des glaces");synonymes.add("husky sibérien");
 		// On crée l'objet
 		try {
-			husky = new Espece(id,"husky de sybérie","canis","canidae","carnivora","mammalia",
+			husky = new Espece(0,"husky de sybérie","canis","canidae","carnivora","mammalia",
 					"chordata","il est traditionnellement élevé comme chien d'attelage","carnivore",
-					"sensible","4",10,dossierImages+"250px-Siberian-husky-1291343_1920.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg",
+					"sensible","4","2",CSVEspeceDAO.verifierImage("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg", dossierImages),
+					"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg",
 					synonymes);
 		} catch (ChampIncorrectException e1) {
 			e1.printStackTrace();
 		}	
-		ligneHusky = "husky de sybérie,canis,canidae,carnivora,mammalia,chordata,il est traditionnellement élevé comme chien d'attelage,carnivore,sensible,4,10,https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg,chien des glaces,husky sibérien";
+		ligneHusky = "husky de sybérie,canis,canidae,carnivora,mammalia,chordata,il est traditionnellement élevé comme chien d'attelage,carnivore,sensible,4,2,https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg,chien des glaces,husky sibérien";
 
 		// On prépare un fichier csv
 		File fichier = new File("src/test/resources/test interface EspeceDAO.csv");
@@ -56,7 +56,7 @@ public class TestCSVEspeceDAO {
 				OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
 				BufferedWriter bw = new BufferedWriter(osw)) {
 			bw.write(ligneHusky+"\n" + 
-					"ligne test,1,1,1,1,1,1,carnivore,sensible,1,10,https://cdn.pixabay.com/photo/2019/12/23/08/15/alaska-4714097__340.jpg,syno 1, syno 2");
+					"ligne test,1,1,1,1,1,1,carnivore,sensible,1,2,https://cdn.pixabay.com/photo/2019/12/23/08/15/alaska-4714097__340.jpg,syno 1, syno 2");
 			bw.flush();
 		} catch (IOException e) {}
 
@@ -84,6 +84,7 @@ public class TestCSVEspeceDAO {
 		try {
 			Files.createDirectories(Paths.get(dossierSortie+"/essai/"));
 			Files.deleteIfExists(Paths.get(dossierSortie+"/essai/testLecture.png"));
+			Files.deleteIfExists(Paths.get(dossierSortie+"/essai/testLecture.txt"));
 		} catch (IOException e) {
 			// On ne fait rien (le dossier est déjà vide)
 		}
@@ -123,13 +124,17 @@ public class TestCSVEspeceDAO {
 		// 7eme cas : le chemin correspond à une image sur le disque dur qui n'existe pas
 		chemin = "C:/Je/Ne/Suis/Pas/La.png";
 		assertEquals(6,CSVEspeceDAO.copierImage(chemin, dossierSortie));
+		
+		// 8eme cas : le chemin correspond à un fichier qui n'est pas une image
+		chemin = "src/test/resources/testLecture.txt";
+		assertEquals(7,CSVEspeceDAO.copierImage(chemin, dossierSortie+"essai/"));
 
-		// 8eme cas : le chemin correspond à une image présente sur le disque
+		// 9eme cas : le chemin correspond à une image présente sur le disque
 		chemin = "src/test/resources/testLecture.png";
 
-		assertEquals(0,CSVEspeceDAO.copierImage(chemin, dossierSortie+"/essai/"));
+		assertEquals(0,CSVEspeceDAO.copierImage(chemin, dossierSortie+"essai/"));
 
-		// 9eme cas : autres erreurs
+		// 10eme cas : autres erreurs
 		// Par exemple la connexion se coupe brusquement ...
 		// Le retour est 5 mais on ne le teste pas ici ...	
 	}
@@ -180,7 +185,11 @@ public class TestCSVEspeceDAO {
 
 		// On teste les methodes convertir
 		assertEquals(ligneHusky,lecteurCSV.convertir(husky));
-		assertEquals(husky,lecteurCSV.convertir(ligneHusky,id));
+		try {
+			assertEquals(husky,lecteurCSV.convertir(ligneHusky,husky.getId()));
+		} catch (ChampIncorrectException e) {
+			fail("Ligne correcte !");
+		}
 	}
 
 	@Test
@@ -198,25 +207,29 @@ public class TestCSVEspeceDAO {
 		} 
 
 		// Test lecture
-		Espece huskyLu = especeDAO.recuperer(id);
+		Espece huskyLu = especeDAO.recuperer(0);
 		assertEquals(husky,huskyLu);
 
 		// Test modification
 		huskyLu.setDescription("modification de la description");
 		husky.setDescription("modification de la description");
 		especeDAO.mettreAJour(huskyLu);
-		assertEquals(husky,especeDAO.recuperer(id));
+		assertEquals(husky,especeDAO.recuperer(huskyLu.getId()));
 
 		// Test ajout
 		Espece lambda = null;
 		try {
-			lambda = new Espece(999,"a","b","c","d","e","f","g","carnivore","sensible","j",13,dossierImages+"k","k",
+			lambda = new Espece(999,"a","b","c","d","e","f","g","carnivore","sensible","j","1","src/test/resources/testLecture.png",
 					new ArrayList<String>());
 		} catch (ChampIncorrectException e) {
 			e.printStackTrace();
 		}
 		// L'identifiant de lambda va être modifié lors de l'ajout dans le fichier
-		especeDAO.ajouter(lambda);
+		try {
+			especeDAO.ajouter(lambda);
+		} catch (ChampIncorrectException e1) {
+			fail("Espece incorrecte !");
+		}
 		int idLambda = lambda.getId();
 		assertEquals(lambda.getId(),idLambda); 
 		assertEquals(lambda,especeDAO.recuperer(idLambda));
@@ -250,16 +263,20 @@ public class TestCSVEspeceDAO {
 		} 
 		
 		// On vérifie le nombre de ligne
-		assertEquals(especeDAO.getContenuFichier().size(),contenuFichierReel.size());
+		assertEquals(especeDAO.recupererToutes().size(),contenuFichierReel.size());
 
 		// On vérifie la ligne ajoutée
 		String ligne = contenuFichierReel.get(idLambda);
-		assertEquals(lambda,especeDAO.convertir(ligne,idLambda));
+		try {
+			assertEquals(lambda,especeDAO.convertir(ligne,idLambda));
+		} catch (ChampIncorrectException e) {
+			fail("L'espece est correcte ! ");
+		}
 		
 		// Test suppression
 		
 		especeDAO.supprimer(idLambda);
-		assertEquals("",especeDAO.getContenuFichier().get(idLambda));
+		assertEquals(null,especeDAO.recupererToutes().get(idLambda));
 	}
 
 }
