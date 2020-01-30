@@ -18,6 +18,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.TrucsUtiles;
 
@@ -155,6 +156,8 @@ public class FilterController implements Initializable {
 			Parent popUpRoot = FXMLLoader.load(getClass().getResource("/fxml/ErrorsPopUp.fxml"));
 			Scene scene = new Scene(popUpRoot);
 			popUp.setScene(scene);
+			popUp.initOwner(TrucsUtiles.getStage(event));
+			popUp.initModality(Modality.APPLICATION_MODAL);
 			popUp.show();
 		} catch (IOException e) {
 			e.printStackTrace();

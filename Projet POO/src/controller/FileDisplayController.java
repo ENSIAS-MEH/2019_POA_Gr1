@@ -15,22 +15,26 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.TrucsUtiles;
 
 public class FileDisplayController implements Initializable {
 
-	// On retient la barre de menu dans cette fenetre
 	@FXML
 	private MenuBar menuBar;
 
 	@FXML
 	private HBox hbox_0, hbox_1, hbox_2, hbox_3;
+
+	@FXML
+	private Button ajouterEspece;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -45,6 +49,8 @@ public class FileDisplayController implements Initializable {
 		recupererResultat(TrucsUtiles.getListEspeces());
 
 	}
+
+	private ArrayList<CheckBox> CheckBoxList = new ArrayList<CheckBox>();
 
 	/**
 	 * Méthode pour l'option dans la barre de menu>Fichier>Ouvrir un fichier On
@@ -69,8 +75,13 @@ public class FileDisplayController implements Initializable {
 			Parent popUpRoot = FXMLLoader.load(getClass().getResource("/fxml/ErrorsPopUp.fxml"));
 			Scene scene = new Scene(popUpRoot);
 			popUp.setScene(scene);
-			popUp.show();
-
+			try {
+				popUp.initOwner(TrucsUtiles.getStage(event));
+				popUp.initModality(Modality.APPLICATION_MODAL);
+				popUp.showAndWait();
+			} catch (Exception e) {
+				System.out.println("Une exception qui me résout un problème, pas mal");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -133,6 +144,14 @@ public class FileDisplayController implements Initializable {
 	 * @return
 	 */
 	private VBox especeVBox(Espece espece) {
+		HBox hbox = new HBox();
+		hbox.setCenterShape(true);
+		hbox.getChildren().addAll(boutonEspece(espece), new CheckBox() {
+			{
+				CheckBoxList.add(this);
+			}
+		});
+
 		VBox vbox = new VBox();
 		vbox.getChildren().addAll(new ImageView() {
 			{
@@ -140,8 +159,10 @@ public class FileDisplayController implements Initializable {
 				setFitHeight(60);
 				setImage(new Image((new File(espece.getCheminImageDisque())).toURI().toString()));
 			}
-		}, boutonEspece(espece));
+		}, hbox);
+
 		vbox.setCenterShape(true);
+
 		return vbox;
 	}
 
@@ -167,4 +188,46 @@ public class FileDisplayController implements Initializable {
 		return b;
 	}
 
+	/**
+	 * Méthode pour passer à la fenetre d'ajout d'une espece dans le fichier
+	 * 
+	 * @param event
+	 */
+	@FXML
+	private void ajouterEspeceHandler(ActionEvent event) {
+		Stage ajoutStage = null;
+		try {
+			ajoutStage = new Stage() {
+				{
+					setScene(new Scene(FXMLLoader.load(getClass().getResource("/fxml/AjouterEspece.fxml"))));
+				}
+			};
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		ajoutStage.initOwner(TrucsUtiles.getStage(event));
+		ajoutStage.initModality(Modality.APPLICATION_MODAL);
+		ajoutStage.setResizable(false);
+		ajoutStage.showAndWait();
+	}
+
+	/**
+	 * Méthode pour supprimer des especes. Elle doivent être selectionnées deja par
+	 * les checkbox
+	 * 
+	 * @param event
+	 */
+	@FXML
+	private void supprimerEspecesHandler(ActionEvent event) {
+		for (CheckBox cb : CheckBoxList) {
+			if (cb.isSelected()) {
+				TrucsUtiles.getDAO()
+						.supprimer((((TrucsUtiles.getListEspeces()).get(CheckBoxList.indexOf(cb)))).getId());
+			}
+		}
+		TrucsUtiles.getDAO().enregistrerModifications();
+		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this);
+	}
 }

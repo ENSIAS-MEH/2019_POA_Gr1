@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.TrucsUtiles;
 
@@ -46,6 +47,8 @@ public class MenuController implements Initializable {
 			popUp.setTitle("Succès");
 			Parent popUpRoot = FXMLLoader.load(getClass().getResource("/fxml/ErrorsPopUp.fxml"));
 			Scene scene = new Scene(popUpRoot);
+			popUp.initOwner(TrucsUtiles.getStage(event));
+			popUp.initModality(Modality.APPLICATION_MODAL);
 			popUp.setScene(scene);
 			popUp.show();
 			

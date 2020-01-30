@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.TrucsUtiles;
 
@@ -90,6 +91,8 @@ public class CreatureDisplayController implements Initializable {
 			Parent popUpRoot = FXMLLoader.load(getClass().getResource("/fxml/ErrorsPopUp.fxml"));
 			Scene scene = new Scene(popUpRoot);
 			popUp.setScene(scene);
+			popUp.initOwner(TrucsUtiles.getStage(event));
+			popUp.initModality(Modality.APPLICATION_MODAL);
 			popUp.show();
 
 		} catch (IOException e) {

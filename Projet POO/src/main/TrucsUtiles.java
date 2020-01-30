@@ -123,6 +123,7 @@ public class TrucsUtiles {
 				// FIXME l'erreur dans le fxmlloader peut etre
 				Scene sc = new Scene(FXMLLoader.load(context.getClass().getResource(fxmlPath)));
 				currentWindow.setScene(sc);
+				currentWindow.centerOnScreen();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 				return false;
