@@ -50,26 +50,21 @@ public class Espece {
 			String groupeEcologique, String categorieImportance,String zone,String cheminImageDisque,
 			String cheminImageOriginale,ArrayList<String> synonymes) throws ChampIncorrectException {
 
-		// On vérifie que les groupes ecologique et trophique sont bons
-		String erreurGroupes = estCorrectTrophique(groupeTrophique) + " ; " + estCorrectEcologique(groupeEcologique);
-		if (!erreurGroupes.equals(" ; ")) 
-			throw new ChampIncorrectException(erreurGroupes);
-		
 		// On verifie que la zone est bien un entier
+		int zoneRecu;
 		try {
-			this.zone = Integer.parseInt(zone);
+			zoneRecu = Integer.parseInt(zone);
 		} catch (NumberFormatException e) {
 			throw new ChampIncorrectException("La valeur << " + zone + " >> pour la zone est incorrecte "
 					+ ": un entier est attendu");
 		}
-		
-		// On verifie que l'intervalle est le bon
-		if (this.zone > maxZone || this.zone < minZone)
-			throw new ChampIncorrectException("L'entier " + zone + " pour la zone est incorrect : "
-					+ "il doit être entre "+minZone+" et "+maxZone);
+		// On affecte les valeurs 
+		// En cas de valeur invalide, une exception sera levée
+		setGroupeTrophique(groupeTrophique);
+		setGroupeEcologique(groupeEcologique);
+		setZone(zoneRecu);
 		
 		this.id = id;
-		// On garde le meme nom pour l'image
 		this.cheminImageDisque = cheminImageDisque;
 		this.cheminImageOriginale = cheminImageOriginale;
 		this.nom = nom;
@@ -124,36 +119,6 @@ public class Espece {
 				&& Objects.equals(groupeTrophique, other.groupeTrophique) && id == other.id
 				&& Objects.equals(nom, other.nom) && Objects.equals(ordre, other.ordre)
 				&& Objects.equals(synonymes, other.synonymes) && zone == other.zone;
-	}
-
-
-	/**
-	 * Verifie si la chaine de caractere est une valeur correcte pour le groupe trophique
-	 * 
-	 * @param gTro La chaine de caractere dont on veut verifier la validité
-	 * @return Une chaine de caractere qui est soit vide (pas d'erreurs) soit contenant le message d'erreur
-	 * (non vide)
-	 */
-	public static String estCorrectTrophique(String gTro){
-		if (listeGroupeTrophique.contains(gTro))
-			return "";
-		return "Le groupe trophique doit être dans la liste : "
-		+ listeGroupeTrophique.toString();
-		
-	}
-	
-	/**
-	 * Verifie si la chaine de caractere est une valeur correcte pour le groupe ecologique
-	 * 
-	 * @param gTro La chaine de caractere dont on veut verifier la validité
-	 * @return Une chaine de caractere qui est soit vide (pas d'erreurs) soit contenant le message d'erreur
-	 * (non vide)
-	 */
-	public static String estCorrectEcologique(String gEco){
-		if (listeGroupeEcologique.contains(gEco))
-			return "";
-		return "Le groupe écologique doit être dans la liste : "
-		+ listeGroupeEcologique.toString();
 	}
 	
 	public int getId() {
@@ -222,10 +187,15 @@ public class Espece {
 	}
 	
 	/**
+	 * Change la valeur de l'attribut zone
 	 * 
-	 * @param zone the zone to set
+	 * @param zone la nouvelle valeur de zone
+	 * @throws ChampIncorrectException Si la nouvelle valeur n'est pas permise 
 	 */
-	public void setZone(int zone) {
+	public void setZone(int zone) throws ChampIncorrectException {
+		if (zone > maxZone || zone < minZone)
+			throw new ChampIncorrectException("L'entier << " + zone + " >> pour la zone est incorrect : "
+					+ "il doit être entre "+minZone+" et "+maxZone);
 		this.zone = zone;
 	}
 	
@@ -294,16 +264,31 @@ public class Espece {
 	}
 
 	/**
-	 * @param groupeTrophique the groupeTrophique to set
+	 * 
+	 * Change la valeur de l'attribut groupe trophique
+	 * 
+	 * @param groupeTrophique Le nouveau groupe trophique
+	 * @throws ChampIncorrectException Si le nouveau groupe trophique n'est pas permis
 	 */
-	public void setGroupeTrophique(String groupeTrophique) {
+	public void setGroupeTrophique(String groupeTrophique) throws ChampIncorrectException {
+		if (!listeGroupeTrophique.contains(groupeTrophique))
+			throw new ChampIncorrectException("La valeur << "+groupeTrophique+" >> est incorrecte pour le "
+					+ "groupe écologique; il doit être dans la liste : "+ listeGroupeEcologique.toString());
 		this.groupeTrophique = groupeTrophique;
+			
 	}
 
 	/**
-	 * @param groupeEcologique the groupeEcologique to set
+	 * 
+	 * Change la valeur de l'attribut groupe ecologique
+	 * 
+	 * @param groupeTrophique Le nouveau groupe ecologique
+	 * @throws ChampIncorrectException Si le nouveau groupe ecologique n'est pas permis
 	 */
-	public void setGroupeEcologique(String groupeEcologique) {
+	public void setGroupeEcologique(String groupeEcologique) throws ChampIncorrectException {
+		if (!listeGroupeEcologique.contains(groupeEcologique))
+			throw new ChampIncorrectException("La valeur << "+groupeEcologique+" >> est incorrecte pour le "
+					+ "groupe écologique; il doit être dans la liste : "+ listeGroupeEcologique.toString());
 		this.groupeEcologique = groupeEcologique;
 	}
 

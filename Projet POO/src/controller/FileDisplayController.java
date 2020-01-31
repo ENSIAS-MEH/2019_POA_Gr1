@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import dao.Espece;
@@ -14,7 +15,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
@@ -70,18 +74,16 @@ public class FileDisplayController implements Initializable {
 			 * On affiche un pop qui indique que le fichier a bien été récupéré Et affiche
 			 * les erreurs dans ce fichier s'il y'en a
 			 */
+			// FIXME erreur au changement de fichier ?
+
 			Stage popUp = new Stage();
 			popUp.setTitle("Succès");
 			Parent popUpRoot = FXMLLoader.load(getClass().getResource("/fxml/ErrorsPopUp.fxml"));
 			Scene scene = new Scene(popUpRoot);
 			popUp.setScene(scene);
-			try {
-				popUp.initOwner(TrucsUtiles.getStage(event));
-				popUp.initModality(Modality.APPLICATION_MODAL);
-				popUp.showAndWait();
-			} catch (Exception e) {
-				System.out.println("Une exception qui me résout un problème, pas mal");
-			}
+			popUp.initModality(Modality.APPLICATION_MODAL);
+			popUp.showAndWait();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -119,19 +121,21 @@ public class FileDisplayController implements Initializable {
 		hbox_3.getChildren().clear();
 
 		for (Espece espece : especes) {
-			switch (espece.getZone()) {
-			case 0:
-				hbox_0.getChildren().add(especeVBox(espece));
-				break;
-			case 1:
-				hbox_1.getChildren().add(especeVBox(espece));
-				break;
-			case 2:
-				hbox_2.getChildren().add(especeVBox(espece));
-				break;
-			case 3:
-				hbox_3.getChildren().add(especeVBox(espece));
-				break;
+			if (espece != null) {
+				switch (espece.getZone()) {
+				case 0:
+					hbox_0.getChildren().add(especeVBox(espece));
+					break;
+				case 1:
+					hbox_1.getChildren().add(especeVBox(espece));
+					break;
+				case 2:
+					hbox_2.getChildren().add(especeVBox(espece));
+					break;
+				case 3:
+					hbox_3.getChildren().add(especeVBox(espece));
+					break;
+				}
 			}
 		}
 	}
@@ -221,13 +225,30 @@ public class FileDisplayController implements Initializable {
 	 */
 	@FXML
 	private void supprimerEspecesHandler(ActionEvent event) {
-		for (CheckBox cb : CheckBoxList) {
-			if (cb.isSelected()) {
-				TrucsUtiles.getDAO()
-						.supprimer((((TrucsUtiles.getListEspeces()).get(CheckBoxList.indexOf(cb)))).getId());
+
+		boolean selected = false;
+
+		Alert alertConfirmation = new Alert(AlertType.CONFIRMATION);
+		alertConfirmation.setHeaderText("Voulez vous ajouter cette espèce ? Le fichier d'origine sera modifié");
+		Optional<ButtonType> result = alertConfirmation.showAndWait();
+
+		if (result.get() == ButtonType.OK) {
+			for (CheckBox cb : CheckBoxList) {
+				if (cb.isSelected()) {
+					TrucsUtiles.getDAO()
+							.supprimer((((TrucsUtiles.getListEspeces()).get(CheckBoxList.indexOf(cb)))).getId());
+					selected = true;
+				}
+			}
+
+			if (!selected) {
+				Alert alertSucces = new Alert(AlertType.INFORMATION);
+				alertSucces.setHeaderText("Aucune créature n'est choisie");
+				alertSucces.showAndWait();
+			} else {
+				TrucsUtiles.getDAO().enregistrerModifications();
+				TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this);
 			}
 		}
-		TrucsUtiles.getDAO().enregistrerModifications();
-		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this);
 	}
 }

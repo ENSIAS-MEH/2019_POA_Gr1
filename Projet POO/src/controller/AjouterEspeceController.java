@@ -44,16 +44,19 @@ public class AjouterEspeceController implements Initializable {
 
 			if (result.get() == ButtonType.OK) {
 				// C'est au moment de cliquer sur OK qu'on ajoute l'instance de Espece au DAO
-				TrucsUtiles.getDAO().ajouter(new Espece(0, nom.getText(), genre.getText(), famille.getText(),
-						ordre.getText(), classe.getText(), embranchement.getText(), description.getText(),
+				Espece e = new Espece(0, nom.getText(), genre.getText(), famille.getText(), ordre.getText(),
+						classe.getText(), embranchement.getText(), description.getText(),
 						groupeTrophique.getValue().toString(), groupeEcologique.getValue().toString(), "catégorie",
-						zone.getValue().toString(), cheminImage.getText(), "chemin original", new ArrayList<String>()));
+						zone.getValue().toString(), cheminImage.getText(), new ArrayList<String>());
+
+				e.setId(TrucsUtiles.getDAO().ajouter(e));
 
 				TrucsUtiles.getDAO().enregistrerModifications();
 
 				Alert alertSucces = new Alert(AlertType.INFORMATION);
 				alertSucces.setHeaderText("Fichier modifié avec succès");
 				alertSucces.showAndWait();
+				
 			} else {
 				// rien à faire quand on clique sur cancel
 			}
@@ -106,5 +109,4 @@ public class AjouterEspeceController implements Initializable {
 		zone.setItems(zoneList);
 		zone.getSelectionModel().selectFirst();
 	}
-
 }

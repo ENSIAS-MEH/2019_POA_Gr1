@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import dao.CSVConnectionFactory;
+import dao.CSVEspeceDAO;
 import dao.ConnectionFactory;
 import dao.Espece;
 import dao.EspeceDAO;
@@ -98,8 +99,8 @@ public class TrucsUtiles {
 	 * fichier .csv
 	 */
 	private static void connexionCSV(File csv) {
-
-		ConnectionFactory cf = CSVConnectionFactory.getInstance(csv);
+		// FIXME sa mère
+		ConnectionFactory cf = new CSVConnectionFactory(csv);
 		especeDAO = cf.getEspeceDAO();
 		listEspeces = especeDAO.recupererToutes();
 
