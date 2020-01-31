@@ -172,7 +172,7 @@ public class CSVEspeceDAO extends EspeceDAO {
 			// On tente de télécharger l'image
 			espece.setCheminImageDisque(verifierImage(espece.getCheminImageOriginale()));
 		listeEspeces.add(espece);
-		listeErreurs.add("");
+		especesIncorrectes.add("");
 		// On renvoie l'identifiant de l'espece
 		return id;
 	}
@@ -188,8 +188,7 @@ public class CSVEspeceDAO extends EspeceDAO {
 			for (int i = 0; i < listeEspeces.size(); i++) {
 				Espece e = listeEspeces.get(i);
 				if (e == null) {
-//					FIXME si je retire ce commentaire, une erreur est generée à la suppression
-//					bw.write(listeErreurs.get(i) + "\n");
+					bw.write(especesIncorrectes.get(i) + "\n");
 				} else
 					bw.write(convertir(e) + "\n");
 			}
@@ -199,11 +198,19 @@ public class CSVEspeceDAO extends EspeceDAO {
 	}
 
 	public Espece recuperer(int id) {
-		return listeEspeces.get(id);
+		if (id < 0 || id >= listeEspeces.size())
+			return null;
+		else
+			return listeEspeces.get(id);
 	}
 
 	public ArrayList<Espece> recupererToutes() {
-		ArrayList<Espece> liste = new ArrayList<Espece>(listeEspeces);
+		ArrayList<Espece> liste = new ArrayList<Espece>();
+		// On enleve les especes "null"
+		for (Espece e : listeEspeces) {
+			if (e != null)
+				liste.add(e);
+		}
 		return liste;
 	}
 
@@ -214,10 +221,16 @@ public class CSVEspeceDAO extends EspeceDAO {
 		// On initialise des booleens qui nous permettront de chercher dans tous les
 		// champs
 		boolean tousEco = gEcoSaisi.equals("tous"), tousTro = gTroSaisi.equals("tous");
+		
+		// Si le champSaisi n'est pas reconnu, on renvoie une liste vide
+		int positionChamp = ordreChamp.indexOf(champSaisi);
+		if (positionChamp == -1)
+			return new ArrayList<Espece>();
 
 		// On determine la position des champs
 		// Cette position est la position du champ dans une ligne de fichier csv
 		int positionEco = ordreChamp.indexOf("gEco"), positionTro = ordreChamp.indexOf("gTro");
+		
 
 		// On commence le filtrage
 		ArrayList<Espece> resultat = new ArrayList<Espece>();
@@ -244,7 +257,7 @@ public class CSVEspeceDAO extends EspeceDAO {
 							break;
 						}
 					}
-				} else if (elements[ordreChamp.indexOf(champSaisi)].contains(saisie))
+				} else if (elements[positionChamp].contains(saisie))
 					resultat.add(e);
 			}
 		}

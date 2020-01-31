@@ -276,7 +276,7 @@ public class TestCSVEspeceDAO {
 		// Test suppression
 		
 		especeDAO.supprimer(idLambda);
-		assertEquals(null,especeDAO.recupererToutes().get(idLambda));
+		assertEquals(null,especeDAO.recuperer(idLambda));
 	}
 
 }

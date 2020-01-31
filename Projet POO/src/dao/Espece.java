@@ -42,6 +42,7 @@ public class Espece {
 	 * Pour connaitre les valeurs correctes, voir {@link dao.Espece#getListeGroupeEcologique} 
 	 * pour le groupe ecologique, {@link dao.Espece#getListeGroupeTrophique} pour le groupe trophique et 
 	 * {@link dao.Espece#getIntervalleZone} pour la zone.
+	 * De plus le nom ne peut pas être vide
 	 * @throws ChampIncorrectException Si l'un des champs a une valeur incorrecte
 	 * 
 	 */
@@ -63,6 +64,7 @@ public class Espece {
 		setGroupeTrophique(groupeTrophique);
 		setGroupeEcologique(groupeEcologique);
 		setZone(zoneRecu);
+		setNom(nom);
 		
 		this.id = id;
 		this.cheminImageDisque = cheminImageDisque;
@@ -208,9 +210,14 @@ public class Espece {
 	}
 
 	/**
-	 * @param nom the nom to set
+	 * Change la valeur de l'attribut nom
+	 * 
+	 * @param nom Le nouveau nom
+	 * @throws ChampIncorrectException Si le nouveau nom est vide
 	 */
-	public void setNom(String nom) {
+	public void setNom(String nom) throws ChampIncorrectException {
+		if (nom.isBlank())
+			throw new ChampIncorrectException("Le nom ne peut pas être vide");
 		this.nom = nom;
 	}
 
@@ -282,7 +289,7 @@ public class Espece {
 	 * 
 	 * Change la valeur de l'attribut groupe ecologique
 	 * 
-	 * @param groupeTrophique Le nouveau groupe ecologique
+	 * @param groupeEcologique Le nouveau groupe ecologique
 	 * @throws ChampIncorrectException Si le nouveau groupe ecologique n'est pas permis
 	 */
 	public void setGroupeEcologique(String groupeEcologique) throws ChampIncorrectException {

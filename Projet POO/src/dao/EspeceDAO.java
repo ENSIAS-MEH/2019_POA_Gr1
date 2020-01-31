@@ -123,6 +123,7 @@ public abstract class EspeceDAO {
 	public static int copierImage(String entree, String sortie, String nom) {
 		boolean dejaLa = false;
 		sortie = sortie + nom;
+		File fichierSortie = new File(sortie);
 		try {
 			// On verifie si l'image existe déjà
 			dejaLa = Files.exists(Paths.get(sortie));
@@ -131,23 +132,32 @@ public abstract class EspeceDAO {
 			return 1;
 		}
 		if (dejaLa) {
-			// Image déjà là
-			return -1;
+			// Le fichier est déjà là : on vérifie que c'est une image
+			try {
+				if (estImage(fichierSortie)) 
+					return -1; // ok
+				else 
+					return 7; // ce n'est pas une image
+			} catch (IOException e) {
+				return 5;
+			} 
 		}
 		// Si l'image commence par http ou ftp on va la chercher sur le internet sinon on la
 		// cherche sur le disque
 		else if (entree.startsWith("http") || entree.startsWith("ftp")){
 			try (InputStream in = new URL(entree).openStream()) {
 				Files.copy(in, Paths.get(sortie));
-				File fichierSortie = new File(sortie);
 				// On verifie si c'est bien une image 
-				if (ImageIO.read(fichierSortie) == null) {
-					// Ce n'est pas une image : on supprime
-					fichierSortie.delete();
-					return 7;
-				}
-				else
-					return 0; // Tout s'est bien passé
+				try {
+					if (estImage(fichierSortie))
+						return 0;
+					else {
+						fichierSortie.delete();
+						return 7;
+					}
+				} catch (IOException e) {
+					return 5;
+				} 
 			} catch (FileNotFoundException e) {
 				return 2; // Fichier non trouvé
 			} catch (MalformedURLException e) {
@@ -160,19 +170,21 @@ public abstract class EspeceDAO {
 		} else {
 			try {
 				Files.copy(Paths.get(entree), Paths.get(sortie));
-				File fichierSortie = new File(sortie);
-				// On verifie si c'est bien une image 
-				if (ImageIO.read(fichierSortie) == null) {
-					// Ce n'est pas une image : on supprime
+				if (estImage(fichierSortie))
+					return 0;
+				else {
 					fichierSortie.delete();
 					return 7;
 				}
-				else
-					return 0; // Tout s'est bien passé
 			} catch (IOException e) {
 				return 6; // Fichier non trouvé sur le disque
 			}
 		}
+	}
+
+	private static boolean estImage(File fichierSortie) throws IOException {
+		// Cette fonction verifie si le ficher est une image
+		return (ImageIO.read(fichierSortie) != null);
 	}
 
 	/**
@@ -200,7 +212,7 @@ public abstract class EspeceDAO {
 		int erreurCopie = copierImage(image, dossierImages);
 		if (erreurCopie > 0) {
 			// Il y a un probleme ...
-			// On signale seulement 2 cas : probleme de connexion et les autres
+			// On signale seulement 3 cas : probleme de connexion, non image et les autres
 			if (erreurCopie == 2)
 				throw new ChampIncorrectException("Impossible de se connecter "
 						+ "pour recuperer l'image. Veuillez vérifier votre connexion et "
