@@ -99,7 +99,7 @@ public class TrucsUtiles {
 	 */
 	private static void connexionCSV(File csv) {
 
-		ConnectionFactory cf = CSVConnectionFactory.getInstance(csv);
+		ConnectionFactory cf = new CSVConnectionFactory(csv);
 		especeDAO = cf.getEspeceDAO();
 		listEspeces = especeDAO.recupererToutes();
 

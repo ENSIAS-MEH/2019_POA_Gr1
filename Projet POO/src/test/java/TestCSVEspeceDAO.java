@@ -42,7 +42,7 @@ public class TestCSVEspeceDAO {
 		try {
 			husky = new Espece(0,"husky de sybérie","canis","canidae","carnivora","mammalia",
 					"chordata","il est traditionnellement élevé comme chien d'attelage","carnivore",
-					"sensible","4","2",CSVEspeceDAO.verifierImage("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg", dossierImages),
+					"sensible","4","2","src/test/resources/images/250px-Siberian-husky-1291343_1920.jpg",
 					"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Siberian-husky-1291343_1920.jpg/250px-Siberian-husky-1291343_1920.jpg",
 					synonymes);
 		} catch (ChampIncorrectException e1) {

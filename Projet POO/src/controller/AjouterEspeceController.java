@@ -48,7 +48,7 @@ public class AjouterEspeceController implements Initializable {
 						.ajouter(new Espece(0, nom.getText(), genre.getText(), famille.getText(), ordre.getText(),
 								classe.getText(), embranchement.getText(), description.getText(),
 								groupeTrophique.getValue().toString(), groupeEcologique.getValue().toString(), "catégorie",
-								0, cheminImage.getText(), "chemin original", new ArrayList<String>()));
+								"0", cheminImage.getText(), new ArrayList<String>()));
 				
 				TrucsUtiles.getDAO().enregistrerModifications();
 				
