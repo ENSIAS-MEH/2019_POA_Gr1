@@ -8,94 +8,78 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity" prefHeight="568.0"
-	prefWidth="476.0" xmlns="http://javafx.com/javafx/11.0.1"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="controller.AjouterEspeceController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="568.0" prefWidth="476.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AjouterEspeceController">
 	<children>
-		<VBox layoutX="15.0" layoutY="10.0" prefHeight="471.0"
-			prefWidth="447.0">
+		<VBox layoutX="15.0" layoutY="10.0" prefHeight="471.0" prefWidth="447.0">
 			<children>
 				<HBox prefHeight="36.0" prefWidth="447.0">
 					<children>
 						<Label prefHeight="76.0" prefWidth="158.0" text="Nom :" />
-						<TextField fx:id="nom" prefHeight="81.0"
-							prefWidth="297.0" />
+						<TextField fx:id="nom" prefHeight="81.0" prefWidth="297.0" />
 					</children>
 				</HBox>
 				<HBox prefHeight="36.0" prefWidth="447.0">
 					<children>
 						<Label prefHeight="76.0" prefWidth="158.0" text="Genre" />
-						<TextField fx:id="genre" prefHeight="81.0"
-							prefWidth="297.0" />
+						<TextField fx:id="genre" prefHeight="81.0" prefWidth="297.0" />
 					</children>
 				</HBox>
 				<HBox prefHeight="36.0" prefWidth="447.0">
 					<children>
 						<Label prefHeight="76.0" prefWidth="158.0" text="Famille :" />
-						<TextField fx:id="famille" prefHeight="81.0"
-							prefWidth="297.0" />
+						<TextField fx:id="famille" prefHeight="81.0" prefWidth="297.0" />
 					</children>
 				</HBox>
 				<HBox prefHeight="36.0" prefWidth="447.0">
 					<children>
 						<Label prefHeight="76.0" prefWidth="158.0" text="Ordre :" />
-						<TextField fx:id="ordre" prefHeight="81.0"
-							prefWidth="297.0" />
+						<TextField fx:id="ordre" prefHeight="81.0" prefWidth="297.0" />
 					</children>
 				</HBox>
 				<HBox prefHeight="36.0" prefWidth="447.0">
 					<children>
 						<Label prefHeight="76.0" prefWidth="158.0" text="Classe :" />
-						<TextField fx:id="classe" prefHeight="81.0"
-							prefWidth="297.0" />
+						<TextField fx:id="classe" prefHeight="81.0" prefWidth="297.0" />
 					</children>
 				</HBox>
 				<HBox prefHeight="36.0" prefWidth="447.0">
 					<children>
-						<Label prefHeight="76.0" prefWidth="158.0"
-							text="Embranchement :" />
-						<TextField fx:id="embranchement" prefHeight="81.0"
-							prefWidth="297.0" />
+						<Label prefHeight="76.0" prefWidth="158.0" text="Embranchement :" />
+						<TextField fx:id="embranchement" prefHeight="81.0" prefWidth="297.0" />
 					</children>
 				</HBox>
 				<HBox prefHeight="36.0" prefWidth="447.0">
 					<children>
-						<Label prefHeight="76.0" prefWidth="158.0"
-							text="Groupe trophique :" />
-						<ChoiceBox fx:id="groupeTrophique" prefHeight="36.0"
-							prefWidth="228.0" />
+						<Label prefHeight="76.0" prefWidth="158.0" text="Groupe trophique :" />
+						<ChoiceBox fx:id="groupeTrophique" prefHeight="36.0" prefWidth="228.0" />
 					</children>
 				</HBox>
 				<HBox prefHeight="36.0" prefWidth="447.0">
 					<children>
-						<Label prefHeight="76.0" prefWidth="158.0"
-							text="Groupe écologique :" />
-						<ChoiceBox fx:id="groupeEcologique" prefHeight="36.0"
-							prefWidth="228.0" />
+						<Label prefHeight="76.0" prefWidth="158.0" text="Groupe écologique :" />
+						<ChoiceBox fx:id="groupeEcologique" prefHeight="36.0" prefWidth="228.0" />
 					</children>
 				</HBox>
 				<HBox prefHeight="36.0" prefWidth="447.0">
 					<children>
-						<Label prefHeight="76.0" prefWidth="158.0"
-							text="Chemin vers l'image :" />
-						<TextField fx:id="cheminImage" prefHeight="36.0"
-							prefWidth="288.0" />
+						<Label prefHeight="76.0" prefWidth="158.0" text="Chemin vers l'image :" />
+						<TextField fx:id="cheminImage" prefHeight="36.0" prefWidth="288.0" />
 					</children>
 				</HBox>
-				<HBox prefHeight="144.0" prefWidth="447.0">
+				<HBox prefHeight="40.0" prefWidth="447.0">
 					<children>
-						<Label prefHeight="76.0" prefWidth="158.0"
-							text="Description :" />
-						<TextField fx:id="description" prefHeight="123.0"
-							prefWidth="291.0" />
+						<Label prefHeight="76.0" prefWidth="158.0" text="Zone :" />
+                  <ChoiceBox fx:id="zone" prefHeight="36.0" prefWidth="128.0" />
 					</children>
 				</HBox>
+            <HBox prefHeight="144.0" prefWidth="447.0">
+               <children>
+                  <Label prefHeight="76.0" prefWidth="158.0" text="Description :" />
+                  <TextField fx:id="description" prefHeight="123.0" prefWidth="291.0" />
+               </children>
+            </HBox>
 			</children>
 		</VBox>
-		<Button layoutX="192.0" layoutY="481.0" mnemonicParsing="false"
-			onAction="#ajouterEspeceHandler" prefHeight="50.0" prefWidth="93.0"
-			text="Ajouter" />
+		<Button layoutX="192.0" layoutY="481.0" mnemonicParsing="false" onAction="#ajouterEspeceHandler" prefHeight="50.0" prefWidth="93.0" text="Ajouter" />
 	</children>
 </AnchorPane>

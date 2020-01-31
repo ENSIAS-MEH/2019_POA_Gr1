@@ -23,11 +23,11 @@ public class AjouterEspeceController implements Initializable {
 	private TextField nom, genre, famille, ordre, classe, embranchement, cheminImage, description;
 
 	@FXML
-	private ChoiceBox<String> groupeTrophique, groupeEcologique;
+	private ChoiceBox<String> zone, groupeTrophique, groupeEcologique;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		initializeGroupesTrophiques_Ecologiques();
+		initializeChoiceBoxes();
 	}
 
 	/**
@@ -41,17 +41,16 @@ public class AjouterEspeceController implements Initializable {
 			Alert alertConfirmation = new Alert(AlertType.CONFIRMATION);
 			alertConfirmation.setHeaderText("Voulez vous ajouter cette espèce ? Le fichier d'origine sera modifié");
 			Optional<ButtonType> result = alertConfirmation.showAndWait();
-			
+
 			if (result.get() == ButtonType.OK) {
 				// C'est au moment de cliquer sur OK qu'on ajoute l'instance de Espece au DAO
-				TrucsUtiles.getDAO()
-						.ajouter(new Espece(0, nom.getText(), genre.getText(), famille.getText(), ordre.getText(),
-								classe.getText(), embranchement.getText(), description.getText(),
-								groupeTrophique.getValue().toString(), groupeEcologique.getValue().toString(), "catégorie",
-								0, cheminImage.getText(), "chemin original", new ArrayList<String>()));
-				
+				TrucsUtiles.getDAO().ajouter(new Espece(0, nom.getText(), genre.getText(), famille.getText(),
+						ordre.getText(), classe.getText(), embranchement.getText(), description.getText(),
+						groupeTrophique.getValue().toString(), groupeEcologique.getValue().toString(), "catégorie",
+						zone.getValue().toString(), cheminImage.getText(), "chemin original", new ArrayList<String>()));
+
 				TrucsUtiles.getDAO().enregistrerModifications();
-				
+
 				Alert alertSucces = new Alert(AlertType.INFORMATION);
 				alertSucces.setHeaderText("Fichier modifié avec succès");
 				alertSucces.showAndWait();
@@ -67,7 +66,7 @@ public class AjouterEspeceController implements Initializable {
 	 * Méthode pour initialiser les groupes trophiques et écologiques d'après les
 	 * tableaux des groupes fournits dans la classe Espece
 	 */
-	private void initializeGroupesTrophiques_Ecologiques() {
+	private void initializeChoiceBoxes() {
 
 		// On initialise une liste des groupes écologiques
 		ArrayList<String> groupesEcologiquesArray = new ArrayList<String>();
@@ -93,6 +92,19 @@ public class AjouterEspeceController implements Initializable {
 		groupeTrophique.setItems(groupesTrophiquesList);
 		groupeTrophique.getSelectionModel().selectFirst();
 
+		// On initialise le checkbox pour la zone aussi
+		ArrayList<String> zoneArray = new ArrayList<String>() {
+			{
+				add("0");
+				add("1");
+				add("2");
+				add("3");
+			}
+		};
+
+		ObservableList<String> zoneList = FXCollections.observableArrayList(zoneArray);
+		zone.setItems(zoneList);
+		zone.getSelectionModel().selectFirst();
 	}
 
 }
