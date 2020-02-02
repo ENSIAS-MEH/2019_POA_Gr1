@@ -21,7 +21,7 @@ import main.TrucsUtiles;
 public class AjouterEspeceController implements Initializable {
 
 	@FXML
-	private TextField nom, genre, famille, ordre, classe, embranchement, cheminImage, description;
+	private TextField nom, genre, famille, ordre, classe, embranchement, cheminImage, description,categorie;
 
 	@FXML
 	private ChoiceBox<String> zone, groupeTrophique, groupeEcologique;
@@ -53,13 +53,13 @@ public class AjouterEspeceController implements Initializable {
 					// C'est au moment de cliquer sur OK qu'on ajoute l'instance de Espece au DAO
 					Espece e = new Espece(0, nom.getText(), genre.getText(), famille.getText(), ordre.getText(),
 							classe.getText(), embranchement.getText(), description.getText(),
-							groupeTrophique.getValue().toString(), groupeEcologique.getValue().toString(), "catégorie",
+							groupeTrophique.getValue().toString(), groupeEcologique.getValue().toString(), categorie.getText(),
 							zone.getValue().toString(), cheminImage.getText(), new ArrayList<String>());
 
 					e.setId(TrucsUtiles.getDAO().ajouter(e));
 
 					alertSucces = new Alert(AlertType.INFORMATION);
-					alertSucces.setHeaderText("Fichier modifié avec succès");
+					alertSucces.setHeaderText("Espèce ajoutée");
 					alertSucces.showAndWait();
 
 				} catch (Exception e) {

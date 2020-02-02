@@ -72,6 +72,12 @@
                   <ChoiceBox fx:id="zone" prefHeight="36.0" prefWidth="128.0" />
 					</children>
 				</HBox>
+            <HBox prefHeight="39.0" prefWidth="447.0">
+               <children>
+                  <Label prefHeight="76.0" prefWidth="158.0" text="Catégorie :" />
+                  <TextField fx:id="categorie" prefHeight="35.0" prefWidth="290.0" />
+               </children>
+            </HBox>
             <HBox prefHeight="144.0" prefWidth="447.0">
                <children>
                   <Label prefHeight="76.0" prefWidth="158.0" text="Description :" />

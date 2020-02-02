@@ -270,7 +270,7 @@ public class FileDisplayController implements Initializable {
 	@FXML
 	private void enregistrerHandler(ActionEvent event) {
 		Alert alertConfirmation = new Alert(AlertType.CONFIRMATION);
-		alertConfirmation.setHeaderText("Voulez vous supprimer les créatures selectionnées ?");
+		alertConfirmation.setHeaderText("Voulez vous enregistrer le fichier ? Cette opération est pas irreversible");
 		Optional<ButtonType> result = alertConfirmation.showAndWait();
 
 		if (result.get() == ButtonType.OK) {
