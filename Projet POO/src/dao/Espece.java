@@ -216,7 +216,8 @@ public class Espece {
 	 * @throws ChampIncorrectException Si le nouveau nom est vide
 	 */
 	public void setNom(String nom) throws ChampIncorrectException {
-		if (nom.isBlank())
+		String sansVide = nom.replaceAll(" ", ""); // On supprime les espaces
+		if (sansVide.isEmpty())
 			throw new ChampIncorrectException("Le nom ne peut pas être vide");
 		this.nom = nom;
 	}
