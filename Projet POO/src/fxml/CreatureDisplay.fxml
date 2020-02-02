@@ -11,51 +11,94 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreatureDisplayController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0"
+	prefWidth="518.0" xmlns="http://javafx.com/javafx/11.0.1"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="controller.CreatureDisplayController">
 	<children>
-      <MenuBar fx:id="menuBar" layoutY="1.0" prefHeight="27.0" prefWidth="600.0">
-         <menus>
-            <Menu mnemonicParsing="false" text="Fichier">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#ouvrirFichierHandler" text="Ouvrir un autre fichier" />
-                  <MenuItem mnemonicParsing="false" onAction="#fermerFichierHandler" text="Fermer le fichier" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#rechercherEspeceHandler" text="Rechercher des espèces" />
-               </items>
-            </Menu>
-         </menus>
-      </MenuBar>
-		<GridPane layoutX="4.0" layoutY="28.0" maxWidth="1.7976931348623157E308" prefHeight="307.0" prefWidth="592.0">
+		<MenuBar fx:id="menuBar" layoutY="1.0" prefHeight="27.0"
+			prefWidth="518.0">
+			<menus>
+				<Menu mnemonicParsing="false" text="Fichier">
+					<items>
+						<MenuItem mnemonicParsing="false"
+							onAction="#ouvrirFichierHandler" text="Ouvrir un autre fichier" />
+						<MenuItem mnemonicParsing="false"
+							onAction="#fermerFichierHandler" text="Fermer le fichier" />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Help">
+					<items>
+						<MenuItem mnemonicParsing="false"
+							onAction="#rechercherEspeceHandler" text="Rechercher des espèces" />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+		<GridPane layoutX="4.0" layoutY="28.0"
+			maxWidth="1.7976931348623157E308" prefHeight="481.0"
+			prefWidth="512.0">
 			<columnConstraints>
-				<ColumnConstraints hgrow="SOMETIMES" maxWidth="291.0" minWidth="10.0" prefWidth="118.0" />
-				<ColumnConstraints hgrow="SOMETIMES" maxWidth="474.0" minWidth="10.0" prefWidth="474.0" />
+				<ColumnConstraints hgrow="SOMETIMES"
+					maxWidth="291.0" minWidth="10.0" prefWidth="162.0" />
+				<ColumnConstraints hgrow="SOMETIMES"
+					maxWidth="474.0" minWidth="10.0" prefWidth="350.0" />
 			</columnConstraints>
 			<rowConstraints>
-				<RowConstraints maxHeight="162.0" minHeight="10.0" prefHeight="128.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="256.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="171.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="172.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="172.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="172.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="228.0" minHeight="10.0"
+					prefHeight="220.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="256.0" minHeight="0.0"
+					prefHeight="56.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="171.0" minHeight="10.0"
+					prefHeight="54.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="172.0" minHeight="10.0"
+					prefHeight="52.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="172.0" minHeight="10.0"
+					prefHeight="48.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="172.0" minHeight="10.0"
+					prefHeight="38.0" vgrow="SOMETIMES" />
 			</rowConstraints>
 			<children>
-				<Label prefHeight="77.0" prefWidth="75.0" text="Photo" textAlignment="CENTER" />
-				<Label prefHeight="77.0" prefWidth="75.0" text="Nom" textAlignment="CENTER" GridPane.rowIndex="1" />
-				<Label prefHeight="77.0" prefWidth="75.0" text="Description" textAlignment="CENTER" GridPane.rowIndex="2" />
-				<Label prefHeight="41.0" prefWidth="117.0" text="Groupe trophique" textAlignment="CENTER" GridPane.rowIndex="3" />
-				<Label prefHeight="41.0" prefWidth="117.0" text="Groupe écologique" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4" />
-				<Label prefHeight="60.0" prefWidth="117.0" text="Catégorie d'importance" wrapText="true" GridPane.rowIndex="5" />
-				<Label fx:id="nom_de_lespece" prefHeight="46.0" prefWidth="522.0" text="nom_de_lespece" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-				<Label fx:id="description_de_lespece" prefHeight="46.0" prefWidth="522.0" text="description_de_lespece" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-				<Label fx:id="groupe_trophique_de_lespece" prefHeight="46.0" prefWidth="522.0" text="groupe_trophique_de_lespece" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-				<Label fx:id="groupe_ecologique_de_lespece" prefHeight="46.0" prefWidth="522.0" text="groupe_ecologique_de_lespece" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-				<Label fx:id="categorie_dimportance_de_lespece" prefHeight="46.0" prefWidth="522.0" text="categorie_dimportance_de_lespece" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-      				<ImageView fx:id="photo" fitHeight="112.0" fitWidth="478.0" pickOnBounds="true" GridPane.columnIndex="1" />
+				<Label prefHeight="77.0" prefWidth="75.0" text="Photo"
+					textAlignment="CENTER" />
+				<Label prefHeight="77.0" prefWidth="75.0" text="Nom"
+					textAlignment="CENTER" GridPane.rowIndex="1" />
+				<Label prefHeight="77.0" prefWidth="75.0" text="Description"
+					textAlignment="CENTER" GridPane.rowIndex="2" />
+				<Label prefHeight="41.0" prefWidth="117.0"
+					text="Groupe trophique" textAlignment="CENTER"
+					GridPane.rowIndex="3" />
+				<Label prefHeight="41.0" prefWidth="117.0"
+					text="Groupe écologique" textAlignment="CENTER" wrapText="true"
+					GridPane.rowIndex="4" />
+				<Label prefHeight="60.0" prefWidth="117.0"
+					text="Catégorie d'importance" wrapText="true" GridPane.rowIndex="5" />
+				<Label fx:id="nom_de_lespece" prefHeight="46.0"
+					prefWidth="522.0" text="nom_de_lespece" textAlignment="CENTER"
+					GridPane.columnIndex="1" GridPane.rowIndex="1" />
+				<Label fx:id="description_de_lespece" prefHeight="46.0"
+					prefWidth="522.0" text="description_de_lespece"
+					textAlignment="CENTER" GridPane.columnIndex="1"
+					GridPane.rowIndex="2" />
+				<Label fx:id="groupe_trophique_de_lespece" prefHeight="46.0"
+					prefWidth="522.0" text="groupe_trophique_de_lespece"
+					textAlignment="CENTER" GridPane.columnIndex="1"
+					GridPane.rowIndex="3" />
+				<Label fx:id="groupe_ecologique_de_lespece" prefHeight="46.0"
+					prefWidth="522.0" text="groupe_ecologique_de_lespece"
+					textAlignment="CENTER" GridPane.columnIndex="1"
+					GridPane.rowIndex="4" />
+				<Label fx:id="categorie_dimportance_de_lespece"
+					prefHeight="46.0" prefWidth="522.0"
+					text="categorie_dimportance_de_lespece" textAlignment="CENTER"
+					GridPane.columnIndex="1" GridPane.rowIndex="5" />
+				<ImageView fx:id="photo" fitHeight="216.0"
+					fitWidth="349.0" pickOnBounds="true" GridPane.columnIndex="1" />
 			</children>
 		</GridPane>
-      <Button layoutX="197.0" layoutY="341.0" mnemonicParsing="false" onAction="#retourButtonHandler" prefHeight="45.0" prefWidth="206.0" text="Retour à l'affichage" />
+		<Button layoutX="156.0" layoutY="536.0" mnemonicParsing="false"
+			onAction="#retourButtonHandler" prefHeight="45.0" prefWidth="206.0"
+			text="Retour à l'affichage" />
 	</children>
 </AnchorPane>
