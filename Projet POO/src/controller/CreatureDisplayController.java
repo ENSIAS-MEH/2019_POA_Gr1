@@ -23,17 +23,17 @@ import main.TrucsUtiles;
 /**
  * Cette classe est le controlleur de la fenêtre d'affichage d'une créature
  * selectionnée par le biais de la fenêtre d'affichage ou par la fenêtre de
- * recherche
- * @author Amine
+ * recherche.<br>
+ * On affiche ici des informations concernant cette créature, à savoir son nom,
+ * son image, sa catégorie d'importance, ses groupes trophiques et écologiques
+ * ainsi que sa description.
  *
  */
 public class CreatureDisplayController implements Initializable {
-
 	// L'espèce selectionnée d'après la fenetre d'affichage ou la fenetre de
 	// filtrage
 	private static Espece especeSelectionnee = null;
 
-	// Les éléments à afficher sur cette espèce
 	@FXML
 	ImageView photo;
 
@@ -50,7 +50,7 @@ public class CreatureDisplayController implements Initializable {
 
 	/**
 	 * Méthode pour le bloc d'initialisation des informations relatives à la
-	 * créature
+	 * créature.
 	 */
 
 	private void initializeInformations() {
@@ -62,15 +62,25 @@ public class CreatureDisplayController implements Initializable {
 		categorie_dimportance_de_lespece.setText(especeSelectionnee.getCategorieImportance());
 	}
 
+	/**
+	 * Méthode pour mettre à jour l'espece selectionnée.<br>
+	 * Elle sera appelée en dehors de cette fenêtre ( soit de la fenêtre d'affichage
+	 * ou du resultat du filtrage ) en cliquant sur le bouton d'une espèce.
+	 * 
+	 * @param espece L'espèce qu'on voudrait afficher
+	 */
 	public static void setEspece(Espece espece) {
 		especeSelectionnee = espece;
 	}
 
 	/**
-	 * Méthode pour l'option dans la barre de menu>Fichier>Ouvrir un fichier On
-	 * change le fichier csv, et on réaffiche
+	 * Méthode pour l'option dans la barre de menu > Fichier > Ouvrir un
+	 * fichier.<br>
+	 * On change le fichier csv, et on réaffiche.<br>
+	 * Elle se déclenche en cliquant sur le bouton y associé.
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton
+	 * @see {@link main.TrucsUtiles#setCsv(Object, String, Object)
 	 */
 	@FXML
 	private void ouvrirFichierHandler(ActionEvent event) {
@@ -103,32 +113,38 @@ public class CreatureDisplayController implements Initializable {
 	/**
 	 * Méthode pour l'option dans la barre de menu>Fichier>Fermer le fichier On
 	 * remet le fichier LeCsv en null On repasse à la premiere fenetre de
-	 * l'application
+	 * l'application<br>
+	 * Elle se déclenche en cliquant sur le bouton y associé.
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton
+	 * @see {@link main.TrucsUtiles#setCsvNull()} {@link main.TrucsUtiles#getCsv()}
 	 */
 	@FXML
 	private void fermerFichierHandler(ActionEvent event) {
 		TrucsUtiles.setCsvNull();
-		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this,true);
+		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this, true);
 	}
 
 	/**
-	 * Méthode pour l'option dans la barre de menu>Help>Rechercher espèces On passe
-	 * à la fenetre de filtrage
-	 * @param event
+	 * Méthode pour l'option dans la barre de menu > Help > Rechercher espèces On passe
+	 * à la fenetre de filtrage<br>
+	 * Elle se déclenche en cliquant sur le bouton y associé
+	 * 
+	 * @param event Evenement de clic sur le bouton
 	 */
 	@FXML
 	private void rechercherEspeceHandler(ActionEvent event) {
-		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this,true);
+		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this, true);
 	}
-	
+
 	/**
-	 * Méthode pour revenir à l'affichage premier du fichier
-	 * @param event
+	 * Méthode pour revenir à l'affichage premier du fichier<br>
+	 * Elle se déclenche en cliquant sur le bouton y associé.
+	 * 
+	 * @param event Evenement de clic sur le bouton
 	 */
 	@FXML
 	private void retourButtonHandler(ActionEvent event) {
-		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this,true);
+		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this, true);
 	}
 }

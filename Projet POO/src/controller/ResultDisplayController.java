@@ -24,6 +24,15 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.TrucsUtiles;
 
+/**
+ * Controlleur de la fenêtre de resultats du filtrage<br>
+ * L'affichage est similaire à l'affichage de base du fichier, sans possibilité
+ * d'ajout ou de suppression parcontre.<br>
+ * On peut retourner à l'affichage de base du fichier par un bouton dédié.
+ * 
+ * @author Amine
+ *
+ */
 public class ResultDisplayController implements Initializable {
 
 	@FXML
@@ -43,10 +52,13 @@ public class ResultDisplayController implements Initializable {
 	}
 
 	/**
-	 * Méthode pour l'option dans la barre de menu>Fichier>Ouvrir un fichier On
-	 * change le fichier csv, et on réaffiche
+	 * Méthode pour l'option dans la barre de menu > Fichier > Ouvrir un
+	 * fichier.<br>
+	 * On change le fichier csv, et on réaffiche.<br>
+	 * Elle se déclenche en cliquant sur le bouton y associé.
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton
+	 * @see {@link main.TrucsUtiles#setCsv(Object, String, Object)
 	 */
 	@FXML
 	private void ouvrirFichierHandler(ActionEvent event) {
@@ -61,7 +73,7 @@ public class ResultDisplayController implements Initializable {
 			 * On affiche un pop qui indique que le fichier a bien été récupéré Et affiche
 			 * les erreurs dans ce fichier s'il y'en a
 			 */
-			
+
 			Stage popUp = new Stage();
 			popUp.setTitle("Succès");
 			Parent popUpRoot = FXMLLoader.load(getClass().getResource("/fxml/ErrorsPopUp.fxml"));
@@ -70,7 +82,7 @@ public class ResultDisplayController implements Initializable {
 			popUp.initOwner(TrucsUtiles.getStage(event));
 			popUp.initModality(Modality.APPLICATION_MODAL);
 			popUp.show();
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -79,37 +91,49 @@ public class ResultDisplayController implements Initializable {
 	/**
 	 * Méthode pour l'option dans la barre de menu>Fichier>Fermer le fichier On
 	 * remet le fichier LeCsv en null On repasse à la premiere fenetre de
-	 * l'application
+	 * l'application<br>
+	 * Elle se déclenche en cliquant sur le bouton y associé.
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton
+	 * @see {@link main.TrucsUtiles#setCsvNull()} {@link main.TrucsUtiles#getCsv()}
 	 */
 	@FXML
 	private void fermerFichierHandler(ActionEvent event) {
 		TrucsUtiles.setCsvNull();
-		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this,true);
+		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this, true);
 	}
 
 	/**
-	 * Méthode pour l'option dans la barre de menu>Help>Rechercher espèces On passe
-	 * à la fenetre de filtrage
+	 * Méthode pour l'option dans la barre de menu > Help > Rechercher espèces On
+	 * passe à la fenetre de filtrage<br>
+	 * Elle se déclenche en cliquant sur le bouton y associé
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton
 	 */
 	@FXML
 	private void rechercherEspeceHandler(ActionEvent event) {
-		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this,true);
+		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this, true);
 	}
 
 	/**
-	 * Méthode pour revenir à l'affichage premier du fichier
+	 * Méthode pour revenir à l'affichage du fichier.
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton
 	 */
 	@FXML
 	private void retourButtonHandler(ActionEvent event) {
-		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this,true);
+		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this, true);
 	}
 
+	/**
+	 * Méthode pour initialiser afficher les espèces.<br>
+	 * Elles seront reparties selon des niveaux de 0 à 3, chaque niveau correspond à
+	 * un HBox.<br>
+	 * Les espèces seront chargées à partir du DAO.
+	 * 
+	 * @param especes ArrayList d'espèces, il correspondra à la valeur retournée par
+	 *                la méthode {@link dao.EspeceDAO#recupererToutes()}.
+	 */
 	private void recupererResultat(ArrayList<Espece> especes) {
 
 		hbox_0.getChildren().clear();
@@ -136,11 +160,11 @@ public class ResultDisplayController implements Initializable {
 	}
 
 	/**
-	 * Méthode privée pour créer l'affichage d'une seule espèces, son image en haut
-	 * et son nom en bas
+	 * Méthode privée pour créer l'affichage d'une seule espèce.
 	 * 
-	 * @param espece
-	 * @return
+	 * @param espece L'espèce pour laquelle on créée cet affichage
+	 * @return Un VBox qui contient en ordre l'image de l'espece et un bouton qui
+	 *         pointe vers cette espèce
 	 */
 	private VBox especeVBox(Espece espece) {
 		VBox vbox = new VBox();
@@ -156,10 +180,11 @@ public class ResultDisplayController implements Initializable {
 	}
 
 	/**
-	 * Méthode privée pour créer un bouton qui pointe vers une espece
+	 * Méthode privée pour créer un bouton qui pointe vers une espece.
 	 * 
-	 * @param e
-	 * @return
+	 * @param espece L'espèce en question
+	 * @return Un Button qui pointe vers cette espèce et ouvre sa fenêtre de
+	 *         description
 	 */
 	private Button boutonEspece(Espece espece) {
 		Button b = new Button(espece.getNom());
@@ -171,7 +196,7 @@ public class ResultDisplayController implements Initializable {
 				 * passe à cette fenetre
 				 */
 				CreatureDisplayController.setEspece(espece);
-				TrucsUtiles.changeStage(event, "/fxml/CreatureDisplay.fxml", this,true);
+				TrucsUtiles.changeStage(event, "/fxml/CreatureDisplay.fxml", this, true);
 			}
 		});
 		return b;

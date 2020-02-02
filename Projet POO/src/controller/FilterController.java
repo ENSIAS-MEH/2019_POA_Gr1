@@ -23,12 +23,11 @@ import javafx.stage.Stage;
 import main.TrucsUtiles;
 
 /**
- * Cette classe est le controlleur de la fenetre de recherche/filtrage,
+ * Cette classe est le controlleur de la fenetre de recherche/filtrage.<br>
  * L'utilisateur devrait saisir du texte dans un champ dedié, et moyennant
  * quelques filtres avec des boutons, il devrait obtenir les résultats les plus
  * adaptés à ces filtres.
  * 
- * @author Amine
  *
  */
 public class FilterController implements Initializable {
@@ -63,9 +62,10 @@ public class FilterController implements Initializable {
 	}
 
 	/**
-	 * Méthode qui se déclenche pour effectuer la recherche
+	 * Méthode qui se déclenche pour effectuer la recherche. On utilise la méthode
+	 * {@link dao.EspeceDAO#filtrer(String, String, String, String)}
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton de recherche
 	 */
 	@FXML
 	private void rechercherButtonHandler(ActionEvent event) {
@@ -82,15 +82,15 @@ public class FilterController implements Initializable {
 		resultRecherche = (TrucsUtiles.getDAO()).filtrer(saisie, boutonChoisis, groupeEcologiqueChoisi,
 				groupeTrophiqueChoisi);
 
-		TrucsUtiles.changeStage(event, "/fxml/ResultDisplay.fxml", this,true);
+		TrucsUtiles.changeStage(event, "/fxml/ResultDisplay.fxml", this, true);
 
 	}
 
 	/**
-	 * Méthode pour récuperer le nom du champs choisis
+	 * Méthode pour récuperer le RadioButton choisis.
 	 * 
-	 * @return Elle renvoie le nom du champs dans lequel on souhaite effectuer la
-	 *         recherche sous forme de string
+	 * @return Elle renvoie un RadioButton correspondant au champs dans lequel on
+	 *         souhaite effectuer la recherche
 	 */
 	private RadioButton fetchClickedRadioButton() {
 		RadioButton resultButton = null;
@@ -102,7 +102,8 @@ public class FilterController implements Initializable {
 
 	/**
 	 * Méthode pour initialiser les groupes trophiques et écologiques d'après les
-	 * tableaux des groupes fournits dans la classe Espece
+	 * tableaux des groupes fournits dans la classe Espece.
+	 * @see {@link dao.Espece#getGroupeTrophique()} {@link dao.Espece#getGroupeEcologique()}
 	 */
 	private void initializeGroupesTrophiques_Ecologiques() {
 
@@ -133,10 +134,13 @@ public class FilterController implements Initializable {
 	}
 
 	/**
-	 * Méthode pour l'option dans la barre de menu>Fichier>Ouvrir un fichier On
-	 * change le fichier csv, et on réaffiche
+	 * Méthode pour l'option dans la barre de menu > Fichier > Ouvrir un
+	 * fichier.<br>
+	 * On change le fichier csv, et on réaffiche.<br>
+	 * Elle se déclenche en cliquant sur le bouton y associé.
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton
+	 * @see {@link main.TrucsUtiles#setCsv(Object, String, Object)
 	 */
 	@FXML
 	private void ouvrirFichierHandler(ActionEvent event) {
@@ -167,34 +171,37 @@ public class FilterController implements Initializable {
 	/**
 	 * Méthode pour l'option dans la barre de menu>Fichier>Fermer le fichier On
 	 * remet le fichier LeCsv en null On repasse à la premiere fenetre de
-	 * l'application
+	 * l'application<br>
+	 * Elle se déclenche en cliquant sur le bouton y associé.
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton
+	 * @see {@link main.TrucsUtiles#setCsvNull()} {@link main.TrucsUtiles#getCsv()}
 	 */
 	@FXML
 	private void fermerFichierHandler(ActionEvent event) {
 		TrucsUtiles.setCsvNull();
-		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this,true);
+		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this, true);
 	}
 
 	/**
-	 * Méthode pour l'option dans la barre de menu>Help>Rechercher espèces On passe
-	 * à la fenetre de filtrage
+	 * Méthode pour l'option dans la barre de menu > Help > Rechercher espèces On
+	 * passe à la fenetre de filtrage<br>
+	 * Elle se déclenche en cliquant sur le bouton y associé
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton
 	 */
 	@FXML
 	private void rechercherEspeceHandler(ActionEvent event) {
-		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this,true);
+		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this, true);
 	}
 
 	/**
-	 * Méthode pour revenir à l'affichage premier du fichier
+	 * Méthode pour revenir à l'affichage du fichier.
 	 * 
-	 * @param event
+	 * @param event	Evenement de clic sur le bouton
 	 */
 	@FXML
 	private void retourButtonHandler(ActionEvent event) {
-		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this,true);
+		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this, true);
 	}
 }

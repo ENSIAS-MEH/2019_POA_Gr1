@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 
 /**
  * Cette classe regroupe un ensemble de méthodes qu'on utilisera dans différents
- * coins de l'application
+ * coins de l'application.
  * 
  * @author Amine
  *
@@ -27,46 +27,49 @@ import javafx.stage.Stage;
 
 public class TrucsUtiles {
 
-	// Le fichier csv importé sera stocké ici
+	/**
+	 * Le fichier .csv importé sera stocké ici
+	 */
 	private static File LeCsv = null;
 
-	// On stocke le DAO ici
+	/**
+	 * On stocke le DAO ici
+	 */
 	private static EspeceDAO especeDAO = null;
 
-	// Et les especes seront stockées ici
-
-	// L'objet d'explorateur de fichiers
+	/**
+	 * L'objet d'explorateur de fichiers
+	 */
 	private static FileChooser fileChooser = new FileChooser();
 
 	/**
 	 * Méthode pour récuperer l'objet fichier csv
 	 * 
-	 * @return
+	 * @see {@link main.TrucsUtiles#LeCsv}
+	 * @return L'objet File correspondant au .csv importé
 	 */
 	public static File getCsv() {
 		return LeCsv;
 	}
 
 	/**
-	 * Méthode pour mettre le fichier en null
+	 * Méthode pour mettre l'objet LeCsv en null
 	 * 
-	 * @return
+	 * @see {@link main.TrucsUtiles#LeCsv}
 	 */
-	public static boolean setCsvNull() {
+	public static void setCsvNull() {
 		LeCsv = null;
-		return true;
 	}
 
 	/**
-	 * Méthode pour ouvrir l'explorateur et choisir un fichier csv Puis charger une
-	 * nouvelle scene
+	 * Méthode pour ouvrir l'explorateur et choisir un fichier csv.<br>
+	 * Puis charger une nouvelle scene pour la fenêtre.
 	 * 
 	 * @param source   Le déclencheur du changement de fichier csv
-	 * @param fxmlPath Le path de la fenêtre de redirection
-	 * @param context
-	 * @return
+	 * @param fxmlPath Le chemin de la fenêtre de redirection
+	 * @param context  L'object controlleur actuel
 	 */
-	public static boolean setCsv(Object source, String fxmlPath, Object context) {
+	public static void setCsv(Object source, String fxmlPath, Object context) {
 
 		// On ajoute un filtre afin de ne prendre que les fichiers sous format .csv
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Fichier .csv", "*.csv"));
@@ -77,16 +80,15 @@ public class TrucsUtiles {
 			// Récuperation des espèces
 			connexionCSV(LeCsv); // Update du DAO et de la liste des espèces
 			// Passage à la fenetre d'affichage du fichier
-			changeStage(source, fxmlPath, context,true);
-
-			return true;
-		} else
-			return false;
+			changeStage(source, fxmlPath, context, true);
+		}
 	}
 
 	/**
-	 * Méthode qui intervient pour lire les espèces dans le cas de selection d'un
-	 * fichier .csv
+	 * Méthode qui effectue la connexion avec le fichier .csv par le biais d'un
+	 * ConnecionFactory ( voir {@link dao.ConnectionFactory} )<br>
+	 * Le DAO est stocké dans l'object especeDAO ( voir
+	 * {@link main.TrucsUtiles#especeDAO} )
 	 */
 	private static void connexionCSV(File csv) {
 		ConnectionFactory cf = new CSVConnectionFactory(csv);
@@ -97,12 +99,12 @@ public class TrucsUtiles {
 	/**
 	 * Méthode pour le changement de fenetres
 	 * 
-	 * @param source
-	 * @param fxmlPath
-	 * @param context
+	 * @param source   Le déclencheur du changement de fenêtre
+	 * @param fxmlPath Le chemin de la fenêtre de redirection
+	 * @param context  L'object controlleur actuel
 	 * @return
 	 */
-	public static boolean changeStage(Object source, String fxmlPath, Object context, boolean center) {
+	public static void changeStage(Object source, String fxmlPath, Object context, boolean center) {
 		// La fenetre courante
 		Stage currentWindow = getStage(source);
 
@@ -115,18 +117,15 @@ public class TrucsUtiles {
 					currentWindow.centerOnScreen();
 			} catch (IOException e1) {
 				e1.printStackTrace();
-				return false;
 			}
-			return true;
-		} else
-			return false;
+		}
 	}
 
 	/**
 	 * Méthode pour récuperer le stage courant
 	 * 
-	 * @param source
-	 * @return
+	 * @param source Le déclencheur qui indique la fenêtre actuelle
+	 * @return La fenêtre courante
 	 */
 	public static Stage getStage(Object source) {
 		// La fenetre courante
@@ -144,7 +143,7 @@ public class TrucsUtiles {
 	/**
 	 * Getter pour le DAO
 	 * 
-	 * @return
+	 * @return l'objet {@link main.TrucsUtiles#especeDAO}
 	 */
 	public static EspeceDAO getDAO() {
 		return especeDAO;

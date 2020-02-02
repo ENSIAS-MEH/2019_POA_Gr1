@@ -29,6 +29,16 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.TrucsUtiles;
 
+/**
+ * Controlleur de la fenêtre d'affichage des espèces.<br>
+ * On y affichera les espèces, reparties par niveaux ( de 0 à 3, voir
+ * {@link dao.Espece#getIntervalleZone()}. L'affichage correspond à une
+ * miniature de l'espèce, un bouton qui permet de changer la fenêtre vers
+ * l'affichage de cette espèce ( {@link controller.CreatureDisplayController} et
+ * un CheckBox où on peut choisir les espèces qu'on souhaite supprimer.
+ * 
+ *
+ */
 public class FileDisplayController implements Initializable {
 
 	@FXML
@@ -54,10 +64,13 @@ public class FileDisplayController implements Initializable {
 	private ArrayList<CheckBox> CheckBoxList = new ArrayList<CheckBox>();
 
 	/**
-	 * Méthode pour l'option dans la barre de menu>Fichier>Ouvrir un fichier On
-	 * change le fichier csv, et on réaffiche
+	 * Méthode pour l'option dans la barre de menu > Fichier > Ouvrir un
+	 * fichier.<br>
+	 * On change le fichier csv, et on réaffiche.<br>
+	 * Elle se déclenche en cliquant sur le bouton y associé.
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton
+	 * @see {@link main.TrucsUtiles#setCsv(Object, String, Object)
 	 */
 	@FXML
 	private void ouvrirFichierHandler(ActionEvent event) {
@@ -88,9 +101,11 @@ public class FileDisplayController implements Initializable {
 	/**
 	 * Méthode pour l'option dans la barre de menu>Fichier>Fermer le fichier On
 	 * remet le fichier LeCsv en null On repasse à la premiere fenetre de
-	 * l'application
+	 * l'application<br>
+	 * Elle se déclenche en cliquant sur le bouton y associé.
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton
+	 * @see {@link main.TrucsUtiles#setCsvNull()} {@link main.TrucsUtiles#getCsv()}
 	 */
 	@FXML
 	private void fermerFichierHandler(ActionEvent event) {
@@ -99,16 +114,26 @@ public class FileDisplayController implements Initializable {
 	}
 
 	/**
-	 * Méthode pour l'option dans la barre de menu>Help>Rechercher espèces On passe
-	 * à la fenetre de filtrage
+	 * Méthode pour l'option dans la barre de menu > Help > Rechercher espèces On
+	 * passe à la fenetre de filtrage<br>
+	 * Elle se déclenche en cliquant sur le bouton y associé
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton
 	 */
 	@FXML
 	private void rechercherEspeceHandler(ActionEvent event) {
 		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this, true);
 	}
 
+	/**
+	 * Méthode pour initialiser afficher les espèces.<br>
+	 * Elles seront reparties selon des niveaux de 0 à 3, chaque niveau correspond à
+	 * un HBox.<br>
+	 * Les espèces seront chargées à partir du DAO.
+	 * 
+	 * @param especes ArrayList d'espèces, il correspondra à la valeur retournée par
+	 *                la méthode {@link dao.EspeceDAO#recupererToutes()}.
+	 */
 	public void recupererResultat(ArrayList<Espece> especes) {
 
 		hbox_0.getChildren().clear();
@@ -137,11 +162,12 @@ public class FileDisplayController implements Initializable {
 	}
 
 	/**
-	 * Méthode privée pour créer l'affichage d'une seule espèces, son image en haut
-	 * et son nom en bas
+	 * Méthode privée pour créer l'affichage d'une seule espèce.
 	 * 
-	 * @param espece
-	 * @return
+	 * @param espece L'espèce pour laquelle on créée cet affichage
+	 * @return Un VBox qui contient en ordre l'image de l'espece, un bouton qui
+	 *         pointe vers cette espèce et un CheckBox pour la choisir au cas où
+	 *         l'utilisateur voudrait la supprimer
 	 */
 	private VBox especeVBox(Espece espece) {
 		HBox hbox = new HBox();
@@ -167,10 +193,11 @@ public class FileDisplayController implements Initializable {
 	}
 
 	/**
-	 * Méthode privée pour créer un bouton qui pointe vers une espece
+	 * Méthode privée pour créer un bouton qui pointe vers une espece.
 	 * 
-	 * @param e
-	 * @return
+	 * @param espece L'espèce en question
+	 * @return Un Button qui pointe vers cette espèce et ouvre sa fenêtre de
+	 *         description
 	 */
 	private Button boutonEspece(Espece espece) {
 		Button b = new Button(espece.getNom());
@@ -189,9 +216,11 @@ public class FileDisplayController implements Initializable {
 	}
 
 	/**
-	 * Méthode pour passer à la fenetre d'ajout d'une espece dans le fichier
+	 * Méthode pour passer à la fenetre d'ajout d'une espece dans le fichier.<br>
+	 * Elle sera invoquée par le bouton d'ajout.
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton.
+	 * @see {@link controller.AjouterEspeceController}
 	 */
 	@FXML
 	private void ajouterEspeceHandler(ActionEvent event) {
@@ -216,9 +245,9 @@ public class FileDisplayController implements Initializable {
 
 	/**
 	 * Méthode pour supprimer des especes. Elle doivent être selectionnées deja par
-	 * les checkbox
+	 * le biais de leur CheckBox. Elle sera invoquée par le bouton de suppression.
 	 * 
-	 * @param event
+	 * @param event Evenement de clic sur le bouton
 	 */
 	@FXML
 	private void supprimerEspecesHandler(ActionEvent event) {
@@ -267,6 +296,13 @@ public class FileDisplayController implements Initializable {
 		}
 	}
 
+	/**
+	 * Méthode pour enregistrer les modifications apportés au fichier d'origine. Les
+	 * ajouts et suppressions ne prennent pas effet permanent tant que
+	 * l'enregistrement n'est pas effectué. Le fichier d'origine sera modifié.
+	 * 
+	 * @param event Evenement de clic sur le bouton d'enregistrement
+	 */
 	@FXML
 	private void enregistrerHandler(ActionEvent event) {
 		Alert alertConfirmation = new Alert(AlertType.CONFIRMATION);

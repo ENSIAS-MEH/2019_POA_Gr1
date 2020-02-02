@@ -14,10 +14,10 @@ import javafx.stage.Stage;
 import main.TrucsUtiles;
 
 /**
- * Cette classe est le controlleur de la fenetre d'importation du fichier CSV
+ * Controlleur de la fenetre d'importation du fichier CSV.<br>
  * Une fois le bouton cliqué, une fenetre pop up de l'explorateur Windows
  * devrait apparaitre, à partir de laquelle on pourrait choisir le fichier à
- * importer
+ * importer.
  */
 
 public class MenuController implements Initializable {
@@ -28,13 +28,13 @@ public class MenuController implements Initializable {
 	}
 
 	/**
-	 * Méthode pour le bouton pour ouvrir l'explorateur Windows, le fichier csv est
-	 * stocké dans l'objet File leCsv
+	 * Méthode pour le bouton pour ouvrir l'explorateur Windows, le fichier .csv est
+	 * stocké dans l'objet File LeCsv ( voir {@link main.TrucsUtiles#getCsv()} )
 	 */
 	@FXML
 	public void importerCsvHandler(ActionEvent event) {
 		try {
-			
+
 			// On charge le fichier csv et passe à la fenetre suivante ( affichage du
 			// fichier )
 			TrucsUtiles.setCsv(event, "/fxml/FileDisplay.fxml", this);
@@ -51,7 +51,7 @@ public class MenuController implements Initializable {
 			popUp.initModality(Modality.APPLICATION_MODAL);
 			popUp.setScene(scene);
 			popUp.show();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
