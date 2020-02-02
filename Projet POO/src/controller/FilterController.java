@@ -82,7 +82,7 @@ public class FilterController implements Initializable {
 		resultRecherche = (TrucsUtiles.getDAO()).filtrer(saisie, boutonChoisis, groupeEcologiqueChoisi,
 				groupeTrophiqueChoisi);
 
-		TrucsUtiles.changeStage(event, "/fxml/ResultDisplay.fxml", this);
+		TrucsUtiles.changeStage(event, "/fxml/ResultDisplay.fxml", this,true);
 
 	}
 
@@ -174,7 +174,7 @@ public class FilterController implements Initializable {
 	@FXML
 	private void fermerFichierHandler(ActionEvent event) {
 		TrucsUtiles.setCsvNull();
-		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this);
+		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this,true);
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class FilterController implements Initializable {
 	 */
 	@FXML
 	private void rechercherEspeceHandler(ActionEvent event) {
-		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this);
+		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this,true);
 	}
 
 	/**
@@ -195,6 +195,6 @@ public class FilterController implements Initializable {
 	 */
 	@FXML
 	private void retourButtonHandler(ActionEvent event) {
-		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this);
+		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this,true);
 	}
 }

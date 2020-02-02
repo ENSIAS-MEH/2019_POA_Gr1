@@ -110,7 +110,7 @@ public class CreatureDisplayController implements Initializable {
 	@FXML
 	private void fermerFichierHandler(ActionEvent event) {
 		TrucsUtiles.setCsvNull();
-		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this);
+		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this,true);
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class CreatureDisplayController implements Initializable {
 	 */
 	@FXML
 	private void rechercherEspeceHandler(ActionEvent event) {
-		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this);
+		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this,true);
 	}
 	
 	/**
@@ -129,6 +129,6 @@ public class CreatureDisplayController implements Initializable {
 	 */
 	@FXML
 	private void retourButtonHandler(ActionEvent event) {
-		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this);
+		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this,true);
 	}
 }

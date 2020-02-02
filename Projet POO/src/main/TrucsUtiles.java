@@ -34,7 +34,6 @@ public class TrucsUtiles {
 	private static EspeceDAO especeDAO = null;
 
 	// Et les especes seront stockées ici
-	private static ArrayList<Espece> listEspeces = null;
 
 	// L'objet d'explorateur de fichiers
 	private static FileChooser fileChooser = new FileChooser();
@@ -46,15 +45,6 @@ public class TrucsUtiles {
 	 */
 	public static File getCsv() {
 		return LeCsv;
-	}
-
-	/**
-	 * Méthode pour récuperer la liste des espèces
-	 * 
-	 * @return
-	 */
-	public static ArrayList<Espece> getListEspeces() {
-		return listEspeces;
 	}
 
 	/**
@@ -87,7 +77,7 @@ public class TrucsUtiles {
 			// Récuperation des espèces
 			connexionCSV(LeCsv); // Update du DAO et de la liste des espèces
 			// Passage à la fenetre d'affichage du fichier
-			changeStage(source, fxmlPath, context);
+			changeStage(source, fxmlPath, context,true);
 
 			return true;
 		} else
@@ -99,10 +89,8 @@ public class TrucsUtiles {
 	 * fichier .csv
 	 */
 	private static void connexionCSV(File csv) {
-		// FIXME sa mère
 		ConnectionFactory cf = new CSVConnectionFactory(csv);
 		especeDAO = cf.getEspeceDAO();
-		listEspeces = especeDAO.recupererToutes();
 
 	}
 
@@ -114,17 +102,17 @@ public class TrucsUtiles {
 	 * @param context
 	 * @return
 	 */
-	public static boolean changeStage(Object source, String fxmlPath, Object context) {
+	public static boolean changeStage(Object source, String fxmlPath, Object context, boolean center) {
 		// La fenetre courante
 		Stage currentWindow = getStage(source);
 
 		// Changement de la fenetre courante
 		if (!(currentWindow == null)) {
 			try {
-				// FIXME l'erreur dans le fxmlloader peut etre
 				Scene sc = new Scene(FXMLLoader.load(context.getClass().getResource(fxmlPath)));
 				currentWindow.setScene(sc);
-				currentWindow.centerOnScreen();
+				if (center)
+					currentWindow.centerOnScreen();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 				return false;

@@ -37,9 +37,6 @@ public class FileDisplayController implements Initializable {
 	@FXML
 	private HBox hbox_0, hbox_1, hbox_2, hbox_3;
 
-	@FXML
-	private Button ajouterEspece;
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -50,7 +47,7 @@ public class FileDisplayController implements Initializable {
 		/*
 		 * On récupère les espèces depuis le csv
 		 */
-		recupererResultat(TrucsUtiles.getListEspeces());
+		recupererResultat((TrucsUtiles.getDAO().recupererToutes()));
 
 	}
 
@@ -74,7 +71,6 @@ public class FileDisplayController implements Initializable {
 			 * On affiche un pop qui indique que le fichier a bien été récupéré Et affiche
 			 * les erreurs dans ce fichier s'il y'en a
 			 */
-			// FIXME erreur au changement de fichier ?
 
 			Stage popUp = new Stage();
 			popUp.setTitle("Succès");
@@ -99,7 +95,7 @@ public class FileDisplayController implements Initializable {
 	@FXML
 	private void fermerFichierHandler(ActionEvent event) {
 		TrucsUtiles.setCsvNull();
-		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this);
+		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this, true);
 	}
 
 	/**
@@ -110,7 +106,7 @@ public class FileDisplayController implements Initializable {
 	 */
 	@FXML
 	private void rechercherEspeceHandler(ActionEvent event) {
-		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this);
+		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this, true);
 	}
 
 	public void recupererResultat(ArrayList<Espece> especes) {
@@ -186,7 +182,7 @@ public class FileDisplayController implements Initializable {
 				 * passe à cette fenetre
 				 */
 				CreatureDisplayController.setEspece(espece);
-				TrucsUtiles.changeStage(event, "/fxml/CreatureDisplay.fxml", this);
+				TrucsUtiles.changeStage(event, "/fxml/CreatureDisplay.fxml", this, true);
 			}
 		});
 		return b;
@@ -207,7 +203,6 @@ public class FileDisplayController implements Initializable {
 				}
 			};
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -215,6 +210,8 @@ public class FileDisplayController implements Initializable {
 		ajoutStage.initModality(Modality.APPLICATION_MODAL);
 		ajoutStage.setResizable(false);
 		ajoutStage.showAndWait();
+
+		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this, false);
 	}
 
 	/**
@@ -229,15 +226,34 @@ public class FileDisplayController implements Initializable {
 		boolean selected = false;
 
 		Alert alertConfirmation = new Alert(AlertType.CONFIRMATION);
-		alertConfirmation.setHeaderText("Voulez vous ajouter cette espèce ? Le fichier d'origine sera modifié");
+		alertConfirmation.setHeaderText("Voulez vous supprimer les créatures selectionnées ?");
 		Optional<ButtonType> result = alertConfirmation.showAndWait();
 
 		if (result.get() == ButtonType.OK) {
+
+			// On mémorisera ici les CheckBox à enlever plus tard
+			ArrayList<CheckBox> checkBoxes = new ArrayList<CheckBox>();
+
+			// On sauvegarde la liste d'origine pour localiser les indices
+			ArrayList<Espece> list = TrucsUtiles.getDAO().recupererToutes();
+
 			for (CheckBox cb : CheckBoxList) {
 				if (cb.isSelected()) {
-					TrucsUtiles.getDAO()
-							.supprimer((((TrucsUtiles.getListEspeces()).get(CheckBoxList.indexOf(cb)))).getId());
+					// On enlève l'espece du DAO
+
+					TrucsUtiles.getDAO().supprimer(((list.get(CheckBoxList.indexOf(cb)))).getId());
+
+					// On enregistre les index des CheckBox
+					checkBoxes.add(cb);
 					selected = true;
+
+				}
+			}
+			// On retire les CheckBox enregistrés à la fin
+
+			if (!checkBoxes.isEmpty()) {
+				for (CheckBox cb : checkBoxes) {
+					CheckBoxList.remove(cb);
 				}
 			}
 
@@ -246,9 +262,20 @@ public class FileDisplayController implements Initializable {
 				alertSucces.setHeaderText("Aucune créature n'est choisie");
 				alertSucces.showAndWait();
 			} else {
-				TrucsUtiles.getDAO().enregistrerModifications();
-				TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this);
+				TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this, false);
 			}
 		}
+	}
+
+	@FXML
+	private void enregistrerHandler(ActionEvent event) {
+		Alert alertConfirmation = new Alert(AlertType.CONFIRMATION);
+		alertConfirmation.setHeaderText("Voulez vous supprimer les créatures selectionnées ?");
+		Optional<ButtonType> result = alertConfirmation.showAndWait();
+
+		if (result.get() == ButtonType.OK) {
+			TrucsUtiles.getDAO().enregistrerModifications();
+		}
+
 	}
 }

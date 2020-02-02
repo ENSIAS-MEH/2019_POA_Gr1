@@ -8,44 +8,71 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="613.0" prefWidth="826.0" styleClass="anchorpane" stylesheets="@../css/DisplayCSS.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FileDisplayController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="613.0"
+	prefWidth="826.0" styleClass="anchorpane"
+	stylesheets="@../css/DisplayCSS.css"
+	xmlns="http://javafx.com/javafx/11.0.1"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="controller.FileDisplayController">
 	<children>
-		<MenuBar fx:id="menuBar" layoutY="1.0" prefHeight="27.0" prefWidth="826.0">
+		<MenuBar fx:id="menuBar" layoutY="1.0" prefHeight="27.0"
+			prefWidth="826.0">
 			<menus>
 				<Menu mnemonicParsing="false" text="Fichier">
 					<items>
-						<MenuItem mnemonicParsing="false" onAction="#ouvrirFichierHandler" text="Ouvrir un autre fichier" />
-						<MenuItem mnemonicParsing="false" onAction="#fermerFichierHandler" text="Fermer le fichier" />
+						<MenuItem mnemonicParsing="false"
+							onAction="#ouvrirFichierHandler" text="Ouvrir un autre fichier" />
+						<MenuItem mnemonicParsing="false"
+							onAction="#fermerFichierHandler" text="Fermer le fichier" />
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Help">
 					<items>
-						<MenuItem mnemonicParsing="false" onAction="#rechercherEspeceHandler" text="Rechercher des espèces" />
+						<MenuItem mnemonicParsing="false"
+							onAction="#rechercherEspeceHandler" text="Rechercher des espèces" />
 					</items>
 				</Menu>
 			</menus>
 		</MenuBar>
-		<ScrollPane layoutY="504.0" opacity="0.59" prefHeight="109.0" prefWidth="826.0">
+		<ScrollPane layoutY="504.0" opacity="0.59"
+			prefHeight="109.0" prefWidth="826.0">
 			<content>
-				<HBox fx:id="hbox_3" alignment="CENTER" prefHeight="106.0" prefWidth="820.0" />
+				<HBox fx:id="hbox_3" alignment="CENTER" prefHeight="106.0"
+					prefWidth="820.0" />
 			</content>
 		</ScrollPane>
-		<ScrollPane layoutY="395.0" opacity="0.59" prefHeight="109.0" prefWidth="826.0">
+		<ScrollPane layoutY="395.0" opacity="0.59"
+			prefHeight="109.0" prefWidth="826.0">
 			<content>
-				<HBox fx:id="hbox_2" alignment="CENTER" prefHeight="104.0" prefWidth="820.0" />
+				<HBox fx:id="hbox_2" alignment="CENTER" prefHeight="104.0"
+					prefWidth="820.0" />
 			</content>
 		</ScrollPane>
-		<ScrollPane layoutY="284.0" opacity="0.59" prefHeight="115.0" prefWidth="826.0">
+		<ScrollPane layoutY="284.0" opacity="0.59"
+			prefHeight="115.0" prefWidth="826.0">
 			<content>
-				<HBox fx:id="hbox_1" alignment="CENTER" prefHeight="106.0" prefWidth="822.0" />
+				<HBox fx:id="hbox_1" alignment="CENTER" prefHeight="106.0"
+					prefWidth="822.0" />
 			</content>
 		</ScrollPane>
-		<ScrollPane layoutY="169.0" opacity="0.59" prefHeight="115.0" prefWidth="826.0">
+		<ScrollPane layoutY="169.0" opacity="0.59"
+			prefHeight="115.0" prefWidth="826.0">
 			<content>
-				<HBox fx:id="hbox_0" alignment="CENTER" prefHeight="110.0" prefWidth="821.0" />
+				<HBox fx:id="hbox_0" alignment="CENTER" prefHeight="110.0"
+					prefWidth="821.0" />
 			</content>
 		</ScrollPane>
-      <Button fx:id="ajouterEspece" layoutX="125.0" layoutY="73.0" mnemonicParsing="false" onAction="#ajouterEspeceHandler" prefHeight="56.0" prefWidth="139.0" text="Ajouter une espece" />
-      <Button fx:id="supprimerEspeces" layoutX="581.0" layoutY="73.0" mnemonicParsing="false" onAction="#supprimerEspecesHandler" prefHeight="56.0" prefWidth="139.0" text="Supprimer les espèces selectionnées" textAlignment="CENTER" wrapText="true" />
+		<Button layoutX="89.0" layoutY="73.0" mnemonicParsing="false"
+			onAction="#ajouterEspeceHandler" prefHeight="56.0" prefWidth="139.0"
+			text="Ajouter une espece" />
+		<Button layoutX="637.0" layoutY="73.0" mnemonicParsing="false"
+			onAction="#supprimerEspecesHandler" prefHeight="56.0"
+			prefWidth="139.0" text="Supprimer les espèces selectionnées"
+			textAlignment="CENTER" wrapText="true" />
+		<Button layoutX="344.0" layoutY="73.0" mnemonicParsing="false"
+			onAction="#enregistrerHandler" prefHeight="56.0" prefWidth="139.0"
+			text="Enregistrer les modifications" textAlignment="CENTER"
+			wrapText="true" />
 	</children>
 </AnchorPane>

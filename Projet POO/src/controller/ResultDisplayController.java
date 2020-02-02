@@ -86,7 +86,7 @@ public class ResultDisplayController implements Initializable {
 	@FXML
 	private void fermerFichierHandler(ActionEvent event) {
 		TrucsUtiles.setCsvNull();
-		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this);
+		TrucsUtiles.changeStage(menuBar, "/fxml/Menu.fxml", this,true);
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class ResultDisplayController implements Initializable {
 	 */
 	@FXML
 	private void rechercherEspeceHandler(ActionEvent event) {
-		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this);
+		TrucsUtiles.changeStage(menuBar, "/fxml/Filter.fxml", this,true);
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class ResultDisplayController implements Initializable {
 	 */
 	@FXML
 	private void retourButtonHandler(ActionEvent event) {
-		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this);
+		TrucsUtiles.changeStage(event, "/fxml/FileDisplay.fxml", this,true);
 	}
 
 	private void recupererResultat(ArrayList<Espece> especes) {
@@ -171,7 +171,7 @@ public class ResultDisplayController implements Initializable {
 				 * passe à cette fenetre
 				 */
 				CreatureDisplayController.setEspece(espece);
-				TrucsUtiles.changeStage(event, "/fxml/CreatureDisplay.fxml", this);
+				TrucsUtiles.changeStage(event, "/fxml/CreatureDisplay.fxml", this,true);
 			}
 		});
 		return b;

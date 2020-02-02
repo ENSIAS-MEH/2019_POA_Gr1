@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import dao.Espece;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -25,6 +26,8 @@ public class AjouterEspeceController implements Initializable {
 	@FXML
 	private ChoiceBox<String> zone, groupeTrophique, groupeEcologique;
 
+//	private Stage thisStage = TrucsUtiles.getStage(this);
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		initializeChoiceBoxes();
@@ -35,30 +38,36 @@ public class AjouterEspeceController implements Initializable {
 	 * méthode ajouter dans du DAO
 	 */
 	@FXML
-	private void ajouterEspeceHandler() {
+	private void ajouterEspeceHandler(ActionEvent event) {
+		Alert alertSucces = null;
+
 		try {
 			// On montre une alerte pour confirmer l'enregistrement de l'espece
+
 			Alert alertConfirmation = new Alert(AlertType.CONFIRMATION);
-			alertConfirmation.setHeaderText("Voulez vous ajouter cette espèce ? Le fichier d'origine sera modifié");
+			alertConfirmation.setHeaderText("Voulez vous ajouter cette espèce ?");
 			Optional<ButtonType> result = alertConfirmation.showAndWait();
 
 			if (result.get() == ButtonType.OK) {
-				// C'est au moment de cliquer sur OK qu'on ajoute l'instance de Espece au DAO
-				Espece e = new Espece(0, nom.getText(), genre.getText(), famille.getText(), ordre.getText(),
-						classe.getText(), embranchement.getText(), description.getText(),
-						groupeTrophique.getValue().toString(), groupeEcologique.getValue().toString(), "catégorie",
-						zone.getValue().toString(), cheminImage.getText(), new ArrayList<String>());
+				try {
+					// C'est au moment de cliquer sur OK qu'on ajoute l'instance de Espece au DAO
+					Espece e = new Espece(0, nom.getText(), genre.getText(), famille.getText(), ordre.getText(),
+							classe.getText(), embranchement.getText(), description.getText(),
+							groupeTrophique.getValue().toString(), groupeEcologique.getValue().toString(), "catégorie",
+							zone.getValue().toString(), cheminImage.getText(), new ArrayList<String>());
 
-				e.setId(TrucsUtiles.getDAO().ajouter(e));
+					e.setId(TrucsUtiles.getDAO().ajouter(e));
 
-				TrucsUtiles.getDAO().enregistrerModifications();
+					alertSucces = new Alert(AlertType.INFORMATION);
+					alertSucces.setHeaderText("Fichier modifié avec succès");
+					alertSucces.showAndWait();
 
-				Alert alertSucces = new Alert(AlertType.INFORMATION);
-				alertSucces.setHeaderText("Fichier modifié avec succès");
-				alertSucces.showAndWait();
-				
-			} else {
-				// rien à faire quand on clique sur cancel
+				} catch (Exception e) {
+
+					alertSucces = new Alert(AlertType.ERROR);
+					alertSucces.setHeaderText(e.getMessage());
+					alertSucces.showAndWait();
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,7 +86,6 @@ public class AjouterEspeceController implements Initializable {
 		// qu'on remplit à partir de celle dans la classe Espece
 		for (String s : Espece.getListeGroupeEcologique())
 			groupesEcologiquesArray.add(s);
-		groupesEcologiquesArray.add("tous"); // On ajoute le tous
 
 		// et on adapte cette liste au CheckBox
 		ObservableList<String> groupesEcologiquesList = FXCollections.observableArrayList(groupesEcologiquesArray);
@@ -89,7 +97,6 @@ public class AjouterEspeceController implements Initializable {
 
 		for (String s : Espece.getListeGroupeTrophique())
 			groupesTrophiquesArray.add(s);
-		groupesTrophiquesArray.add("tous");
 
 		ObservableList<String> groupesTrophiquesList = FXCollections.observableArrayList(groupesTrophiquesArray);
 		groupeTrophique.setItems(groupesTrophiquesList);
