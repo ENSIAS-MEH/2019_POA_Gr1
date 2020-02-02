@@ -280,7 +280,7 @@ public class Espece {
 	public void setGroupeTrophique(String groupeTrophique) throws ChampIncorrectException {
 		if (!listeGroupeTrophique.contains(groupeTrophique))
 			throw new ChampIncorrectException("La valeur << "+groupeTrophique+" >> est incorrecte pour le "
-					+ "groupe écologique; il doit être dans la liste : "+ listeGroupeEcologique.toString());
+					+ "groupe trophique; il doit être dans la liste : "+ listeGroupeTrophique.toString());
 		this.groupeTrophique = groupeTrophique;
 			
 	}

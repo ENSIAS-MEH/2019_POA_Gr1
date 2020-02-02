@@ -73,8 +73,8 @@ public class CSVEspeceDAO extends EspeceDAO {
 		try (FileInputStream fis = new FileInputStream(fichier);
 				InputStreamReader isr = new InputStreamReader(fis, "utf-8");
 				BufferedReader br = new BufferedReader(isr)) {
-			Espece espece = null; // Par defaut
 			while ((ligne = br.readLine()) != null) {
+				Espece espece = null; // Par defaut
 				// On ne considère pas les ligne vides
 				if (ligne.equals("")) {
 					listeEspeces.add(null);
@@ -89,7 +89,6 @@ public class CSVEspeceDAO extends EspeceDAO {
 					listeErreurs.add("Erreur à la ligne " + (i + 1) + " : Il n'y a que" + " " + elements.length
 							+ " élements !\nIl faut au moins " + nombreElementsFixe + " élements.");
 				}
-
 				else {
 					try {
 						espece = convertir(ligne, i);
@@ -212,6 +211,8 @@ public class CSVEspeceDAO extends EspeceDAO {
 				liste.add(e);
 		}
 		return liste;
+		// return new ArrayList<Espece>(listeEspeces);
+		
 	}
 
 	@Override
