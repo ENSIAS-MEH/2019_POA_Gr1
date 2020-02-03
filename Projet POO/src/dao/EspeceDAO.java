@@ -81,8 +81,9 @@ public abstract class EspeceDAO {
 	
 	/**
 	 * Fonction qui sauvegarde les eventuelles modifications faites sur la base de données
+	 * @return true si la sauvegarde s'est bien passée, false sinon
 	 */
-	public abstract void enregistrerModifications();
+	public abstract boolean enregistrerModifications();
 	
 	/**
 	 * Fonction qui permet de recuperer des eventuelles erreurs en particulier après la création de l'objet
