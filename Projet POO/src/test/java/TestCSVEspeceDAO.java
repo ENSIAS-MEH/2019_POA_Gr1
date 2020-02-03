@@ -191,6 +191,48 @@ public class TestCSVEspeceDAO {
 			fail("Ligne correcte !");
 		}
 	}
+	
+	@Test
+	public void testEspece() {
+		// Tests des differents setters de l'objet Espece (et du constructeur)
+		Espece test = null;
+		try {
+			test = new Espece(0,"test","test","test","test","test","","","carnivore","sensible","4","2",
+					"",new ArrayList<String>());
+		} catch (ChampIncorrectException e) {
+			fail("L'espece est correcte !");
+		}
+		
+		try {
+			test.setNom(""); // Non
+			fail("Le nom est incorrect");
+		} catch (ChampIncorrectException e) {
+		}
+		
+		try {
+			test.setGroupeEcologique("eee"); // Non
+			fail("");
+		} catch (ChampIncorrectException e) {
+		} 
+		
+		try {
+			test.setGroupeTrophique("fere"); // Non
+			fail("");
+		} catch (ChampIncorrectException e) {
+		}
+		
+		try {
+			test.setZone(5); // Non
+			fail("");
+		} catch (ChampIncorrectException e) {
+		}
+		
+		try {
+			test.setGroupeTrophique("necrophage"); // Oui
+		} catch (ChampIncorrectException e) {
+			fail("Le groupe trophique est correct !");
+		} 
+	}
 
 	@Test
 	public void testInterfaceEspeceDAO() {
@@ -248,7 +290,10 @@ public class TestCSVEspeceDAO {
 		assertEquals(husky,resultat.get(0));
 		
 		// Test enregistrement
-		especeDAO.enregistrerModifications();
+		
+		assertTrue(especeDAO.enregistrerModifications());
+		
+		
 		// On va lire le fichier pour voir si la ligne qu'on a ajouté est là
 		List<String> contenuFichierReel = new ArrayList<String>();
 		String l;

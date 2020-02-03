@@ -42,7 +42,7 @@ public class CreatureDisplayController implements Initializable {
 
 	@FXML
 	Label nom_de_lespece, description_de_lespece, groupe_trophique_de_lespece, groupe_ecologique_de_lespece,
-			categorie_dimportance_de_lespece;
+			categorie_dimportance_de_lespece,classe,famille,ordre,genre;
 
 	public void initialize(URL location, ResourceBundle resources) {
 		initializeInformations();
@@ -60,6 +60,10 @@ public class CreatureDisplayController implements Initializable {
 		groupe_trophique_de_lespece.setText(especeSelectionnee.getGroupeTrophique());
 		groupe_ecologique_de_lespece.setText(especeSelectionnee.getGroupeEcologique());
 		categorie_dimportance_de_lespece.setText(especeSelectionnee.getCategorieImportance());
+		classe.setText(especeSelectionnee.getClasse());
+		famille.setText(especeSelectionnee.getFamille());
+		ordre.setText(especeSelectionnee.getOrdre());
+		genre.setText(especeSelectionnee.getGenre());
 	}
 
 	/**

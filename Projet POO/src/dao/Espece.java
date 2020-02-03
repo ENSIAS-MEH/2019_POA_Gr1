@@ -145,9 +145,27 @@ public class Espece {
 	public String getGenre() {
 		return genre;
 	}
+	public int getZone() {
+		return zone;
+	}
+
 	public ArrayList<String> getSynonymes() {
 		return synonymes;
 	}
+	/**
+	 * @return the cheminImageDisque
+	 */
+	public String getCheminImageDisque() {
+		return cheminImageDisque;
+	}
+
+	/**
+	 * @return the cheminImageOriginale
+	 */
+	public String getCheminImageOriginale() {
+		return cheminImageOriginale;
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -184,10 +202,6 @@ public class Espece {
 		return new int[] {minZone,maxZone};
 	}
 	
-	public int getZone() {
-		return zone;
-	}
-	
 	/**
 	 * Change la valeur de l'attribut zone
 	 * 
@@ -199,14 +213,6 @@ public class Espece {
 			throw new ChampIncorrectException("L'entier << " + zone + " >> pour la zone est incorrect : "
 					+ "il doit être entre "+minZone+" et "+maxZone);
 		this.zone = zone;
-	}
-	
-	/**
-	 * 
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	/**
@@ -220,6 +226,43 @@ public class Espece {
 		if (sansVide.isEmpty())
 			throw new ChampIncorrectException("Le nom ne peut pas être vide");
 		this.nom = nom;
+	}
+
+	/**
+	 * 
+	 * Change la valeur de l'attribut groupe trophique
+	 * 
+	 * @param groupeTrophique Le nouveau groupe trophique
+	 * @throws ChampIncorrectException Si le nouveau groupe trophique n'est pas permis
+	 */
+	public void setGroupeTrophique(String groupeTrophique) throws ChampIncorrectException {
+		if (!listeGroupeTrophique.contains(groupeTrophique))
+			throw new ChampIncorrectException("La valeur << "+groupeTrophique+" >> est incorrecte pour le "
+					+ "groupe trophique; il doit être dans la liste : "+ listeGroupeTrophique.toString());
+		this.groupeTrophique = groupeTrophique;
+			
+	}
+
+	/**
+	 * 
+	 * Change la valeur de l'attribut groupe ecologique
+	 * 
+	 * @param groupeEcologique Le nouveau groupe ecologique
+	 * @throws ChampIncorrectException Si le nouveau groupe ecologique n'est pas permis
+	 */
+	public void setGroupeEcologique(String groupeEcologique) throws ChampIncorrectException {
+		if (!listeGroupeEcologique.contains(groupeEcologique))
+			throw new ChampIncorrectException("La valeur << "+groupeEcologique+" >> est incorrecte pour le "
+					+ "groupe écologique; il doit être dans la liste : "+ listeGroupeEcologique.toString());
+		this.groupeEcologique = groupeEcologique;
+	}
+
+	/**
+	 * 
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**
@@ -272,35 +315,6 @@ public class Espece {
 	}
 
 	/**
-	 * 
-	 * Change la valeur de l'attribut groupe trophique
-	 * 
-	 * @param groupeTrophique Le nouveau groupe trophique
-	 * @throws ChampIncorrectException Si le nouveau groupe trophique n'est pas permis
-	 */
-	public void setGroupeTrophique(String groupeTrophique) throws ChampIncorrectException {
-		if (!listeGroupeTrophique.contains(groupeTrophique))
-			throw new ChampIncorrectException("La valeur << "+groupeTrophique+" >> est incorrecte pour le "
-					+ "groupe trophique; il doit être dans la liste : "+ listeGroupeTrophique.toString());
-		this.groupeTrophique = groupeTrophique;
-			
-	}
-
-	/**
-	 * 
-	 * Change la valeur de l'attribut groupe ecologique
-	 * 
-	 * @param groupeEcologique Le nouveau groupe ecologique
-	 * @throws ChampIncorrectException Si le nouveau groupe ecologique n'est pas permis
-	 */
-	public void setGroupeEcologique(String groupeEcologique) throws ChampIncorrectException {
-		if (!listeGroupeEcologique.contains(groupeEcologique))
-			throw new ChampIncorrectException("La valeur << "+groupeEcologique+" >> est incorrecte pour le "
-					+ "groupe écologique; il doit être dans la liste : "+ listeGroupeEcologique.toString());
-		this.groupeEcologique = groupeEcologique;
-	}
-
-	/**
 	 * @param categorieImportance the categorieImportance to set
 	 */
 	public void setCategorieImportance(String categorieImportance) {
@@ -308,24 +322,10 @@ public class Espece {
 	}
 
 	/**
-	 * @return the cheminImageDisque
-	 */
-	public String getCheminImageDisque() {
-		return cheminImageDisque;
-	}
-
-	/**
 	 * @param cheminImageDisque the cheminImageDisque to set
 	 */
 	public void setCheminImageDisque(String cheminImageDisque) {
 		this.cheminImageDisque = cheminImageDisque;
-	}
-
-	/**
-	 * @return the cheminImageOriginale
-	 */
-	public String getCheminImageOriginale() {
-		return cheminImageOriginale;
 	}
 
 	/**

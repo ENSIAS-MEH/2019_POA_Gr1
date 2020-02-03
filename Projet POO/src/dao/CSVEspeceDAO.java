@@ -15,7 +15,7 @@ import java.util.Arrays;
 /**
  * 
  * Cette classe permet de faire la correspondance entre objet java et données
- * textes (fichier csv) Il permet de lire un fichier csv et de créer des objets
+ * textes (fichier csv). Elle permet de lire un fichier csv et de créer des objets
  * Espece.
  *
  */
@@ -65,45 +65,45 @@ public class CSVEspeceDAO extends EspeceDAO {
 		this.fichier = fichier;
 		this.dossierImages = dossierImages;
 		// On cree le dossier de sortie (Au meme niveau que le jar ou le projet)
-		File dossierSortie = new File(dossierImages);
-		dossierSortie.mkdir();
+		File dossier = new File(dossierImages);
+		dossier.mkdir();
 		int i = 0; // On initialise un compteur pour savoir à quelle ligne s'est produite une
 		// erreur
 		String ligne;
+		/* Pour une ligne correcte, on ajoute l'objet Espece dans la liste des especes et pour une ligne 
+		 * incorrecte on ajoute la ligne en question dans la liste des especes incorrectes
+		 */
 		try (FileInputStream fis = new FileInputStream(fichier);
 				InputStreamReader isr = new InputStreamReader(fis, "utf-8");
 				BufferedReader br = new BufferedReader(isr)) {
 			while ((ligne = br.readLine()) != null) {
 				Espece espece = null; // Par defaut
+				i++;
 				// On ne considère pas les ligne vides
 				if (ligne.equals("")) {
-					listeEspeces.add(null);
-					especesIncorrectes.add(ligne);
-					i++;
 					continue;
 				}
 				// On vérifie d'abord qu'il y a assez d'élements
 				String[] elements = ligne.split(",");
 
 				if (elements.length < nombreElementsFixe) {
-					listeErreurs.add("Erreur à la ligne " + (i + 1) + " : Il n'y a que" + " " + elements.length
+					listeErreurs.add("Erreur à la ligne " + i + " : Il n'y a que" + " " + elements.length
 							+ " élements !\nIl faut au moins " + nombreElementsFixe + " élements.");
 				}
 				else {
 					try {
-						espece = convertir(ligne, i);
+						espece = convertir(ligne, listeEspeces.size());
 						espece.setCheminImageDisque(verifierImage(espece.getCheminImageOriginale()));
-						ligne = ""; // Ligne vide car l'espece est correcte
+						listeEspeces.add(espece);
+						continue;
 					} catch (ChampIncorrectException e) {
-						listeErreurs.add("Erreur à la ligne " + (i + 1) + " : " + e.getMessage());
+						listeErreurs.add("Erreur à la ligne " + i + " : " + e.getMessage());
 					}
 				}
-				listeEspeces.add(espece);
 				especesIncorrectes.add(ligne);
-				i++;
 			}
 		}
-		nouvelleLigne = i;
+		nouvelleLigne = listeEspeces.size();
 	}
 
 	/**
@@ -160,7 +160,8 @@ public class CSVEspeceDAO extends EspeceDAO {
 
 	public void mettreAJour(Espece espece) {
 		int id = espece.getId();
-		listeEspeces.set(id, espece);
+		if (id >=0 && id < listeEspeces.size())
+			listeEspeces.set(id, espece);
 	}
 
 	public int ajouter(Espece espece) throws ChampIncorrectException {
@@ -171,29 +172,29 @@ public class CSVEspeceDAO extends EspeceDAO {
 			// On tente de télécharger l'image
 			espece.setCheminImageDisque(verifierImage(espece.getCheminImageOriginale()));
 		listeEspeces.add(espece);
-		especesIncorrectes.add("");
 		// On renvoie l'identifiant de l'espece
 		return id;
 	}
 
 	public void supprimer(int id) {
-		listeEspeces.set(id, null);
+		if (id >=0 && id < listeEspeces.size())
+			listeEspeces.set(id, null);
 	}
 
-	public void enregistrerModifications() {
+	public boolean enregistrerModifications() {
 		try (FileOutputStream fos = new FileOutputStream(fichier);
 				OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
 				BufferedWriter bw = new BufferedWriter(osw)) {
-			for (int i = 0; i < listeEspeces.size(); i++) {
-				Espece e = listeEspeces.get(i);
-				if (e == null) {
-					bw.write(especesIncorrectes.get(i) + "\n");
-				} else
+			for (Espece e: listeEspeces) {
+				if (e != null) {
 					bw.write(convertir(e) + "\n");
+				}		
 			}
+			for (String ligne: especesIncorrectes)
+				bw.write(ligne+"\n");
 			bw.flush();
-		} catch (IOException e) {
-		}
+			return true;
+		} catch (IOException e) {return false;}
 	}
 
 	public Espece recuperer(int id) {
@@ -210,9 +211,7 @@ public class CSVEspeceDAO extends EspeceDAO {
 			if (e != null)
 				liste.add(e);
 		}
-		return liste;
-		// return new ArrayList<Espece>(listeEspeces);
-		
+		return liste;	
 	}
 
 	@Override
@@ -235,17 +234,13 @@ public class CSVEspeceDAO extends EspeceDAO {
 
 		// On commence le filtrage
 		ArrayList<Espece> resultat = new ArrayList<Espece>();
-		for (Espece e : listeEspeces) {
-			if (e == null)
+		for (Espece espece : listeEspeces) {
+			if (espece == null)
 				continue; // On ne traite pas ces lignes
 
-			String[] elements = convertir(e).split(",");
+			String[] elements = convertir(espece).split(",");
 			// On va ajouter les synonymes dans le champ nom s'il y en a
-			// càd tout ce qui se trouve après le dernier champ
-			if (elements.length > nombreElementsFixe) {
-				for (int j = nombreElementsFixe; j < elements.length; j++)
-					elements[ordreChamp.indexOf("nom")] += "," + elements[j];
-			}
+			elements[ordreChamp.indexOf("nom")] += espece.getSynonymes().toString();
 
 			// On filtre d'abord les groupes (ecologique et trophique)
 			if ((elements[positionEco].contains(gEcoSaisi) || tousEco)
@@ -254,12 +249,12 @@ public class CSVEspeceDAO extends EspeceDAO {
 					// On cherche dans tous les champs
 					for (int j = 0; j <= 6; j++) {
 						if (elements[j].contains(saisie)) {
-							resultat.add(e);
+							resultat.add(espece);
 							break;
 						}
 					}
 				} else if (elements[positionChamp].contains(saisie))
-					resultat.add(e);
+					resultat.add(espece);
 			}
 		}
 		return resultat;
